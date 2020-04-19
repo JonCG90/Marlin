@@ -1,0 +1,548 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		238811E8244C056C00E8444E /* Marlin.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 238811E7244C056C00E8444E /* Marlin.hpp */; };
+		238811EA244C056C00E8444E /* MarlinPriv.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 238811E9244C056C00E8444E /* MarlinPriv.hpp */; };
+		238811EC244C056C00E8444E /* Marlin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 238811EB244C056C00E8444E /* Marlin.cpp */; };
+		238811FA244C062F00E8444E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 238811F9244C062F00E8444E /* AppDelegate.m */; };
+		238811FC244C063300E8444E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 238811FB244C063300E8444E /* Assets.xcassets */; };
+		238811FF244C063300E8444E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 238811FD244C063300E8444E /* MainMenu.xib */; };
+		23881202244C063300E8444E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 23881201244C063300E8444E /* main.m */; };
+		2388120D244C063300E8444E /* MarlinViewerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2388120C244C063300E8444E /* MarlinViewerTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		23881209244C063300E8444E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 238811DC244C056C00E8444E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 238811F5244C062F00E8444E;
+			remoteInfo = MarlinViewer;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		238811E4244C056C00E8444E /* libMarlin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMarlin.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		238811E7244C056C00E8444E /* Marlin.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Marlin.hpp; sourceTree = "<group>"; };
+		238811E9244C056C00E8444E /* MarlinPriv.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MarlinPriv.hpp; sourceTree = "<group>"; };
+		238811EB244C056C00E8444E /* Marlin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Marlin.cpp; sourceTree = "<group>"; };
+		238811F6244C062F00E8444E /* MarlinViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarlinViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		238811F8244C062F00E8444E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		238811F9244C062F00E8444E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		238811FB244C063300E8444E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		238811FE244C063300E8444E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		23881200244C063300E8444E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		23881201244C063300E8444E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		23881203244C063300E8444E /* MarlinViewer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MarlinViewer.entitlements; sourceTree = "<group>"; };
+		23881208244C063300E8444E /* MarlinViewerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarlinViewerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2388120C244C063300E8444E /* MarlinViewerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MarlinViewerTests.m; sourceTree = "<group>"; };
+		2388120E244C063300E8444E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		238811E2244C056C00E8444E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		238811F3244C062F00E8444E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23881205244C063300E8444E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		238811DB244C056C00E8444E = {
+			isa = PBXGroup;
+			children = (
+				238811E6244C056C00E8444E /* Marlin */,
+				238811F7244C062F00E8444E /* MarlinViewer */,
+				2388120B244C063300E8444E /* MarlinViewerTests */,
+				238811E5244C056C00E8444E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		238811E5244C056C00E8444E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				238811E4244C056C00E8444E /* libMarlin.a */,
+				238811F6244C062F00E8444E /* MarlinViewer.app */,
+				23881208244C063300E8444E /* MarlinViewerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		238811E6244C056C00E8444E /* Marlin */ = {
+			isa = PBXGroup;
+			children = (
+				238811E7244C056C00E8444E /* Marlin.hpp */,
+				238811E9244C056C00E8444E /* MarlinPriv.hpp */,
+				238811EB244C056C00E8444E /* Marlin.cpp */,
+			);
+			path = Marlin;
+			sourceTree = "<group>";
+		};
+		238811F7244C062F00E8444E /* MarlinViewer */ = {
+			isa = PBXGroup;
+			children = (
+				238811F8244C062F00E8444E /* AppDelegate.h */,
+				238811F9244C062F00E8444E /* AppDelegate.m */,
+				238811FB244C063300E8444E /* Assets.xcassets */,
+				238811FD244C063300E8444E /* MainMenu.xib */,
+				23881200244C063300E8444E /* Info.plist */,
+				23881201244C063300E8444E /* main.m */,
+				23881203244C063300E8444E /* MarlinViewer.entitlements */,
+			);
+			path = MarlinViewer;
+			sourceTree = "<group>";
+		};
+		2388120B244C063300E8444E /* MarlinViewerTests */ = {
+			isa = PBXGroup;
+			children = (
+				2388120C244C063300E8444E /* MarlinViewerTests.m */,
+				2388120E244C063300E8444E /* Info.plist */,
+			);
+			path = MarlinViewerTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		238811E0244C056C00E8444E /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				238811EA244C056C00E8444E /* MarlinPriv.hpp in Headers */,
+				238811E8244C056C00E8444E /* Marlin.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		238811E3244C056C00E8444E /* Marlin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 238811EF244C056C00E8444E /* Build configuration list for PBXNativeTarget "Marlin" */;
+			buildPhases = (
+				238811E0244C056C00E8444E /* Headers */,
+				238811E1244C056C00E8444E /* Sources */,
+				238811E2244C056C00E8444E /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Marlin;
+			productName = Marlin;
+			productReference = 238811E4244C056C00E8444E /* libMarlin.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		238811F5244C062F00E8444E /* MarlinViewer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2388120F244C063300E8444E /* Build configuration list for PBXNativeTarget "MarlinViewer" */;
+			buildPhases = (
+				238811F2244C062F00E8444E /* Sources */,
+				238811F3244C062F00E8444E /* Frameworks */,
+				238811F4244C062F00E8444E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MarlinViewer;
+			productName = MarlinViewer;
+			productReference = 238811F6244C062F00E8444E /* MarlinViewer.app */;
+			productType = "com.apple.product-type.application";
+		};
+		23881207244C063300E8444E /* MarlinViewerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 23881212244C063300E8444E /* Build configuration list for PBXNativeTarget "MarlinViewerTests" */;
+			buildPhases = (
+				23881204244C063300E8444E /* Sources */,
+				23881205244C063300E8444E /* Frameworks */,
+				23881206244C063300E8444E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2388120A244C063300E8444E /* PBXTargetDependency */,
+			);
+			name = MarlinViewerTests;
+			productName = MarlinViewerTests;
+			productReference = 23881208244C063300E8444E /* MarlinViewerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		238811DC244C056C00E8444E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1130;
+				ORGANIZATIONNAME = "Jonathan Graham";
+				TargetAttributes = {
+					238811E3244C056C00E8444E = {
+						CreatedOnToolsVersion = 11.3;
+					};
+					238811F5244C062F00E8444E = {
+						CreatedOnToolsVersion = 11.3;
+					};
+					23881207244C063300E8444E = {
+						CreatedOnToolsVersion = 11.3;
+						TestTargetID = 238811F5244C062F00E8444E;
+					};
+				};
+			};
+			buildConfigurationList = 238811DF244C056C00E8444E /* Build configuration list for PBXProject "Marlin" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 238811DB244C056C00E8444E;
+			productRefGroup = 238811E5244C056C00E8444E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				238811E3244C056C00E8444E /* Marlin */,
+				238811F5244C062F00E8444E /* MarlinViewer */,
+				23881207244C063300E8444E /* MarlinViewerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		238811F4244C062F00E8444E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				238811FC244C063300E8444E /* Assets.xcassets in Resources */,
+				238811FF244C063300E8444E /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23881206244C063300E8444E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		238811E1244C056C00E8444E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				238811EC244C056C00E8444E /* Marlin.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		238811F2244C062F00E8444E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23881202244C063300E8444E /* main.m in Sources */,
+				238811FA244C062F00E8444E /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23881204244C063300E8444E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2388120D244C063300E8444E /* MarlinViewerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2388120A244C063300E8444E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 238811F5244C062F00E8444E /* MarlinViewer */;
+			targetProxy = 23881209244C063300E8444E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		238811FD244C063300E8444E /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				238811FE244C063300E8444E /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		238811ED244C056C00E8444E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		238811EE244C056C00E8444E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		238811F0244C056C00E8444E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		238811F1244C056C00E8444E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		23881210244C063300E8444E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MarlinViewer/MarlinViewer.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = MarlinViewer/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = Graham.MarlinViewer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		23881211244C063300E8444E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MarlinViewer/MarlinViewer.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = MarlinViewer/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = Graham.MarlinViewer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		23881213244C063300E8444E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = MarlinViewerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				PRODUCT_BUNDLE_IDENTIFIER = Graham.MarlinViewerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MarlinViewer.app/Contents/MacOS/MarlinViewer";
+			};
+			name = Debug;
+		};
+		23881214244C063300E8444E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = MarlinViewerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				PRODUCT_BUNDLE_IDENTIFIER = Graham.MarlinViewerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MarlinViewer.app/Contents/MacOS/MarlinViewer";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		238811DF244C056C00E8444E /* Build configuration list for PBXProject "Marlin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				238811ED244C056C00E8444E /* Debug */,
+				238811EE244C056C00E8444E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		238811EF244C056C00E8444E /* Build configuration list for PBXNativeTarget "Marlin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				238811F0244C056C00E8444E /* Debug */,
+				238811F1244C056C00E8444E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2388120F244C063300E8444E /* Build configuration list for PBXNativeTarget "MarlinViewer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				23881210244C063300E8444E /* Debug */,
+				23881211244C063300E8444E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		23881212244C063300E8444E /* Build configuration list for PBXNativeTarget "MarlinViewerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				23881213244C063300E8444E /* Debug */,
+				23881214244C063300E8444E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 238811DC244C056C00E8444E /* Project object */;
+}
