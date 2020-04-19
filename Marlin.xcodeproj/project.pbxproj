@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		238811FA244C062F00E8444E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238811F9244C062F00E8444E /* AppDelegate.mm */; };
+		238811FA244C062F00E8444E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 238811F9244C062F00E8444E /* AppDelegate.m */; };
 		238811FC244C063300E8444E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 238811FB244C063300E8444E /* Assets.xcassets */; };
 		238811FF244C063300E8444E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 238811FD244C063300E8444E /* MainMenu.xib */; };
 		23881202244C063300E8444E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 23881201244C063300E8444E /* main.m */; };
@@ -15,6 +15,7 @@
 		2388121D244C24A300E8444E /* libMarlin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 238811E4244C056C00E8444E /* libMarlin.a */; };
 		23881220244C253600E8444E /* marlin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2388121E244C253600E8444E /* marlin.cpp */; };
 		23881221244C253600E8444E /* marlin.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2388121F244C253600E8444E /* marlin.hpp */; };
+		23881239244C62BC00E8444E /* MarlinView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23881238244C62BC00E8444E /* MarlinView.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,7 +32,7 @@
 		238811E4244C056C00E8444E /* libMarlin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMarlin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F6244C062F00E8444E /* MarlinViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarlinViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F8244C062F00E8444E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		238811F9244C062F00E8444E /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
+		238811F9244C062F00E8444E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		238811FB244C063300E8444E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		238811FE244C063300E8444E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		23881200244C063300E8444E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -42,6 +43,8 @@
 		2388120E244C063300E8444E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2388121E244C253600E8444E /* marlin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = marlin.cpp; sourceTree = "<group>"; };
 		2388121F244C253600E8444E /* marlin.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = marlin.hpp; sourceTree = "<group>"; };
+		23881237244C62BC00E8444E /* MarlinView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MarlinView.h; sourceTree = "<group>"; };
+		23881238244C62BC00E8444E /* MarlinView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MarlinView.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,12 +98,14 @@
 			isa = PBXGroup;
 			children = (
 				238811F8244C062F00E8444E /* AppDelegate.h */,
-				238811F9244C062F00E8444E /* AppDelegate.mm */,
+				238811F9244C062F00E8444E /* AppDelegate.m */,
 				238811FB244C063300E8444E /* Assets.xcassets */,
 				238811FD244C063300E8444E /* MainMenu.xib */,
 				23881200244C063300E8444E /* Info.plist */,
 				23881201244C063300E8444E /* main.m */,
 				23881203244C063300E8444E /* MarlinViewer.entitlements */,
+				23881237244C62BC00E8444E /* MarlinView.h */,
+				23881238244C62BC00E8444E /* MarlinView.mm */,
 			);
 			path = MarlinViewer;
 			sourceTree = "<group>";
@@ -270,8 +275,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23881239244C62BC00E8444E /* MarlinView.mm in Sources */,
 				23881202244C063300E8444E /* main.m in Sources */,
-				238811FA244C062F00E8444E /* AppDelegate.mm in Sources */,
+				238811FA244C062F00E8444E /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

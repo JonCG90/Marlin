@@ -8,8 +8,6 @@
 
 #import "AppDelegate.h"
 
-#include <marlin.hpp>
-
 @interface AppDelegate ()
 
 @property (weak) IBOutlet NSWindow *window;
@@ -18,7 +16,7 @@
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    marlin::print("Hello World");
+    // Insert code here to initialize your application
 }
 
 
