@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 
-#include "Marlin.hpp"
+#include <marlin.hpp>
 
 @interface AppDelegate ()
 
@@ -18,8 +18,7 @@
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    Marlin m;
-    m.HelloWorld("Hello\n");
+    marlin::print("Hello World");
 }
 
 
