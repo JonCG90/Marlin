@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		238811FA244C062F00E8444E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 238811F9244C062F00E8444E /* AppDelegate.m */; };
+		238811FA244C062F00E8444E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 238811F9244C062F00E8444E /* AppDelegate.mm */; };
 		238811FC244C063300E8444E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 238811FB244C063300E8444E /* Assets.xcassets */; };
 		238811FF244C063300E8444E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 238811FD244C063300E8444E /* MainMenu.xib */; };
 		23881202244C063300E8444E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 23881201244C063300E8444E /* main.m */; };
@@ -15,6 +15,7 @@
 		23881219244C206C00E8444E /* Marlin.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23881216244C206C00E8444E /* Marlin.hpp */; };
 		2388121A244C206C00E8444E /* Marlin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23881217244C206C00E8444E /* Marlin.cpp */; };
 		2388121B244C206C00E8444E /* MarlinPriv.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23881218244C206C00E8444E /* MarlinPriv.hpp */; };
+		2388121D244C24A300E8444E /* libMarlin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 238811E4244C056C00E8444E /* libMarlin.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,7 +32,7 @@
 		238811E4244C056C00E8444E /* libMarlin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMarlin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F6244C062F00E8444E /* MarlinViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarlinViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F8244C062F00E8444E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		238811F9244C062F00E8444E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		238811F9244C062F00E8444E /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		238811FB244C063300E8444E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		238811FE244C063300E8444E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		23881200244C063300E8444E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -57,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2388121D244C24A300E8444E /* libMarlin.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,6 +79,7 @@
 				238811F7244C062F00E8444E /* MarlinViewer */,
 				2388120B244C063300E8444E /* MarlinViewerTests */,
 				238811E5244C056C00E8444E /* Products */,
+				2388121C244C24A300E8444E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -94,7 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				238811F8244C062F00E8444E /* AppDelegate.h */,
-				238811F9244C062F00E8444E /* AppDelegate.m */,
+				238811F9244C062F00E8444E /* AppDelegate.mm */,
 				238811FB244C063300E8444E /* Assets.xcassets */,
 				238811FD244C063300E8444E /* MainMenu.xib */,
 				23881200244C063300E8444E /* Info.plist */,
@@ -122,6 +125,13 @@
 			);
 			name = marlin;
 			path = src/marlin;
+			sourceTree = "<group>";
+		};
+		2388121C244C24A300E8444E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -265,7 +275,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23881202244C063300E8444E /* main.m in Sources */,
-				238811FA244C062F00E8444E /* AppDelegate.m in Sources */,
+				238811FA244C062F00E8444E /* AppDelegate.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -349,6 +359,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/src/thirdparty/MoltenVK/include";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/src/thirdparty/MoltenVK/lib";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -401,6 +413,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/src/thirdparty/MoltenVK/include";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/src/thirdparty/MoltenVK/lib";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;

@@ -10,6 +10,8 @@
 #include "Marlin.hpp"
 #include "MarlinPriv.hpp"
 
+#include <vulkan/vulkan.h>
+
 void Marlin::HelloWorld(const char * s)
 {
     MarlinPriv *theObj = new MarlinPriv;
