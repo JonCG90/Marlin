@@ -28,8 +28,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
                                     CVOptionFlags* flagsOut,
                                     void* target) {
     
-    static uint frame = 0;
-    marlin::print("Draw Frame: " + std::to_string( frame++ ) );
+    marlin::render();
+    
     return kCVReturnSuccess;
 }
 
@@ -39,7 +39,10 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     // Back the view with a layer created by the makeBackingLayer method.
     self.view.wantsLayer = YES;
 
-    marlin::print("Setup");
+    marlin::init();
+    
+    marlin::MlnContext context;
+    context.createInstance();
 
     CVDisplayLinkCreateWithActiveCGDisplays(&m_displayLink);
     CVDisplayLinkSetOutputCallback(m_displayLink, &displayLinkCallback,  (__bridge void *)(self));

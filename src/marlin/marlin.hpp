@@ -9,12 +9,35 @@
 #ifndef MARLIN_HPP
 #define MARLIN_HPP
 
+#include <vulkan/vulkan.h>
+
 #include <iostream>
 
 namespace marlin
 {
 
-void print( const std::string &i_string );
+class MlnContext
+{
+public:
+    
+    MlnContext() = default;
+    ~MlnContext() = default;
+    
+    void createInstance();
+
+private:
+    
+    VkInstance m_instance;
+    
+private:
+    
+};
+
+void init();
+
+void render();
+
+void deinit();
 
 }
 

@@ -12,10 +12,10 @@
 		238811FF244C063300E8444E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 238811FD244C063300E8444E /* MainMenu.xib */; };
 		23881202244C063300E8444E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 23881201244C063300E8444E /* main.m */; };
 		2388120D244C063300E8444E /* MarlinViewerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2388120C244C063300E8444E /* MarlinViewerTests.m */; };
-		2388121D244C24A300E8444E /* libMarlin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 238811E4244C056C00E8444E /* libMarlin.a */; };
-		23881220244C253600E8444E /* marlin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2388121E244C253600E8444E /* marlin.cpp */; };
-		23881221244C253600E8444E /* marlin.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2388121F244C253600E8444E /* marlin.hpp */; };
 		23881239244C62BC00E8444E /* MarlinView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23881238244C62BC00E8444E /* MarlinView.mm */; };
+		23881362244F8F5400E8444E /* marlin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2388123D244F8F5300E8444E /* marlin.cpp */; };
+		23881363244F8F5400E8444E /* libMoltenVK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2388125D244F8F5300E8444E /* libMoltenVK.a */; };
+		238813D6244F8F6600E8444E /* libMoltenVK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2388125D244F8F5300E8444E /* libMoltenVK.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,10 +41,35 @@
 		23881208244C063300E8444E /* MarlinViewerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarlinViewerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2388120C244C063300E8444E /* MarlinViewerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MarlinViewerTests.m; sourceTree = "<group>"; };
 		2388120E244C063300E8444E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2388121E244C253600E8444E /* marlin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = marlin.cpp; sourceTree = "<group>"; };
-		2388121F244C253600E8444E /* marlin.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = marlin.hpp; sourceTree = "<group>"; };
 		23881237244C62BC00E8444E /* MarlinView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MarlinView.h; sourceTree = "<group>"; };
 		23881238244C62BC00E8444E /* MarlinView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MarlinView.mm; sourceTree = "<group>"; };
+		2388123C244F8F5300E8444E /* marlin.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = marlin.hpp; sourceTree = "<group>"; };
+		2388123D244F8F5300E8444E /* marlin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = marlin.cpp; sourceTree = "<group>"; };
+		23881242244F8F5300E8444E /* vk_extx_portability_subset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vk_extx_portability_subset.h; sourceTree = "<group>"; };
+		23881244244F8F5300E8444E /* mvk_datatypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mvk_datatypes.h; sourceTree = "<group>"; };
+		23881245244F8F5300E8444E /* vk_mvk_moltenvk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vk_mvk_moltenvk.h; sourceTree = "<group>"; };
+		23881246244F8F5300E8444E /* mvk_vulkan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mvk_vulkan.h; sourceTree = "<group>"; };
+		23881248244F8F5300E8444E /* vk_layer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vk_layer.h; sourceTree = "<group>"; };
+		23881249244F8F5300E8444E /* vk_icd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vk_icd.h; sourceTree = "<group>"; };
+		2388124A244F8F5300E8444E /* vulkan_vi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_vi.h; sourceTree = "<group>"; };
+		2388124B244F8F5300E8444E /* vulkan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan.h; sourceTree = "<group>"; };
+		2388124C244F8F5300E8444E /* vk_platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vk_platform.h; sourceTree = "<group>"; };
+		2388124D244F8F5300E8444E /* vulkan.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = vulkan.hpp; sourceTree = "<group>"; };
+		2388124E244F8F5300E8444E /* vulkan_fuchsia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_fuchsia.h; sourceTree = "<group>"; };
+		2388124F244F8F5300E8444E /* vulkan_wayland.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_wayland.h; sourceTree = "<group>"; };
+		23881250244F8F5300E8444E /* vulkan_win32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_win32.h; sourceTree = "<group>"; };
+		23881251244F8F5300E8444E /* vulkan_macos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_macos.h; sourceTree = "<group>"; };
+		23881252244F8F5300E8444E /* vulkan_xlib_xrandr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_xlib_xrandr.h; sourceTree = "<group>"; };
+		23881253244F8F5300E8444E /* vulkan_xcb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_xcb.h; sourceTree = "<group>"; };
+		23881254244F8F5300E8444E /* vulkan_ggp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_ggp.h; sourceTree = "<group>"; };
+		23881255244F8F5300E8444E /* vulkan_xlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_xlib.h; sourceTree = "<group>"; };
+		23881256244F8F5300E8444E /* vulkan_ios.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_ios.h; sourceTree = "<group>"; };
+		23881257244F8F5300E8444E /* vulkan_core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_core.h; sourceTree = "<group>"; };
+		23881258244F8F5300E8444E /* vk_sdk_platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vk_sdk_platform.h; sourceTree = "<group>"; };
+		23881259244F8F5300E8444E /* vulkan_android.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_android.h; sourceTree = "<group>"; };
+		2388125A244F8F5300E8444E /* vulkan_metal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_metal.h; sourceTree = "<group>"; };
+		2388125B244F8F5300E8444E /* vulkan_beta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_beta.h; sourceTree = "<group>"; };
+		2388125D244F8F5300E8444E /* libMoltenVK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMoltenVK.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				238813D6244F8F6600E8444E /* libMoltenVK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,7 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2388121D244C24A300E8444E /* libMarlin.a in Frameworks */,
+				23881363244F8F5400E8444E /* libMoltenVK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,7 +102,7 @@
 		238811DB244C056C00E8444E = {
 			isa = PBXGroup;
 			children = (
-				23881215244C206C00E8444E /* marlin */,
+				2388123A244F8F5300E8444E /* src */,
 				238811F7244C062F00E8444E /* MarlinViewer */,
 				2388120B244C063300E8444E /* MarlinViewerTests */,
 				238811E5244C056C00E8444E /* Products */,
@@ -119,21 +145,109 @@
 			path = MarlinViewerTests;
 			sourceTree = "<group>";
 		};
-		23881215244C206C00E8444E /* marlin */ = {
-			isa = PBXGroup;
-			children = (
-				2388121E244C253600E8444E /* marlin.cpp */,
-				2388121F244C253600E8444E /* marlin.hpp */,
-			);
-			name = marlin;
-			path = src/marlin;
-			sourceTree = "<group>";
-		};
 		2388121C244C24A300E8444E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2388123A244F8F5300E8444E /* src */ = {
+			isa = PBXGroup;
+			children = (
+				2388123B244F8F5300E8444E /* marlin */,
+				2388123E244F8F5300E8444E /* thirdparty */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		2388123B244F8F5300E8444E /* marlin */ = {
+			isa = PBXGroup;
+			children = (
+				2388123C244F8F5300E8444E /* marlin.hpp */,
+				2388123D244F8F5300E8444E /* marlin.cpp */,
+			);
+			path = marlin;
+			sourceTree = "<group>";
+		};
+		2388123E244F8F5300E8444E /* thirdparty */ = {
+			isa = PBXGroup;
+			children = (
+				2388123F244F8F5300E8444E /* MoltenVK */,
+			);
+			path = thirdparty;
+			sourceTree = "<group>";
+		};
+		2388123F244F8F5300E8444E /* MoltenVK */ = {
+			isa = PBXGroup;
+			children = (
+				23881240244F8F5300E8444E /* include */,
+				2388125C244F8F5300E8444E /* lib */,
+			);
+			path = MoltenVK;
+			sourceTree = "<group>";
+		};
+		23881240244F8F5300E8444E /* include */ = {
+			isa = PBXGroup;
+			children = (
+				23881241244F8F5300E8444E /* vulkan-portability */,
+				23881243244F8F5300E8444E /* MoltenVK */,
+				23881247244F8F5300E8444E /* vulkan */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		23881241244F8F5300E8444E /* vulkan-portability */ = {
+			isa = PBXGroup;
+			children = (
+				23881242244F8F5300E8444E /* vk_extx_portability_subset.h */,
+			);
+			path = "vulkan-portability";
+			sourceTree = "<group>";
+		};
+		23881243244F8F5300E8444E /* MoltenVK */ = {
+			isa = PBXGroup;
+			children = (
+				23881244244F8F5300E8444E /* mvk_datatypes.h */,
+				23881245244F8F5300E8444E /* vk_mvk_moltenvk.h */,
+				23881246244F8F5300E8444E /* mvk_vulkan.h */,
+			);
+			path = MoltenVK;
+			sourceTree = "<group>";
+		};
+		23881247244F8F5300E8444E /* vulkan */ = {
+			isa = PBXGroup;
+			children = (
+				23881248244F8F5300E8444E /* vk_layer.h */,
+				23881249244F8F5300E8444E /* vk_icd.h */,
+				2388124A244F8F5300E8444E /* vulkan_vi.h */,
+				2388124B244F8F5300E8444E /* vulkan.h */,
+				2388124C244F8F5300E8444E /* vk_platform.h */,
+				2388124D244F8F5300E8444E /* vulkan.hpp */,
+				2388124E244F8F5300E8444E /* vulkan_fuchsia.h */,
+				2388124F244F8F5300E8444E /* vulkan_wayland.h */,
+				23881250244F8F5300E8444E /* vulkan_win32.h */,
+				23881251244F8F5300E8444E /* vulkan_macos.h */,
+				23881252244F8F5300E8444E /* vulkan_xlib_xrandr.h */,
+				23881253244F8F5300E8444E /* vulkan_xcb.h */,
+				23881254244F8F5300E8444E /* vulkan_ggp.h */,
+				23881255244F8F5300E8444E /* vulkan_xlib.h */,
+				23881256244F8F5300E8444E /* vulkan_ios.h */,
+				23881257244F8F5300E8444E /* vulkan_core.h */,
+				23881258244F8F5300E8444E /* vk_sdk_platform.h */,
+				23881259244F8F5300E8444E /* vulkan_android.h */,
+				2388125A244F8F5300E8444E /* vulkan_metal.h */,
+				2388125B244F8F5300E8444E /* vulkan_beta.h */,
+			);
+			path = vulkan;
+			sourceTree = "<group>";
+		};
+		2388125C244F8F5300E8444E /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				2388125D244F8F5300E8444E /* libMoltenVK.a */,
+			);
+			path = lib;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -143,7 +257,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23881221244C253600E8444E /* marlin.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,7 +380,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23881220244C253600E8444E /* marlin.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,6 +389,7 @@
 			files = (
 				23881239244C62BC00E8444E /* MarlinView.mm in Sources */,
 				23881202244C063300E8444E /* main.m in Sources */,
+				23881362244F8F5400E8444E /* marlin.cpp in Sources */,
 				238811FA244C062F00E8444E /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -367,6 +480,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -420,6 +534,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -431,6 +546,15 @@
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/src/thirdparty/MoltenVK/include",
+					"$(SRCROOT)/src/thirdparty",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/src/thirdparty/MoltenVK/lib",
+				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -443,6 +567,15 @@
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/src/thirdparty/MoltenVK/include",
+					"$(SRCROOT)/src/thirdparty",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/src/thirdparty/MoltenVK/lib",
+				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -464,6 +597,10 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/src/thirdparty/MoltenVK/lib",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = Graham.MarlinViewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -484,6 +621,10 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/src/thirdparty/MoltenVK/lib",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = Graham.MarlinViewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
