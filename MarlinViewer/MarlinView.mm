@@ -41,9 +41,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
     marlin::init();
     
-    marlin::MlnContext context;
-    context.createInstance();
-
     CVDisplayLinkCreateWithActiveCGDisplays(&m_displayLink);
     CVDisplayLinkSetOutputCallback(m_displayLink, &displayLinkCallback,  (__bridge void *)(self));
     CVDisplayLinkStart(m_displayLink);

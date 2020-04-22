@@ -161,6 +161,8 @@
 		238816DA245040DF00E8444E /* type_aligned.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2388164A245040DF00E8444E /* type_aligned.hpp */; };
 		238816DB245041FC00E8444E /* marlin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2388123D244F8F5300E8444E /* marlin.cpp */; };
 		238816DC2450422B00E8444E /* libMarlin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 238811E4244C056C00E8444E /* libMarlin.a */; };
+		238816E62450472B00E8444E /* instance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 238816E42450472B00E8444E /* instance.cpp */; };
+		238816E72450472B00E8444E /* instance.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 238816E52450472B00E8444E /* instance.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -476,6 +478,8 @@
 		23881648245040DF00E8444E /* projection.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = projection.inl; sourceTree = "<group>"; };
 		23881649245040DF00E8444E /* multiple.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = multiple.inl; sourceTree = "<group>"; };
 		2388164A245040DF00E8444E /* type_aligned.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_aligned.hpp; sourceTree = "<group>"; };
+		238816E42450472B00E8444E /* instance.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = instance.cpp; sourceTree = "<group>"; };
+		238816E52450472B00E8444E /* instance.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = instance.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -571,6 +575,7 @@
 		2388123B244F8F5300E8444E /* marlin */ = {
 			isa = PBXGroup;
 			children = (
+				238816E32450470800E8444E /* vulkan */,
 				2388123C244F8F5300E8444E /* marlin.hpp */,
 				2388123D244F8F5300E8444E /* marlin.cpp */,
 			);
@@ -943,6 +948,15 @@
 			path = gtx;
 			sourceTree = "<group>";
 		};
+		238816E32450470800E8444E /* vulkan */ = {
+			isa = PBXGroup;
+			children = (
+				238816E42450472B00E8444E /* instance.cpp */,
+				238816E52450472B00E8444E /* instance.hpp */,
+			);
+			path = vulkan;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1060,6 +1074,7 @@
 				2388166F245040DF00E8444E /* func_noise.hpp in Headers */,
 				23881697245040DF00E8444E /* quaternion.hpp in Headers */,
 				23881681245040DF00E8444E /* type_mat2x2.hpp in Headers */,
+				238816E72450472B00E8444E /* instance.hpp in Headers */,
 				23881652245040DF00E8444E /* vec2.hpp in Headers */,
 				238816BF245040DF00E8444E /* simd_quat.hpp in Headers */,
 				23881683245040DF00E8444E /* _swizzle_func.hpp in Headers */,
@@ -1218,6 +1233,7 @@
 			files = (
 				238816DB245041FC00E8444E /* marlin.cpp in Sources */,
 				2388167A245040DF00E8444E /* glm.cpp in Sources */,
+				238816E62450472B00E8444E /* instance.cpp in Sources */,
 				23881676245040DF00E8444E /* dummy.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1392,6 +1408,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/src/thirdparty/MoltenVK/include",
 					"$(SRCROOT)/src/thirdparty",
+					"$(SRCROOT)/src",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1413,6 +1430,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/src/thirdparty/MoltenVK/include",
 					"$(SRCROOT)/src/thirdparty",
+					"$(SRCROOT)/src",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

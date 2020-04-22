@@ -12,27 +12,12 @@
 namespace marlin
 {
 
-class MlnContext
-{
-public:
-    
-    MlnContext() = default;
-    ~MlnContext() = default;
-    
-    void createInstance();
-
-private:
-        
-private:
-    
-};
-
 void init();
 
 void render();
 
 void deinit();
 
-}
+} // namespace marlin
 
 #endif /* marlin_hpp */
