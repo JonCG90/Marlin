@@ -8,11 +8,17 @@
 
 #include "marlin.hpp"
 
+#include <vulkan/vulkan.h>
+
+#include <iostream>
+
 namespace marlin
 {
 
 void MlnContext::createInstance()
 {
+    VkInstance m_instance;
+    
     VkApplicationInfo appInfo{};
     appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     appInfo.pApplicationName = "Hello Triangle";

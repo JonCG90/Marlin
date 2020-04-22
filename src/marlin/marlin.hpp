@@ -9,10 +9,6 @@
 #ifndef MARLIN_HPP
 #define MARLIN_HPP
 
-#include <vulkan/vulkan.h>
-
-#include <iostream>
-
 namespace marlin
 {
 
@@ -26,9 +22,7 @@ public:
     void createInstance();
 
 private:
-    
-    VkInstance m_instance;
-    
+        
 private:
     
 };
