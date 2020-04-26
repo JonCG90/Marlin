@@ -22,7 +22,7 @@ using ExtensionMap = std::map< std::string, VkExtensionProperties >;
 class MlnInstance
 {
 public:
-    MlnInstance() = default;
+    MlnInstance();
     ~MlnInstance() = default;
     
     static MlnInstance & getInstance();
@@ -36,6 +36,9 @@ public:
 private:
         
     VkInstance m_vkInstance;
+
+    bool m_enableValidation;
+    VkDebugUtilsMessengerEXT m_debugMessenger;
 };
 
 } // namespace marlin
