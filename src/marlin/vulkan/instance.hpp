@@ -11,13 +11,10 @@
 
 #include <vulkan/vulkan.h>
 
-#include <map>
+#include <vector>
 
 namespace marlin
 {
-
-using Extensions = std::vector< VkExtensionProperties >;
-using ExtensionMap = std::map< std::string, VkExtensionProperties >;
 
 class MlnInstance
 {
@@ -39,6 +36,14 @@ private:
 
     bool m_enableValidation;
     VkDebugUtilsMessengerEXT m_debugMessenger;
+    
+    void setupDebugMessenger();
+    
+private:
+    
+    void getValidationLayers( std::vector< const char* > &o_validationLayers );
+    void getExtensions( std::vector< const char* > &o_extensions );
+
 };
 
 } // namespace marlin

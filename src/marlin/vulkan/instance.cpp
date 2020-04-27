@@ -9,29 +9,42 @@
 #include "instance.hpp"
 
 #include <iostream>
-#include <vector>
+#include <set>
 
 namespace marlin
 {
 
-static ExtensionMap getAvailableExtensions()
+static std::set< std::string > getAvailableInstanceExtensions()
 {
     uint32_t extensionCount = 0;
     vkEnumerateInstanceExtensionProperties( nullptr, &extensionCount, nullptr );
     
-    Extensions extensions( extensionCount );
+    std::vector< VkExtensionProperties > extensions( extensionCount );
     vkEnumerateInstanceExtensionProperties( nullptr, &extensionCount, extensions.data() );
     
-    ExtensionMap extensionMap;
+    std::set< std::string > extensionNames;
     for ( const VkExtensionProperties &extension : extensions )
     {
-        extensionMap[ extension.extensionName ] = extension;
+        extensionNames.insert( extension.extensionName );
     }
     
-    return extensionMap;
+    return extensionNames;
 }
 
-static void supportedValidationLayers( const std::vector< const char* > &i_validationLayers, std::vector< const char* > &o_validationLayers )
+static bool hasRequiredInstanceExtension( const char* i_extension )
+{
+    static std::set< std::string > extensions = getAvailableInstanceExtensions();
+    
+    if ( !extensions.count( i_extension ) )
+    {
+        std::cerr << "Warning: Extension '" << i_extension << "' not found." << std::endl;
+        return false;
+    }
+    
+    return true;
+}
+
+static void getSupportedValidationLayers( const std::vector< const char* > &i_validationLayers, std::vector< const char* > &o_validationLayers )
 {    
     uint32_t layerCount;
     vkEnumerateInstanceLayerProperties( &layerCount, nullptr );
@@ -105,10 +118,11 @@ static void populateDebugInfo( VkDebugUtilsMessengerCreateInfoEXT &debugCreateIn
 
 static void setupDebugging( VkInstance i_instance, VkDebugUtilsMessengerEXT &i_debugMessenger )
 {
-    VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
+    VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo {};
     populateDebugInfo( debugCreateInfo );
     
-    if ( createDebugUtilsMessengerEXT( i_instance, &debugCreateInfo, nullptr, &i_debugMessenger ) != VK_SUCCESS )
+    VkResult r = createDebugUtilsMessengerEXT( i_instance, &debugCreateInfo, nullptr, &i_debugMessenger );
+    if ( r != VK_SUCCESS )
     {
         std::cerr << "Error: Failed to set up debug messenger." << std::endl;
     }
@@ -143,16 +157,20 @@ void MlnInstance::init()
     VkInstanceCreateInfo createInstanceInfo {};
     createInstanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
     createInstanceInfo.pApplicationInfo = &appInfo;
-
-    VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
+    
+    std::vector< const char* > extensions;
+    getExtensions( extensions );
+    createInstanceInfo.enabledExtensionCount = static_cast< uint32_t >( extensions.size() );
+    createInstanceInfo.ppEnabledExtensionNames = extensions.data();
+    
+    std::vector< const char* > validationLayers;
+    getValidationLayers( validationLayers );
+    createInstanceInfo.enabledLayerCount = static_cast< uint32_t >( validationLayers.size() );
+    createInstanceInfo.ppEnabledLayerNames = validationLayers.data();
+    
+    VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo {};
     if ( m_enableValidation )
     {
-        const std::vector< const char* > validationLayers { "VK_LAYER_KHRONOS_validation" };
-        std::vector< const char* > supportedLayers;
-        supportedValidationLayers( validationLayers, supportedLayers );
-        createInstanceInfo.enabledLayerCount = static_cast< uint32_t >( supportedLayers.size() );
-        createInstanceInfo.ppEnabledLayerNames = supportedLayers.data();
-
         populateDebugInfo( debugCreateInfo );
         createInstanceInfo.pNext = &debugCreateInfo;
     }
@@ -180,6 +198,37 @@ void MlnInstance::deinit()
     }
     
     vkDestroyInstance( m_vkInstance, nullptr );
+}
+
+void MlnInstance::getValidationLayers( std::vector< const char* > &o_validationLayers )
+{
+    std::vector< const char* > validationLayers;
+
+    if ( m_enableValidation )
+    {
+        validationLayers.push_back( "VK_LAYER_KHRONOS_validation" );
+    }
+    
+    o_validationLayers.clear();
+    getSupportedValidationLayers( validationLayers, o_validationLayers );
+}
+
+void MlnInstance::getExtensions( std::vector< const char* > &o_extensions )
+{
+    std::vector< const char* > extensions;
+
+    if ( m_enableValidation )
+    {
+        extensions.push_back( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
+    }
+    
+    for ( const char* extension : extensions )
+    {
+        if ( hasRequiredInstanceExtension( extension ) )
+        {
+            o_extensions.push_back( extension );
+        }
+    }
 }
 
 } // namespace marlin
