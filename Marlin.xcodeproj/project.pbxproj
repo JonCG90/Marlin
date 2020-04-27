@@ -13,8 +13,6 @@
 		23881202244C063300E8444E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 23881201244C063300E8444E /* main.m */; };
 		2388120D244C063300E8444E /* MarlinViewerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2388120C244C063300E8444E /* MarlinViewerTests.m */; };
 		23881239244C62BC00E8444E /* MarlinView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23881238244C62BC00E8444E /* MarlinView.mm */; };
-		23881363244F8F5400E8444E /* libMoltenVK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2388125D244F8F5300E8444E /* libMoltenVK.a */; };
-		238813D6244F8F6600E8444E /* libMoltenVK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2388125D244F8F5300E8444E /* libMoltenVK.a */; };
 		2388164B245040DF00E8444E /* vec4.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2388154A245040DF00E8444E /* vec4.hpp */; };
 		2388164C245040DF00E8444E /* integer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2388154B245040DF00E8444E /* integer.hpp */; };
 		2388164D245040DF00E8444E /* vector_relational.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2388154C245040DF00E8444E /* vector_relational.hpp */; };
@@ -191,7 +189,6 @@
 		238811FE244C063300E8444E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		23881200244C063300E8444E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		23881201244C063300E8444E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		23881203244C063300E8444E /* MarlinViewer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MarlinViewer.entitlements; sourceTree = "<group>"; };
 		23881208244C063300E8444E /* MarlinViewerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarlinViewerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2388120C244C063300E8444E /* MarlinViewerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MarlinViewerTests.m; sourceTree = "<group>"; };
 		2388120E244C063300E8444E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -199,31 +196,6 @@
 		23881238244C62BC00E8444E /* MarlinView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MarlinView.mm; sourceTree = "<group>"; };
 		2388123C244F8F5300E8444E /* marlin.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = marlin.hpp; sourceTree = "<group>"; };
 		2388123D244F8F5300E8444E /* marlin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = marlin.cpp; sourceTree = "<group>"; };
-		23881242244F8F5300E8444E /* vk_extx_portability_subset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vk_extx_portability_subset.h; sourceTree = "<group>"; };
-		23881244244F8F5300E8444E /* mvk_datatypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mvk_datatypes.h; sourceTree = "<group>"; };
-		23881245244F8F5300E8444E /* vk_mvk_moltenvk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vk_mvk_moltenvk.h; sourceTree = "<group>"; };
-		23881246244F8F5300E8444E /* mvk_vulkan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mvk_vulkan.h; sourceTree = "<group>"; };
-		23881248244F8F5300E8444E /* vk_layer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vk_layer.h; sourceTree = "<group>"; };
-		23881249244F8F5300E8444E /* vk_icd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vk_icd.h; sourceTree = "<group>"; };
-		2388124A244F8F5300E8444E /* vulkan_vi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_vi.h; sourceTree = "<group>"; };
-		2388124B244F8F5300E8444E /* vulkan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan.h; sourceTree = "<group>"; };
-		2388124C244F8F5300E8444E /* vk_platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vk_platform.h; sourceTree = "<group>"; };
-		2388124D244F8F5300E8444E /* vulkan.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = vulkan.hpp; sourceTree = "<group>"; };
-		2388124E244F8F5300E8444E /* vulkan_fuchsia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_fuchsia.h; sourceTree = "<group>"; };
-		2388124F244F8F5300E8444E /* vulkan_wayland.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_wayland.h; sourceTree = "<group>"; };
-		23881250244F8F5300E8444E /* vulkan_win32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_win32.h; sourceTree = "<group>"; };
-		23881251244F8F5300E8444E /* vulkan_macos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_macos.h; sourceTree = "<group>"; };
-		23881252244F8F5300E8444E /* vulkan_xlib_xrandr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_xlib_xrandr.h; sourceTree = "<group>"; };
-		23881253244F8F5300E8444E /* vulkan_xcb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_xcb.h; sourceTree = "<group>"; };
-		23881254244F8F5300E8444E /* vulkan_ggp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_ggp.h; sourceTree = "<group>"; };
-		23881255244F8F5300E8444E /* vulkan_xlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_xlib.h; sourceTree = "<group>"; };
-		23881256244F8F5300E8444E /* vulkan_ios.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_ios.h; sourceTree = "<group>"; };
-		23881257244F8F5300E8444E /* vulkan_core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_core.h; sourceTree = "<group>"; };
-		23881258244F8F5300E8444E /* vk_sdk_platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vk_sdk_platform.h; sourceTree = "<group>"; };
-		23881259244F8F5300E8444E /* vulkan_android.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_android.h; sourceTree = "<group>"; };
-		2388125A244F8F5300E8444E /* vulkan_metal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_metal.h; sourceTree = "<group>"; };
-		2388125B244F8F5300E8444E /* vulkan_beta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vulkan_beta.h; sourceTree = "<group>"; };
-		2388125D244F8F5300E8444E /* libMoltenVK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMoltenVK.a; sourceTree = "<group>"; };
 		2388154A245040DF00E8444E /* vec4.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = vec4.hpp; sourceTree = "<group>"; };
 		2388154B245040DF00E8444E /* integer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = integer.hpp; sourceTree = "<group>"; };
 		2388154C245040DF00E8444E /* vector_relational.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = vector_relational.hpp; sourceTree = "<group>"; };
@@ -480,6 +452,8 @@
 		2388164A245040DF00E8444E /* type_aligned.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_aligned.hpp; sourceTree = "<group>"; };
 		238816E42450472B00E8444E /* instance.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = instance.cpp; sourceTree = "<group>"; };
 		238816E52450472B00E8444E /* instance.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = instance.hpp; sourceTree = "<group>"; };
+		23C97A962455962C00FF37DF /* vulkan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = vulkan.framework; sourceTree = "<group>"; };
+		23C97B0324559F1C00FF37DF /* MarlinConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = MarlinConfig.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -487,7 +461,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				238813D6244F8F6600E8444E /* libMoltenVK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -495,7 +468,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23881363244F8F5400E8444E /* libMoltenVK.a in Frameworks */,
 				238816DC2450422B00E8444E /* libMarlin.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -513,6 +485,7 @@
 		238811DB244C056C00E8444E = {
 			isa = PBXGroup;
 			children = (
+				23C97B0324559F1C00FF37DF /* MarlinConfig.xcconfig */,
 				2388123A244F8F5300E8444E /* src */,
 				238811F7244C062F00E8444E /* MarlinViewer */,
 				2388120B244C063300E8444E /* MarlinViewerTests */,
@@ -540,7 +513,6 @@
 				238811FD244C063300E8444E /* MainMenu.xib */,
 				23881200244C063300E8444E /* Info.plist */,
 				23881201244C063300E8444E /* main.m */,
-				23881203244C063300E8444E /* MarlinViewer.entitlements */,
 				23881237244C62BC00E8444E /* MarlinView.h */,
 				23881238244C62BC00E8444E /* MarlinView.mm */,
 			);
@@ -559,6 +531,7 @@
 		2388121C244C24A300E8444E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				23C97A962455962C00FF37DF /* vulkan.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -586,81 +559,8 @@
 			isa = PBXGroup;
 			children = (
 				23881549245040DF00E8444E /* glm */,
-				2388123F244F8F5300E8444E /* MoltenVK */,
 			);
 			path = thirdparty;
-			sourceTree = "<group>";
-		};
-		2388123F244F8F5300E8444E /* MoltenVK */ = {
-			isa = PBXGroup;
-			children = (
-				23881240244F8F5300E8444E /* include */,
-				2388125C244F8F5300E8444E /* lib */,
-			);
-			path = MoltenVK;
-			sourceTree = "<group>";
-		};
-		23881240244F8F5300E8444E /* include */ = {
-			isa = PBXGroup;
-			children = (
-				23881241244F8F5300E8444E /* vulkan-portability */,
-				23881243244F8F5300E8444E /* MoltenVK */,
-				23881247244F8F5300E8444E /* vulkan */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
-		23881241244F8F5300E8444E /* vulkan-portability */ = {
-			isa = PBXGroup;
-			children = (
-				23881242244F8F5300E8444E /* vk_extx_portability_subset.h */,
-			);
-			path = "vulkan-portability";
-			sourceTree = "<group>";
-		};
-		23881243244F8F5300E8444E /* MoltenVK */ = {
-			isa = PBXGroup;
-			children = (
-				23881244244F8F5300E8444E /* mvk_datatypes.h */,
-				23881245244F8F5300E8444E /* vk_mvk_moltenvk.h */,
-				23881246244F8F5300E8444E /* mvk_vulkan.h */,
-			);
-			path = MoltenVK;
-			sourceTree = "<group>";
-		};
-		23881247244F8F5300E8444E /* vulkan */ = {
-			isa = PBXGroup;
-			children = (
-				23881248244F8F5300E8444E /* vk_layer.h */,
-				23881249244F8F5300E8444E /* vk_icd.h */,
-				2388124A244F8F5300E8444E /* vulkan_vi.h */,
-				2388124B244F8F5300E8444E /* vulkan.h */,
-				2388124C244F8F5300E8444E /* vk_platform.h */,
-				2388124D244F8F5300E8444E /* vulkan.hpp */,
-				2388124E244F8F5300E8444E /* vulkan_fuchsia.h */,
-				2388124F244F8F5300E8444E /* vulkan_wayland.h */,
-				23881250244F8F5300E8444E /* vulkan_win32.h */,
-				23881251244F8F5300E8444E /* vulkan_macos.h */,
-				23881252244F8F5300E8444E /* vulkan_xlib_xrandr.h */,
-				23881253244F8F5300E8444E /* vulkan_xcb.h */,
-				23881254244F8F5300E8444E /* vulkan_ggp.h */,
-				23881255244F8F5300E8444E /* vulkan_xlib.h */,
-				23881256244F8F5300E8444E /* vulkan_ios.h */,
-				23881257244F8F5300E8444E /* vulkan_core.h */,
-				23881258244F8F5300E8444E /* vk_sdk_platform.h */,
-				23881259244F8F5300E8444E /* vulkan_android.h */,
-				2388125A244F8F5300E8444E /* vulkan_metal.h */,
-				2388125B244F8F5300E8444E /* vulkan_beta.h */,
-			);
-			path = vulkan;
-			sourceTree = "<group>";
-		};
-		2388125C244F8F5300E8444E /* lib */ = {
-			isa = PBXGroup;
-			children = (
-				2388125D244F8F5300E8444E /* libMoltenVK.a */,
-			);
-			path = lib;
 			sourceTree = "<group>";
 		};
 		23881549245040DF00E8444E /* glm */ = {
@@ -1285,6 +1185,7 @@
 /* Begin XCBuildConfiguration section */
 		238811ED244C056C00E8444E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 23C97B0324559F1C00FF37DF /* MarlinConfig.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1333,19 +1234,21 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/src/thirdparty/MoltenVK/include";
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/src/thirdparty/MoltenVK/lib";
+				HEADER_SEARCH_PATHS = /Users/jongraham/vulkan/1.2.135.0/MoltenVK/include;
+				LD_RUNPATH_SEARCH_PATHS = /Users/jongraham/vulkan/1.2.135.0/macOS/lib;
+				LIBRARY_SEARCH_PATHS = "$(VULKAN_SDK)/lib";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "-lvulkan";
 				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
 		238811EE244C056C00E8444E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 23C97B0324559F1C00FF37DF /* MarlinConfig.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1388,32 +1291,31 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/src/thirdparty/MoltenVK/include";
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/src/thirdparty/MoltenVK/lib";
+				HEADER_SEARCH_PATHS = /Users/jongraham/vulkan/1.2.135.0/MoltenVK/include;
+				LD_RUNPATH_SEARCH_PATHS = /Users/jongraham/vulkan/1.2.135.0/macOS/lib;
+				LIBRARY_SEARCH_PATHS = "$(VULKAN_SDK)/lib";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "-lvulkan";
 				SDKROOT = macosx;
 			};
 			name = Release;
 		};
 		238811F0244C056C00E8444E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 23C97B0324559F1C00FF37DF /* MarlinConfig.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/src/thirdparty/MoltenVK/include",
+					"$(MOLTENVK_PATH)/include",
 					"$(SRCROOT)/src/thirdparty",
 					"$(SRCROOT)/src",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/src/thirdparty/MoltenVK/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1422,20 +1324,18 @@
 		};
 		238811F1244C056C00E8444E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 23C97B0324559F1C00FF37DF /* MarlinConfig.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/src/thirdparty/MoltenVK/include",
+					"$(MOLTENVK_PATH)/include",
 					"$(SRCROOT)/src/thirdparty",
 					"$(SRCROOT)/src",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/src/thirdparty/MoltenVK/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1444,21 +1344,27 @@
 		};
 		23881210244C063300E8444E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 23C97B0324559F1C00FF37DF /* MarlinConfig.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = MarlinViewer/MarlinViewer.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/src/marlin";
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = (
+					/Users/jongraham/vulkan/1.2.135.0/MoltenVK/include,
+					"$(SRCROOT)/src/marlin",
+				);
 				INFOPLIST_FILE = MarlinViewer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"@executable_path/../Frameworks",
+					"$(VULKAN_SDK)/lib",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/src/thirdparty/MoltenVK/lib",
+					"$(VULKAN_SDK)/lib",
 				);
+				OTHER_LDFLAGS = "-lvulkan";
 				PRODUCT_BUNDLE_IDENTIFIER = Graham.MarlinViewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1466,21 +1372,27 @@
 		};
 		23881211244C063300E8444E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 23C97B0324559F1C00FF37DF /* MarlinConfig.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = MarlinViewer/MarlinViewer.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/src/marlin";
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = (
+					/Users/jongraham/vulkan/1.2.135.0/MoltenVK/include,
+					"$(SRCROOT)/src/marlin",
+				);
 				INFOPLIST_FILE = MarlinViewer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"@executable_path/../Frameworks",
+					"$(VULKAN_SDK)/lib",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/src/thirdparty/MoltenVK/lib",
+					"$(VULKAN_SDK)/lib",
 				);
+				OTHER_LDFLAGS = "-lvulkan";
 				PRODUCT_BUNDLE_IDENTIFIER = Graham.MarlinViewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1488,6 +1400,7 @@
 		};
 		23881213244C063300E8444E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 23C97B0324559F1C00FF37DF /* MarlinConfig.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -1508,6 +1421,7 @@
 		};
 		23881214244C063300E8444E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 23C97B0324559F1C00FF37DF /* MarlinConfig.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;

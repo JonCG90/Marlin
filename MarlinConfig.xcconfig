@@ -1,0 +1,14 @@
+//
+//  MarlinConfig.xcconfig
+//  Marlin
+//
+//  Created by Jonathan Graham on 4/26/20.
+//  Copyright © 2020 Jonathan Graham. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+VULKAN_PATH = /Users/jongraham/vulkan/1.2.135.0
+VULKAN_SDK = $(VULKAN_PATH)/macOS
+MOLTENVK_PATH = $(VULKAN_PATH)/MoltenVK

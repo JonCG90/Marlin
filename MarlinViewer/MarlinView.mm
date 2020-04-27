@@ -34,6 +34,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 }
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
 
     // Back the view with a layer created by the makeBackingLayer method.
