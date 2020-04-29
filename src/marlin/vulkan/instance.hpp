@@ -33,7 +33,8 @@ public:
 private:
         
     VkInstance m_vkInstance;
-
+    VkPhysicalDevice m_vkPhysicalDevice;
+    
     bool m_enableValidation;
     VkDebugUtilsMessengerEXT m_debugMessenger;
     

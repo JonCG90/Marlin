@@ -9,6 +9,8 @@
 #include "instance.hpp"
 
 #include <iostream>
+#include <optional>
+#include <map>
 #include <set>
 
 namespace marlin
@@ -128,6 +130,79 @@ static void setupDebugging( VkInstance i_instance, VkDebugUtilsMessengerEXT &i_d
     }
 }
 
+static int getDevicScore( VkPhysicalDevice i_device )
+{
+    VkPhysicalDeviceProperties deviceProperties;
+    vkGetPhysicalDeviceProperties( i_device, &deviceProperties );
+    
+    VkPhysicalDeviceFeatures deviceFeatures;
+    vkGetPhysicalDeviceFeatures(i_device, &deviceFeatures);
+    
+    int score = 0;
+    
+    if ( deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU )
+    {
+        score += 100;
+    }
+    
+    return score;
+}
+
+static VkPhysicalDevice getPhysicalDevice( VkInstance i_instance )
+{
+    uint32_t deviceCount = 0;
+    vkEnumeratePhysicalDevices( i_instance, &deviceCount, nullptr );
+    
+    if ( deviceCount == 0 )
+    {
+        throw std::runtime_error( "Error: Unable to find GPUs with Vulkan support." );
+    }
+    
+    std::vector< VkPhysicalDevice > devices( deviceCount );
+    vkEnumeratePhysicalDevices( i_instance, &deviceCount, devices.data() );
+    
+    std::multimap< int, VkPhysicalDevice > deviceScores;
+    for ( const VkPhysicalDevice &device : devices )
+    {
+        int score = getDevicScore( device );
+        if ( score > 0 )
+        {
+            deviceScores.insert( { score, device } );
+        }
+    }
+    
+    if ( deviceScores.empty() )
+    {
+        throw std::runtime_error( "Error: Unable to find suitable GPU." );
+    }
+        
+    return deviceScores.rbegin()->second;
+}
+
+struct QueueFamilyIndices
+{
+    std::optional< uint32_t > graphicsFamily;
+};
+
+void getQueueFamily( VkPhysicalDevice i_device, QueueFamilyIndices o_familyIndices )
+{
+    uint32_t queueFamilyCount = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties( i_device, &queueFamilyCount, nullptr );
+    
+    std::vector< VkQueueFamilyProperties > queueFamilies( queueFamilyCount );
+    vkGetPhysicalDeviceQueueFamilyProperties( i_device, &queueFamilyCount, queueFamilies.data() );
+    
+    for ( uint32_t i = 0; i < queueFamilyCount; i++ )
+    {
+        const VkQueueFamilyProperties &queueFamily = queueFamilies[ i ];
+        
+        if ( queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT )
+        {
+            o_familyIndices.graphicsFamily = i;
+        }
+    }
+}
+
 MlnInstance & MlnInstance::getInstance()
 {
     static MlnInstance instance;
@@ -136,6 +211,9 @@ MlnInstance & MlnInstance::getInstance()
 
 MlnInstance::MlnInstance()
     : m_enableValidation( false )
+    , m_vkInstance( VK_NULL_HANDLE )
+    , m_vkPhysicalDevice( VK_NULL_HANDLE )
+    , m_debugMessenger( VK_NULL_HANDLE )
 {
 #ifdef DEBUG
     m_enableValidation = true;
@@ -188,6 +266,11 @@ void MlnInstance::init()
     {
         setupDebugging( m_vkInstance, m_debugMessenger );
     }
+    
+    m_vkPhysicalDevice = getPhysicalDevice( m_vkInstance );
+    
+    QueueFamilyIndices familyIndices;
+    getQueueFamily( m_vkPhysicalDevice, familyIndices );
 }
 
 void MlnInstance::deinit()
