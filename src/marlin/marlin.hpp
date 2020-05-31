@@ -12,7 +12,7 @@
 namespace marlin
 {
 
-void init();
+void init( void* i_layer );
 
 void render();
 

@@ -18,9 +18,9 @@
 namespace marlin
 {
 
-void init()
+void init( void* i_layer )
 {
-    marlin::MlnInstance::getInstance().init();
+    marlin::MlnInstance::getInstance().init( i_layer );
 }
 
 void render()

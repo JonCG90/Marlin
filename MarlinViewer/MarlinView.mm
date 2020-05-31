@@ -40,10 +40,10 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     // Back the view with a layer created by the makeBackingLayer method.
     self.view.wantsLayer = YES;
 
-    marlin::init();
+    marlin::init((__bridge void*)(self.view.layer ));
     
     CVDisplayLinkCreateWithActiveCGDisplays(&m_displayLink);
-    CVDisplayLinkSetOutputCallback(m_displayLink, &displayLinkCallback,  (__bridge void *)(self));
+    CVDisplayLinkSetOutputCallback(m_displayLink, &displayLinkCallback,  (__bridge void*)(self));
     CVDisplayLinkStart(m_displayLink);
 }
 

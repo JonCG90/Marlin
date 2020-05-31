@@ -24,7 +24,7 @@ public:
     
     static MlnInstance & getInstance();
     
-    void init();
+    void init( void* i_layer );
     void deinit();
     
     MlnInstance( MlnInstance const &i_instance ) = delete;
@@ -33,7 +33,18 @@ public:
 private:
         
     VkInstance m_vkInstance;
+    VkSurfaceKHR m_vkSurface;
+
     VkPhysicalDevice m_vkPhysicalDevice;
+    VkDevice m_vkDevice;
+    
+    VkQueue m_graphicsQueue;
+    VkQueue m_presentQueue;
+    
+    VkSwapchainKHR m_swapChain;
+    std::vector< VkImage > m_swapChainImages;
+    VkFormat m_swapChainImageFormat;
+    VkExtent2D m_swapChainExtent;
     
     bool m_enableValidation;
     VkDebugUtilsMessengerEXT m_debugMessenger;
@@ -44,6 +55,8 @@ private:
     
     void getValidationLayers( std::vector< const char* > &o_validationLayers );
     void getExtensions( std::vector< const char* > &o_extensions );
+    void createLogicalDevice();
+    void createSwapChain();
 
 };
 
