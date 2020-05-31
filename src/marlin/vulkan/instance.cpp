@@ -445,6 +445,7 @@ void MlnInstance::init( void* i_layer )
     
     // Create the swap chain
     createSwapChain();
+    createImageViews();
 }
 
 void MlnInstance::deinit()
@@ -452,6 +453,11 @@ void MlnInstance::deinit()
     if ( m_enableValidation )
     {
         destroyDebugUtilsMessengerEXT( m_vkInstance, m_debugMessenger, nullptr );
+    }
+    
+    for ( VkImageView imageView : m_swapChainImageViews )
+    {
+        vkDestroyImageView( m_vkDevice, imageView, nullptr );
     }
     
     vkDestroySwapchainKHR( m_vkDevice, m_swapChain, nullptr );
@@ -603,6 +609,39 @@ void MlnInstance::createSwapChain()
     
     m_swapChainImageFormat = surfaceFormat.format;
     m_swapChainExtent = extent;
+}
+
+void MlnInstance::createImageViews()
+{
+    size_t imageCount = m_swapChainImages.size();
+    m_swapChainImageViews.resize( imageCount );
+
+    for ( size_t i = 0; i < imageCount; i++ )
+    {
+        VkImage image = m_swapChainImages[ i ];
+        
+        VkImageViewCreateInfo imageViewCreateInfo{};
+        imageViewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        imageViewCreateInfo.image = image;
+        imageViewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+        imageViewCreateInfo.format = m_swapChainImageFormat;
+        
+        imageViewCreateInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+        imageViewCreateInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+        imageViewCreateInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+        imageViewCreateInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+        
+        imageViewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        imageViewCreateInfo.subresourceRange.baseMipLevel = 0;
+        imageViewCreateInfo.subresourceRange.levelCount = 1;
+        imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
+        imageViewCreateInfo.subresourceRange.layerCount = 1;
+        
+        if ( vkCreateImageView( m_vkDevice, &imageViewCreateInfo, nullptr, &m_swapChainImageViews[ i ] ) != VK_SUCCESS )
+        {
+            throw std::runtime_error( "Failed to create image views!" );
+        }
+    }
 }
 
 } // namespace marlin

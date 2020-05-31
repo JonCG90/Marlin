@@ -43,6 +43,8 @@ private:
     
     VkSwapchainKHR m_swapChain;
     std::vector< VkImage > m_swapChainImages;
+    std::vector< VkImageView > m_swapChainImageViews;
+    
     VkFormat m_swapChainImageFormat;
     VkExtent2D m_swapChainExtent;
     
@@ -57,6 +59,7 @@ private:
     void getExtensions( std::vector< const char* > &o_extensions );
     void createLogicalDevice();
     void createSwapChain();
+    void createImageViews();
 
 };
 
