@@ -181,6 +181,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		23258F0F2488FF3C0005AF13 /* shader.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = shader.vert; sourceTree = "<group>"; };
+		23258F102488FF4A0005AF13 /* shader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = shader.frag; sourceTree = "<group>"; };
 		238811E4244C056C00E8444E /* libMarlin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMarlin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F6244C062F00E8444E /* MarlinViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarlinViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F8244C062F00E8444E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -482,6 +484,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		23258F0E2488FF1F0005AF13 /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				23258F0F2488FF3C0005AF13 /* shader.vert */,
+				23258F102488FF4A0005AF13 /* shader.frag */,
+			);
+			path = shaders;
+			sourceTree = "<group>";
+		};
 		238811DB244C056C00E8444E = {
 			isa = PBXGroup;
 			children = (
@@ -548,6 +559,7 @@
 		2388123B244F8F5300E8444E /* marlin */ = {
 			isa = PBXGroup;
 			children = (
+				23258F0E2488FF1F0005AF13 /* shaders */,
 				238816E32450470800E8444E /* vulkan */,
 				2388123C244F8F5300E8444E /* marlin.hpp */,
 				2388123D244F8F5300E8444E /* marlin.cpp */,

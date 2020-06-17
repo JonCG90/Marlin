@@ -48,6 +48,8 @@ private:
     VkFormat m_swapChainImageFormat;
     VkExtent2D m_swapChainExtent;
     
+    VkPipelineLayout m_pipelineLayout;
+    
     bool m_enableValidation;
     VkDebugUtilsMessengerEXT m_debugMessenger;
     
@@ -60,6 +62,7 @@ private:
     void createLogicalDevice();
     void createSwapChain();
     void createImageViews();
+    void createGraphicsPipeline();
 
 };
 
