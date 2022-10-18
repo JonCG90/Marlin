@@ -25,7 +25,7 @@ void init( void* i_layer )
 
 void render()
 {
-    
+    marlin::MlnInstance::getInstance().drawFrame();
 }
 
 void deinit()

@@ -27,6 +27,8 @@ public:
     void init( void* i_layer );
     void deinit();
     
+    void drawFrame();
+    
     MlnInstance( MlnInstance const &i_instance ) = delete;
     void operator=( MlnInstance const &i_instance )  = delete;
     
@@ -40,7 +42,9 @@ private:
     
     VkQueue m_graphicsQueue;
     VkQueue m_presentQueue;
-    
+    VkCommandPool m_commandPool;
+    VkCommandBuffer m_commandBuffer;
+
     VkSwapchainKHR m_swapChain;
     std::vector< VkImage > m_swapChainImages;
     std::vector< VkImageView > m_swapChainImageViews;
@@ -48,8 +52,15 @@ private:
     VkFormat m_swapChainImageFormat;
     VkExtent2D m_swapChainExtent;
     
+    VkRenderPass m_renderPass;
     VkPipelineLayout m_pipelineLayout;
+    VkPipeline m_graphicsPipeline;
+    std::vector< VkFramebuffer > m_swapChainFramebuffers;
     
+    VkSemaphore m_imageAvailableSemaphore;
+    VkSemaphore m_renderFinishedSemaphore;
+    VkFence m_inFlightFence;
+
     bool m_enableValidation;
     VkDebugUtilsMessengerEXT m_debugMessenger;
     
@@ -62,8 +73,13 @@ private:
     void createLogicalDevice();
     void createSwapChain();
     void createImageViews();
+    void createRenderPass();
     void createGraphicsPipeline();
-
+    void createFramebuffers();
+    void createCommandPool();
+    void createCommandBuffer();
+    void recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t imageIndex );
+    void createSyncObjects();
 };
 
 } // namespace marlin
