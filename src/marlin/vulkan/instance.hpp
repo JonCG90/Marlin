@@ -9,6 +9,8 @@
 #ifndef MARLIN_INSTANCE_HPP
 #define MARLIN_INSTANCE_HPP
 
+#include "physicalDevice.hpp"
+
 #include <vulkan/vulkan.h>
 
 #include <vector>
@@ -37,6 +39,7 @@ private:
     VkInstance m_vkInstance;
     VkSurfaceKHR m_vkSurface;
 
+    PhysicalDevice m_physicalDevice;
     VkPhysicalDevice m_vkPhysicalDevice;
     VkDevice m_vkDevice;
     

@@ -161,6 +161,10 @@
 		238816DC2450422B00E8444E /* libMarlin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 238811E4244C056C00E8444E /* libMarlin.a */; };
 		238816E62450472B00E8444E /* instance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 238816E42450472B00E8444E /* instance.cpp */; };
 		238816E72450472B00E8444E /* instance.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 238816E52450472B00E8444E /* instance.hpp */; };
+		23ED676F28FFE2520039B92A /* vkObject.tpp in Sources */ = {isa = PBXBuildFile; fileRef = 23ED676D28FFE2520039B92A /* vkObject.tpp */; };
+		23ED677028FFE2520039B92A /* vkObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23ED676E28FFE2520039B92A /* vkObject.hpp */; };
+		23ED677328FFE49B0039B92A /* physicalDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23ED677128FFE49B0039B92A /* physicalDevice.cpp */; };
+		23ED677428FFE49B0039B92A /* physicalDevice.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23ED677228FFE49B0039B92A /* physicalDevice.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -456,6 +460,10 @@
 		238816E52450472B00E8444E /* instance.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = instance.hpp; sourceTree = "<group>"; };
 		23C97A962455962C00FF37DF /* vulkan.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = vulkan.framework; sourceTree = "<group>"; };
 		23C97B0324559F1C00FF37DF /* MarlinConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = MarlinConfig.xcconfig; sourceTree = "<group>"; };
+		23ED676D28FFE2520039B92A /* vkObject.tpp */ = {isa = PBXFileReference; lastKnownFileType = text; path = vkObject.tpp; sourceTree = "<group>"; };
+		23ED676E28FFE2520039B92A /* vkObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vkObject.hpp; sourceTree = "<group>"; };
+		23ED677128FFE49B0039B92A /* physicalDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = physicalDevice.cpp; sourceTree = "<group>"; };
+		23ED677228FFE49B0039B92A /* physicalDevice.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = physicalDevice.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -865,6 +873,10 @@
 			children = (
 				238816E42450472B00E8444E /* instance.cpp */,
 				238816E52450472B00E8444E /* instance.hpp */,
+				23ED676D28FFE2520039B92A /* vkObject.tpp */,
+				23ED676E28FFE2520039B92A /* vkObject.hpp */,
+				23ED677128FFE49B0039B92A /* physicalDevice.cpp */,
+				23ED677228FFE49B0039B92A /* physicalDevice.hpp */,
 			);
 			path = vulkan;
 			sourceTree = "<group>";
@@ -998,9 +1010,11 @@
 				23881690245040DF00E8444E /* vec1.hpp in Headers */,
 				238816C7245040DF00E8444E /* matrix_decompose.hpp in Headers */,
 				2388164E245040DF00E8444E /* mat2x3.hpp in Headers */,
+				23ED677028FFE2520039B92A /* vkObject.hpp in Headers */,
 				23881699245040DF00E8444E /* random.hpp in Headers */,
 				23881689245040DF00E8444E /* type_float.hpp in Headers */,
 				23881667245040DF00E8444E /* intrinsic_matrix.hpp in Headers */,
+				23ED677428FFE49B0039B92A /* physicalDevice.hpp in Headers */,
 				23881662245040DF00E8444E /* intrinsic_vector_relational.hpp in Headers */,
 				238816B2245040DF00E8444E /* transform.hpp in Headers */,
 				2388167C245040DF00E8444E /* intrinsic_exponential.hpp in Headers */,
@@ -1147,6 +1161,8 @@
 				2388167A245040DF00E8444E /* glm.cpp in Sources */,
 				238816E62450472B00E8444E /* instance.cpp in Sources */,
 				23881676245040DF00E8444E /* dummy.cpp in Sources */,
+				23ED677328FFE49B0039B92A /* physicalDevice.cpp in Sources */,
+				23ED676F28FFE2520039B92A /* vkObject.tpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

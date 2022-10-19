@@ -315,25 +315,20 @@ static bool isDeviceSuitable( VkPhysicalDevice i_device, VkSurfaceKHR i_surface 
     return true;
 }
 
-static std::vector< VkPhysicalDevice > getSuitableDevices( VkInstance i_instance, VkSurfaceKHR i_surface )
+static PhysicalDevices getSuitableDevices( VkInstance i_instance, VkSurfaceKHR i_surface )
 {
-    uint32_t deviceCount = 0;
-    vkEnumeratePhysicalDevices( i_instance, &deviceCount, nullptr );
-    
-    if ( deviceCount == 0 )
+    PhysicalDevices physicalDevices = PhysicalDevice::getPhysicalDevices( i_instance );
+
+    if ( physicalDevices.empty() )
     {
         throw std::runtime_error( "Error: Unable to find GPUs with Vulkan support." );
     }
+
+    PhysicalDevices suitableDevices;
     
-    std::vector< VkPhysicalDevice > devices( deviceCount );
-    vkEnumeratePhysicalDevices( i_instance, &deviceCount, devices.data() );
-    
-    std::vector< VkPhysicalDevice > suitableDevices;
-    suitableDevices.reserve( deviceCount );
-    
-    for ( const VkPhysicalDevice &device : devices )
+    for ( const PhysicalDevice &device : physicalDevices )
     {
-        if ( isDeviceSuitable( device, i_surface ) )
+        if ( isDeviceSuitable( device.getObject(), i_surface ) )
         {
             suitableDevices.push_back( device );
         }
@@ -344,15 +339,15 @@ static std::vector< VkPhysicalDevice > getSuitableDevices( VkInstance i_instance
 
 static VkPhysicalDevice pickPhysicalDevice( VkInstance i_instance, VkSurfaceKHR i_surface )
 {
-    std::vector< VkPhysicalDevice > devices = getSuitableDevices( i_instance, i_surface );
+    PhysicalDevices devices = getSuitableDevices( i_instance, i_surface );
     
     std::multimap< int, VkPhysicalDevice > deviceScores;
-    for ( const VkPhysicalDevice &device : devices )
+    for ( const PhysicalDevice &device : devices )
     {
-        int score = getDevicScore( device );
+        int score = getDevicScore( device.getObject() );
         if ( score > 0 )
         {
-            deviceScores.insert( { score, device } );
+            deviceScores.insert( { score, device.getObject() } );
         }
     }
     
