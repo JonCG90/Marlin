@@ -42,4 +42,22 @@ PhysicalDevice::PhysicalDevice( VkPhysicalDevice i_device )
     
 }
 
+void PhysicalDevice::getQueueFamilyProperties( std::vector< VkQueueFamilyProperties > &properties )
+{
+    uint32_t count = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties( m_object, &count, nullptr );
+    
+    properties.resize( count );
+    vkGetPhysicalDeviceQueueFamilyProperties( m_object, &count, properties.data() );
+}
+
+void PhysicalDevice::getExtensions( std::vector< VkExtensionProperties > &extensions )
+{
+    uint32_t count;
+    vkEnumerateDeviceExtensionProperties( m_object, nullptr, &count, nullptr );
+
+    extensions.resize( count );
+    vkEnumerateDeviceExtensionProperties( m_object, nullptr, &count, extensions.data() );
+}
+
 } // namespace marlin

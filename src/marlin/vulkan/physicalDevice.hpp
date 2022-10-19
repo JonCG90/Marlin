@@ -31,6 +31,8 @@ public:
     PhysicalDevice() = default;
     explicit PhysicalDevice( VkPhysicalDevice i_device );
 
+    void getQueueFamilyProperties( std::vector< VkQueueFamilyProperties > &properties );
+    void getExtensions( std::vector< VkExtensionProperties > &extensions );
 };
 
 } // namespace marlin

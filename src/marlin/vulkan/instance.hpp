@@ -40,7 +40,6 @@ private:
     VkSurfaceKHR m_vkSurface;
 
     PhysicalDevice m_physicalDevice;
-    VkPhysicalDevice m_vkPhysicalDevice;
     VkDevice m_vkDevice;
     
     VkQueue m_graphicsQueue;
