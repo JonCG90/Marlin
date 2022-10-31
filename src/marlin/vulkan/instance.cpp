@@ -441,7 +441,6 @@ MlnInstance & MlnInstance::getInstance()
 MlnInstance::MlnInstance()
     : m_enableValidation( false )
     , m_vkInstance( VK_NULL_HANDLE )
-    , m_vkDevice( VK_NULL_HANDLE )
     , m_debugMessenger( VK_NULL_HANDLE )
 {
 #ifdef DEBUG
@@ -488,28 +487,28 @@ void MlnInstance::init( void* i_layer )
 
 void MlnInstance::deinit()
 {
-    vkDestroySemaphore( m_vkDevice, m_imageAvailableSemaphore, nullptr );
-    vkDestroySemaphore( m_vkDevice, m_renderFinishedSemaphore, nullptr );
-    vkDestroyFence( m_vkDevice, m_inFlightFence, nullptr );
+    vkDestroySemaphore( m_device.getObject(), m_imageAvailableSemaphore, nullptr );
+    vkDestroySemaphore( m_device.getObject(), m_renderFinishedSemaphore, nullptr );
+    vkDestroyFence( m_device.getObject(), m_inFlightFence, nullptr );
     
-    vkDestroyCommandPool( m_vkDevice, m_commandPool, nullptr );
+    vkDestroyCommandPool( m_device.getObject(), m_commandPool, nullptr );
     
     for ( auto framebuffer : m_swapChainFramebuffers )
     {
-        vkDestroyFramebuffer( m_vkDevice, framebuffer, nullptr );
+        vkDestroyFramebuffer( m_device.getObject(), framebuffer, nullptr );
     }
     
-    vkDestroyPipeline( m_vkDevice, m_graphicsPipeline, nullptr );
-    vkDestroyPipelineLayout( m_vkDevice, m_pipelineLayout, nullptr );
-    vkDestroyRenderPass( m_vkDevice, m_renderPass, nullptr );
+    vkDestroyPipeline( m_device.getObject(), m_graphicsPipeline, nullptr );
+    vkDestroyPipelineLayout( m_device.getObject(), m_pipelineLayout, nullptr );
+    vkDestroyRenderPass( m_device.getObject(), m_renderPass, nullptr );
 
     for ( VkImageView imageView : m_swapChainImageViews )
     {
-        vkDestroyImageView( m_vkDevice, imageView, nullptr );
+        vkDestroyImageView( m_device.getObject(), imageView, nullptr );
     }
     
-    vkDestroySwapchainKHR( m_vkDevice, m_swapChain, nullptr );
-    vkDestroyDevice( m_vkDevice, nullptr );
+    vkDestroySwapchainKHR( m_device.getObject(), m_swapChain, nullptr );
+    vkDestroyDevice( m_device.getObject(), nullptr );
     
     if ( m_enableValidation )
     {
@@ -522,11 +521,11 @@ void MlnInstance::deinit()
 
 void MlnInstance::drawFrame()
 {
-    vkWaitForFences( m_vkDevice, 1, &m_inFlightFence, VK_TRUE, UINT64_MAX );
-    vkResetFences( m_vkDevice, 1, &m_inFlightFence );
+    vkWaitForFences( m_device.getObject(), 1, &m_inFlightFence, VK_TRUE, UINT64_MAX );
+    vkResetFences( m_device.getObject(), 1, &m_inFlightFence );
 
     uint32_t imageIndex;
-    vkAcquireNextImageKHR( m_vkDevice, m_swapChain, UINT64_MAX, m_imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex );
+    vkAcquireNextImageKHR( m_device.getObject(), m_swapChain, UINT64_MAX, m_imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex );
     
     vkResetCommandBuffer( m_commandBuffer, 0 );
     
@@ -573,44 +572,12 @@ void MlnInstance::createLogicalDevice()
 {
     QueueFamilyIndices families;
     getQueueFamilies( m_physicalDevice, m_surface, families );
-
-    std::set< uint32_t > queueFamilies {
-        families.graphicsFamily.value().getIndex(),
-        families.presentFamily.value().getIndex()
-    };
     
-    float queuePriority = 1.0f;
-    std::vector< VkDeviceQueueCreateInfo > queueCreateInfos;
-    
-    for ( uint32_t queueFamily : queueFamilies )
-    {
-        VkDeviceQueueCreateInfo queueCreateInfo {};
-        queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-        queueCreateInfo.queueFamilyIndex = queueFamily;
-        queueCreateInfo.queueCount = 1;
-        queueCreateInfo.pQueuePriorities = &queuePriority;
-        
-        queueCreateInfos.push_back( queueCreateInfo );
-    }
-    
-    VkPhysicalDeviceFeatures deviceFeatures {};
-
-    VkDeviceCreateInfo createInfo {};
-    createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-    createInfo.pQueueCreateInfos = queueCreateInfos.data();
-    createInfo.queueCreateInfoCount = static_cast< uint32_t >( queueCreateInfos.size() );
-    createInfo.pEnabledFeatures = &deviceFeatures;
-    createInfo.enabledExtensionCount = static_cast< uint32_t >( s_deviceExtensions.size() );
-    createInfo.ppEnabledExtensionNames = s_deviceExtensions.data();
-    
-    if ( vkCreateDevice( m_physicalDevice.getObject(), &createInfo, nullptr, &m_vkDevice ) != VK_SUCCESS )
-    {
-        throw std::runtime_error( "Failed to create logical device." );
-    }
+    m_device = Device::create( m_physicalDevice, { families.graphicsFamily.value(), families.presentFamily.value() } );
     
     // Get our device queues
-    vkGetDeviceQueue( m_vkDevice, families.graphicsFamily.value().getIndex(), 0, &m_graphicsQueue );
-    vkGetDeviceQueue( m_vkDevice, families.presentFamily.value().getIndex(), 0, &m_presentQueue );
+    m_graphicsQueue = m_device.getQueue( families.graphicsFamily.value(), 0 );
+    m_presentQueue = m_device.getQueue( families.presentFamily.value(), 0 );
 }
 
 void MlnInstance::createSwapChain()
@@ -668,15 +635,15 @@ void MlnInstance::createSwapChain()
     swapChainCreateInfo.clipped = VK_TRUE;
     swapChainCreateInfo.oldSwapchain = VK_NULL_HANDLE;
 
-    if ( vkCreateSwapchainKHR( m_vkDevice, &swapChainCreateInfo, nullptr, &m_swapChain ) != VK_SUCCESS )
+    if ( vkCreateSwapchainKHR( m_device.getObject(), &swapChainCreateInfo, nullptr, &m_swapChain ) != VK_SUCCESS )
     {
         throw std::runtime_error("Failed to create swap chain!");
     }
     
     // Ge the swap chain images
-    vkGetSwapchainImagesKHR( m_vkDevice, m_swapChain, &imageCount, nullptr );
+    vkGetSwapchainImagesKHR( m_device.getObject(), m_swapChain, &imageCount, nullptr );
     m_swapChainImages.resize( imageCount );
-    vkGetSwapchainImagesKHR( m_vkDevice, m_swapChain, &imageCount, m_swapChainImages.data() );
+    vkGetSwapchainImagesKHR( m_device.getObject(), m_swapChain, &imageCount, m_swapChainImages.data() );
     
     m_swapChainImageFormat = surfaceFormat.format;
     m_swapChainExtent = extent;
@@ -708,7 +675,7 @@ void MlnInstance::createImageViews()
         imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
         imageViewCreateInfo.subresourceRange.layerCount = 1;
         
-        if ( vkCreateImageView( m_vkDevice, &imageViewCreateInfo, nullptr, &m_swapChainImageViews[ i ] ) != VK_SUCCESS )
+        if ( vkCreateImageView( m_device.getObject(), &imageViewCreateInfo, nullptr, &m_swapChainImageViews[ i ] ) != VK_SUCCESS )
         {
             throw std::runtime_error( "Failed to create image views!" );
         }
@@ -792,7 +759,7 @@ void MlnInstance::createRenderPass()
     renderPassInfo.dependencyCount = 1;
     renderPassInfo.pDependencies = &dependency;
     
-    if ( vkCreateRenderPass( m_vkDevice, &renderPassInfo, nullptr, &m_renderPass ) != VK_SUCCESS )
+    if ( vkCreateRenderPass( m_device.getObject(), &renderPassInfo, nullptr, &m_renderPass ) != VK_SUCCESS )
     {
         throw std::runtime_error("failed to create render pass!");
     }
@@ -806,8 +773,8 @@ void MlnInstance::createGraphicsPipeline()
     readFile( "/Users/jongraham/Projects/Marlin/src/marlin/shaders/vert.spv", vertBytes );
     readFile( "/Users/jongraham/Projects/Marlin/src/marlin/shaders/frag.spv", fragBytes );
     
-    VkShaderModule vertShaderModule = createShaderModule( vertBytes, m_vkDevice );
-    VkShaderModule fragShaderModule = createShaderModule( fragBytes, m_vkDevice );
+    VkShaderModule vertShaderModule = createShaderModule( vertBytes, m_device.getObject() );
+    VkShaderModule fragShaderModule = createShaderModule( fragBytes, m_device.getObject() );
     
     VkPipelineShaderStageCreateInfo vertShaderStageInfo {};
     vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -914,7 +881,7 @@ void MlnInstance::createGraphicsPipeline()
     pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
     pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
     
-    if ( vkCreatePipelineLayout( m_vkDevice, &pipelineLayoutInfo, nullptr, &m_pipelineLayout ) != VK_SUCCESS )
+    if ( vkCreatePipelineLayout( m_device.getObject(), &pipelineLayoutInfo, nullptr, &m_pipelineLayout ) != VK_SUCCESS )
     {
         throw std::runtime_error( "Failed to create pipeline layout!" );
     }
@@ -938,13 +905,13 @@ void MlnInstance::createGraphicsPipeline()
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
     pipelineInfo.basePipelineIndex = -1; // Optional
     
-    if ( vkCreateGraphicsPipelines( m_vkDevice, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_graphicsPipeline ) != VK_SUCCESS )
+    if ( vkCreateGraphicsPipelines( m_device.getObject(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_graphicsPipeline ) != VK_SUCCESS )
     {
         throw std::runtime_error( "failed to create graphics pipeline!" );
     }
     
-    vkDestroyShaderModule( m_vkDevice, vertShaderModule, nullptr );
-    vkDestroyShaderModule( m_vkDevice, fragShaderModule, nullptr );
+    vkDestroyShaderModule( m_device.getObject(), vertShaderModule, nullptr );
+    vkDestroyShaderModule( m_device.getObject(), fragShaderModule, nullptr );
 }
 
 void MlnInstance::createFramebuffers()
@@ -967,7 +934,7 @@ void MlnInstance::createFramebuffers()
         framebufferInfo.height = m_swapChainExtent.height;
         framebufferInfo.layers = 1;
 
-        if ( vkCreateFramebuffer( m_vkDevice, &framebufferInfo, nullptr, &m_swapChainFramebuffers[ i ] ) != VK_SUCCESS )
+        if ( vkCreateFramebuffer( m_device.getObject(), &framebufferInfo, nullptr, &m_swapChainFramebuffers[ i ] ) != VK_SUCCESS )
         {
             throw std::runtime_error("failed to create framebuffer!");
         }
@@ -984,7 +951,7 @@ void MlnInstance::createCommandPool()
     poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
     poolInfo.queueFamilyIndex = familyIndices.graphicsFamily.value().getIndex();
     
-    if ( vkCreateCommandPool( m_vkDevice, &poolInfo, nullptr, &m_commandPool ) != VK_SUCCESS )
+    if ( vkCreateCommandPool( m_device.getObject(), &poolInfo, nullptr, &m_commandPool ) != VK_SUCCESS )
     {
         throw std::runtime_error( "failed to create command pool!" );
     }
@@ -1000,7 +967,7 @@ void MlnInstance::createCommandBuffer()
         .commandBufferCount = 1,
     };
     
-    if ( vkAllocateCommandBuffers( m_vkDevice, &allocInfo, &m_commandBuffer ) != VK_SUCCESS ) {
+    if ( vkAllocateCommandBuffers( m_device.getObject(), &allocInfo, &m_commandBuffer ) != VK_SUCCESS ) {
         throw std::runtime_error( "failed to allocate command buffers!" );
     }
 }
@@ -1091,9 +1058,9 @@ static void s_createFence( const VkDevice &i_device, VkFence &io_fence )
 
 void MlnInstance::createSyncObjects()
 {
-    s_createSemaphore( m_vkDevice, m_imageAvailableSemaphore );
-    s_createSemaphore( m_vkDevice, m_renderFinishedSemaphore );
-    s_createFence( m_vkDevice, m_inFlightFence );
+    s_createSemaphore( m_device.getObject(), m_imageAvailableSemaphore );
+    s_createSemaphore( m_device.getObject(), m_renderFinishedSemaphore );
+    s_createFence( m_device.getObject(), m_inFlightFence );
 }
 
 } // namespace marlin

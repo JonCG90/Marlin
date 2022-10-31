@@ -9,6 +9,7 @@
 #ifndef MARLIN_INSTANCE_HPP
 #define MARLIN_INSTANCE_HPP
 
+#include "device.hpp"
 #include "physicalDevice.hpp"
 #include "surface.hpp"
 
@@ -51,8 +52,8 @@ private:
     Surface m_surface;
 
     PhysicalDevice m_physicalDevice;
-    VkDevice m_vkDevice;
-    
+    Device m_device;
+        
     VkQueue m_graphicsQueue;
     VkQueue m_presentQueue;
     VkCommandPool m_commandPool;

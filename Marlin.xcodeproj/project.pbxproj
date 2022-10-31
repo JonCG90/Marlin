@@ -167,6 +167,8 @@
 		23ED677428FFE49B0039B92A /* physicalDevice.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23ED677228FFE49B0039B92A /* physicalDevice.hpp */; };
 		23ED677729069D4F0039B92A /* surface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23ED677529069D4F0039B92A /* surface.cpp */; };
 		23ED677829069D4F0039B92A /* surface.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23ED677629069D4F0039B92A /* surface.hpp */; };
+		23ED677B290FD29E0039B92A /* device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23ED6779290FD29E0039B92A /* device.cpp */; };
+		23ED677C290FD29E0039B92A /* device.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23ED677A290FD29E0039B92A /* device.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -468,6 +470,8 @@
 		23ED677228FFE49B0039B92A /* physicalDevice.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = physicalDevice.hpp; sourceTree = "<group>"; };
 		23ED677529069D4F0039B92A /* surface.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = surface.cpp; sourceTree = "<group>"; };
 		23ED677629069D4F0039B92A /* surface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = surface.hpp; sourceTree = "<group>"; };
+		23ED6779290FD29E0039B92A /* device.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = device.cpp; sourceTree = "<group>"; };
+		23ED677A290FD29E0039B92A /* device.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = device.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -883,6 +887,8 @@
 				23ED677228FFE49B0039B92A /* physicalDevice.hpp */,
 				23ED677529069D4F0039B92A /* surface.cpp */,
 				23ED677629069D4F0039B92A /* surface.hpp */,
+				23ED6779290FD29E0039B92A /* device.cpp */,
+				23ED677A290FD29E0039B92A /* device.hpp */,
 			);
 			path = vulkan;
 			sourceTree = "<group>";
@@ -913,6 +919,7 @@
 				2388168C245040DF00E8444E /* intrinsic_common.hpp in Headers */,
 				2388169D245040DF00E8444E /* matrix_access.hpp in Headers */,
 				23881684245040DF00E8444E /* type_vec3.hpp in Headers */,
+				23ED677C290FD29E0039B92A /* device.hpp in Headers */,
 				238816C4245040DF00E8444E /* norm.hpp in Headers */,
 				23881686245040DF00E8444E /* type_vec2.hpp in Headers */,
 				2388164F245040DF00E8444E /* mat4x4.hpp in Headers */,
@@ -1167,6 +1174,7 @@
 				238816DB245041FC00E8444E /* marlin.cpp in Sources */,
 				2388167A245040DF00E8444E /* glm.cpp in Sources */,
 				238816E62450472B00E8444E /* instance.cpp in Sources */,
+				23ED677B290FD29E0039B92A /* device.cpp in Sources */,
 				23881676245040DF00E8444E /* dummy.cpp in Sources */,
 				23ED677729069D4F0039B92A /* surface.cpp in Sources */,
 				23ED677328FFE49B0039B92A /* physicalDevice.cpp in Sources */,
