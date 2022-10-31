@@ -22,6 +22,7 @@ public:
     VkObjectT();
     virtual ~VkObjectT() = default;
     
+    bool isValid() const;
     T getObject() const;
     
 protected:

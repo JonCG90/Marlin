@@ -10,6 +10,7 @@
 #define MARLIN_INSTANCE_HPP
 
 #include "physicalDevice.hpp"
+#include "surface.hpp"
 
 #include <vulkan/vulkan.h>
 
@@ -17,6 +18,16 @@
 
 namespace marlin
 {
+
+class Instance : public VkObjectT< VkInstance >
+{
+public:
+    
+    static Instance create( bool i_enableValidation );
+    
+    Instance() = default;
+    explicit Instance( VkInstance i_instance );
+};
 
 class MlnInstance
 {
@@ -37,7 +48,7 @@ public:
 private:
         
     VkInstance m_vkInstance;
-    VkSurfaceKHR m_vkSurface;
+    Surface m_surface;
 
     PhysicalDevice m_physicalDevice;
     VkDevice m_vkDevice;
@@ -70,8 +81,6 @@ private:
     
 private:
     
-    void getValidationLayers( std::vector< const char* > &o_validationLayers );
-    void getExtensions( std::vector< const char* > &o_extensions );
     void createLogicalDevice();
     void createSwapChain();
     void createImageViews();

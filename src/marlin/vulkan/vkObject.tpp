@@ -25,6 +25,11 @@ VkObjectT< T >::VkObjectT()
 {
 }
 
+template < class T >
+bool VkObjectT< T >::isValid() const
+{
+    return m_object != nullptr;
+}
 
 template < class T >
 T VkObjectT< T >::getObject() const

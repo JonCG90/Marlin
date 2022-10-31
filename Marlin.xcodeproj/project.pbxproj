@@ -165,6 +165,8 @@
 		23ED677028FFE2520039B92A /* vkObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23ED676E28FFE2520039B92A /* vkObject.hpp */; };
 		23ED677328FFE49B0039B92A /* physicalDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23ED677128FFE49B0039B92A /* physicalDevice.cpp */; };
 		23ED677428FFE49B0039B92A /* physicalDevice.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23ED677228FFE49B0039B92A /* physicalDevice.hpp */; };
+		23ED677729069D4F0039B92A /* surface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23ED677529069D4F0039B92A /* surface.cpp */; };
+		23ED677829069D4F0039B92A /* surface.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23ED677629069D4F0039B92A /* surface.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -464,6 +466,8 @@
 		23ED676E28FFE2520039B92A /* vkObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vkObject.hpp; sourceTree = "<group>"; };
 		23ED677128FFE49B0039B92A /* physicalDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = physicalDevice.cpp; sourceTree = "<group>"; };
 		23ED677228FFE49B0039B92A /* physicalDevice.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = physicalDevice.hpp; sourceTree = "<group>"; };
+		23ED677529069D4F0039B92A /* surface.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = surface.cpp; sourceTree = "<group>"; };
+		23ED677629069D4F0039B92A /* surface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = surface.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -877,6 +881,8 @@
 				23ED676E28FFE2520039B92A /* vkObject.hpp */,
 				23ED677128FFE49B0039B92A /* physicalDevice.cpp */,
 				23ED677228FFE49B0039B92A /* physicalDevice.hpp */,
+				23ED677529069D4F0039B92A /* surface.cpp */,
+				23ED677629069D4F0039B92A /* surface.hpp */,
 			);
 			path = vulkan;
 			sourceTree = "<group>";
@@ -910,6 +916,7 @@
 				238816C4245040DF00E8444E /* norm.hpp in Headers */,
 				23881686245040DF00E8444E /* type_vec2.hpp in Headers */,
 				2388164F245040DF00E8444E /* mat4x4.hpp in Headers */,
+				23ED677829069D4F0039B92A /* surface.hpp in Headers */,
 				238816D7245040DF00E8444E /* vector_query.hpp in Headers */,
 				2388164B245040DF00E8444E /* vec4.hpp in Headers */,
 				238816B9245040DF00E8444E /* log_base.hpp in Headers */,
@@ -1161,6 +1168,7 @@
 				2388167A245040DF00E8444E /* glm.cpp in Sources */,
 				238816E62450472B00E8444E /* instance.cpp in Sources */,
 				23881676245040DF00E8444E /* dummy.cpp in Sources */,
+				23ED677729069D4F0039B92A /* surface.cpp in Sources */,
 				23ED677328FFE49B0039B92A /* physicalDevice.cpp in Sources */,
 				23ED676F28FFE2520039B92A /* vkObject.tpp in Sources */,
 			);

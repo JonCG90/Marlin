@@ -22,6 +22,28 @@ namespace marlin
 
 #define VK_EXT_METAL_SURFACE_EXTENSION_NAME "VK_EXT_metal_surface"
 
+// Callback for debug output on validation layers
+static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback( VkDebugUtilsMessageSeverityFlagBitsEXT i_severity, VkDebugUtilsMessageTypeFlagsEXT i_type, const VkDebugUtilsMessengerCallbackDataEXT* i_callbackData, void* i_userData )
+{
+    if ( i_severity >= VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT )
+    {
+        std::cerr << "Validation layer: " << i_callbackData->pMessage << std::endl;
+    }
+
+    return VK_FALSE;
+}
+
+static void populateDebugInfo( VkDebugUtilsMessengerCreateInfoEXT &debugCreateInfo )
+{
+    debugCreateInfo = VkDebugUtilsMessengerCreateInfoEXT {
+        .sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
+        .messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT,
+        .messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT,
+        .pfnUserCallback = debugCallback,
+        .pUserData = nullptr,
+    };
+}
+
 static std::set< std::string > getAvailableInstanceExtensions()
 {
     uint32_t extensionCount = 0;
@@ -52,8 +74,29 @@ static bool hasRequiredInstanceExtension( const char* i_extension )
     return true;
 }
 
+void getExtensions( bool i_enableValidation, std::vector< const char* > &o_extensions )
+{
+    std::vector< const char* > extensions = {
+        VK_EXT_METAL_SURFACE_EXTENSION_NAME,
+        VK_KHR_SURFACE_EXTENSION_NAME,
+    };
+
+    if ( i_enableValidation )
+    {
+        extensions.push_back( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
+    }
+    
+    for ( const char* extension : extensions )
+    {
+        if ( hasRequiredInstanceExtension( extension ) )
+        {
+            o_extensions.push_back( extension );
+        }
+    }
+}
+
 static void getSupportedValidationLayers( const std::vector< const char* > &i_validationLayers, std::vector< const char* > &o_validationLayers )
-{    
+{
     uint32_t layerCount;
     vkEnumerateInstanceLayerProperties( &layerCount, nullptr );
 
@@ -81,16 +124,71 @@ static void getSupportedValidationLayers( const std::vector< const char* > &i_va
     }
 }
 
-// Callback for debug output on validation layers
-static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback( VkDebugUtilsMessageSeverityFlagBitsEXT i_severity, VkDebugUtilsMessageTypeFlagsEXT i_type, const VkDebugUtilsMessengerCallbackDataEXT* i_callbackData, void* i_userData )
+void getValidationLayers( bool i_enableValidation, std::vector< const char* > &o_validationLayers )
 {
-    if ( i_severity >= VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT )
-    {
-        std::cerr << "Validation layer: " << i_callbackData->pMessage << std::endl;
-    }
+    std::vector< const char* > validationLayers;
 
-    return VK_FALSE;
+    if ( i_enableValidation )
+    {
+        validationLayers.push_back( "VK_LAYER_KHRONOS_validation" );
+    }
+    
+    o_validationLayers.clear();
+    getSupportedValidationLayers( validationLayers, o_validationLayers );
 }
+
+Instance Instance::create( bool i_enableValidation )
+{
+    VkApplicationInfo appInfo {};
+    appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+    appInfo.pApplicationName = "Marlin Render";
+    appInfo.applicationVersion = VK_MAKE_VERSION( 1, 0, 0 );
+    appInfo.pEngineName = "No Engine";
+    appInfo.engineVersion = VK_MAKE_VERSION( 1, 0, 0 );
+    appInfo.apiVersion = VK_API_VERSION_1_0;
+    
+    VkInstanceCreateInfo createInstanceInfo {};
+    createInstanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    createInstanceInfo.pApplicationInfo = &appInfo;
+    
+    std::vector< const char* > extensions;
+    getExtensions( i_enableValidation, extensions );
+    createInstanceInfo.enabledExtensionCount = static_cast< uint32_t >( extensions.size() );
+    createInstanceInfo.ppEnabledExtensionNames = extensions.data();
+    
+    std::vector< const char* > validationLayers;
+    getValidationLayers( i_enableValidation, validationLayers );
+    createInstanceInfo.enabledLayerCount = static_cast< uint32_t >( validationLayers.size() );
+    createInstanceInfo.ppEnabledLayerNames = validationLayers.data();
+    
+    VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo {};
+    if ( i_enableValidation )
+    {
+        populateDebugInfo( debugCreateInfo );
+        createInstanceInfo.pNext = &debugCreateInfo;
+    }
+    else
+    {
+        createInstanceInfo.enabledLayerCount = 0;
+    }
+        
+    VkInstance vkInstance;
+    if ( vkCreateInstance( &createInstanceInfo, nullptr, &vkInstance ) != VK_SUCCESS )
+    {
+        throw std::runtime_error( "Error: Failed to create Vulkan instance." );
+    }
+    
+    return Instance( vkInstance );
+}
+
+Instance::Instance( VkInstance i_instance )
+: VkObjectT< VkInstance >( i_instance )
+{
+}
+
+//**
+// Old
+//**
 
 VkResult createDebugUtilsMessengerEXT( VkInstance i_instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger ) {
     
@@ -116,16 +214,6 @@ void destroyDebugUtilsMessengerEXT( VkInstance i_instance, VkDebugUtilsMessenger
     }
 }
 
-static void populateDebugInfo( VkDebugUtilsMessengerCreateInfoEXT &debugCreateInfo )
-{
-    debugCreateInfo = {};
-    debugCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-    debugCreateInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-    debugCreateInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
-    debugCreateInfo.pfnUserCallback = debugCallback;
-    debugCreateInfo.pUserData = nullptr;
-}
-
 static void setupDebugging( VkInstance i_instance, VkDebugUtilsMessengerEXT &i_debugMessenger )
 {
     VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo {};
@@ -138,13 +226,9 @@ static void setupDebugging( VkInstance i_instance, VkDebugUtilsMessengerEXT &i_d
     }
 }
 
-static int getDevicScore( VkPhysicalDevice i_device )
+static int getDevicScore( const PhysicalDevice &i_device )
 {
-    VkPhysicalDeviceProperties deviceProperties;
-    vkGetPhysicalDeviceProperties( i_device, &deviceProperties );
-    
-    VkPhysicalDeviceFeatures deviceFeatures;
-    vkGetPhysicalDeviceFeatures(i_device, &deviceFeatures);
+    VkPhysicalDeviceProperties deviceProperties = i_device.getProperties();
     
     int score = 0;
     
@@ -158,30 +242,25 @@ static int getDevicScore( VkPhysicalDevice i_device )
 
 struct QueueFamilyIndices
 {
-    std::optional< uint32_t > graphicsFamily;
-    std::optional< uint32_t > presentFamily;
+    std::optional< QueueFamily > graphicsFamily;
+    std::optional< QueueFamily > presentFamily;
 };
 
-static void getQueueFamilies( PhysicalDevice i_device, VkSurfaceKHR i_surface, QueueFamilyIndices &o_familyIndices )
+static void getQueueFamilies( PhysicalDevice i_device, Surface i_surface, QueueFamilyIndices &o_familyIndices )
 {
-    std::vector< VkQueueFamilyProperties > properties;
-    i_device.getQueueFamilyProperties( properties );
-
-    for ( uint32_t i = 0; i < properties.size(); i++ )
+    QueueFamilies queueFamilies;
+    i_device.getQueueFamilies( queueFamilies );
+    
+    for ( QueueFamily family : queueFamilies )
     {
-        const VkQueueFamilyProperties &queueFamily = properties[ i ];
-        
-        if ( queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT )
+        if ( family.hasGraphics() )
         {
-            o_familyIndices.graphicsFamily = i;
+            o_familyIndices.graphicsFamily = family;
         }
         
-        VkBool32 presentSupport = false;
-        vkGetPhysicalDeviceSurfaceSupportKHR( i_device.getObject(), i, i_surface, &presentSupport );
-        
-        if ( presentSupport )
+        if ( family.isSurfaceSupported( i_surface ) )
         {
-            o_familyIndices.presentFamily = i;
+            o_familyIndices.presentFamily = family;
         }
     }
 }
@@ -256,36 +335,36 @@ VkExtent2D chooseSwapExtent( const VkSurfaceCapabilitiesKHR &i_capabilities )
     return { width, height };
 }
 
-SwapChainSupportDetails querySwapChainSupport( VkPhysicalDevice i_device, VkSurfaceKHR i_surface )
+SwapChainSupportDetails querySwapChainSupport( VkPhysicalDevice i_device, Surface i_surface )
 {
     SwapChainSupportDetails details;
     
     // Query capabilities
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR( i_device, i_surface, &details.capabilities );
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR( i_device, i_surface.getObject(), &details.capabilities );
     
     // Query formats
     uint32_t formatCount;
-    vkGetPhysicalDeviceSurfaceFormatsKHR( i_device, i_surface, &formatCount, nullptr );
+    vkGetPhysicalDeviceSurfaceFormatsKHR( i_device, i_surface.getObject(), &formatCount, nullptr );
 
     if ( formatCount != 0 )
     {
         details.formats.resize(formatCount);
-        vkGetPhysicalDeviceSurfaceFormatsKHR( i_device, i_surface, &formatCount, details.formats.data() );
+        vkGetPhysicalDeviceSurfaceFormatsKHR( i_device, i_surface.getObject(), &formatCount, details.formats.data() );
     }
     
     uint32_t presentModeCount;
-    vkGetPhysicalDeviceSurfacePresentModesKHR( i_device, i_surface, &presentModeCount, nullptr );
+    vkGetPhysicalDeviceSurfacePresentModesKHR( i_device, i_surface.getObject(), &presentModeCount, nullptr );
 
     if ( presentModeCount != 0 )
     {
         details.presentModes.resize( presentModeCount );
-        vkGetPhysicalDeviceSurfacePresentModesKHR( i_device, i_surface, &presentModeCount, details.presentModes.data() );
+        vkGetPhysicalDeviceSurfacePresentModesKHR( i_device, i_surface.getObject(), &presentModeCount, details.presentModes.data() );
     }
     
     return details;
 }
 
-static bool isDeviceSuitable( PhysicalDevice i_device, VkSurfaceKHR i_surface )
+static bool isDeviceSuitable( PhysicalDevice i_device, Surface i_surface )
 {
     if ( !hasRequiredExtensions( i_device ) )
     {
@@ -309,7 +388,7 @@ static bool isDeviceSuitable( PhysicalDevice i_device, VkSurfaceKHR i_surface )
     return true;
 }
 
-static PhysicalDevices getSuitableDevices( VkInstance i_instance, VkSurfaceKHR i_surface )
+static PhysicalDevices getSuitableDevices( VkInstance i_instance, Surface i_surface )
 {
     PhysicalDevices physicalDevices = PhysicalDevice::getPhysicalDevices( i_instance );
 
@@ -331,14 +410,14 @@ static PhysicalDevices getSuitableDevices( VkInstance i_instance, VkSurfaceKHR i
     return suitableDevices;
 }
 
-static PhysicalDevice pickPhysicalDevice( VkInstance i_instance, VkSurfaceKHR i_surface )
+static PhysicalDevice pickPhysicalDevice( VkInstance i_instance, Surface i_surface )
 {
     PhysicalDevices devices = getSuitableDevices( i_instance, i_surface );
     
     std::multimap< int, PhysicalDevice > deviceScores;
     for ( const PhysicalDevice &device : devices )
     {
-        int score = getDevicScore( device.getObject() );
+        int score = getDevicScore( device );
         if ( score > 0 )
         {
             deviceScores.insert( { score, device } );
@@ -374,63 +453,18 @@ MlnInstance::MlnInstance()
 
 void MlnInstance::init( void* i_layer )
 {
-    VkApplicationInfo appInfo {};
-    appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    appInfo.pApplicationName = "Hello Triangle";
-    appInfo.applicationVersion = VK_MAKE_VERSION( 1, 0, 0 );
-    appInfo.pEngineName = "No Engine";
-    appInfo.engineVersion = VK_MAKE_VERSION( 1, 0, 0 );
-    appInfo.apiVersion = VK_API_VERSION_1_0;
-    
-    VkInstanceCreateInfo createInstanceInfo {};
-    createInstanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-    createInstanceInfo.pApplicationInfo = &appInfo;
-    
-    std::vector< const char* > extensions;
-    getExtensions( extensions );
-    createInstanceInfo.enabledExtensionCount = static_cast< uint32_t >( extensions.size() );
-    createInstanceInfo.ppEnabledExtensionNames = extensions.data();
-    
-    std::vector< const char* > validationLayers;
-    getValidationLayers( validationLayers );
-    createInstanceInfo.enabledLayerCount = static_cast< uint32_t >( validationLayers.size() );
-    createInstanceInfo.ppEnabledLayerNames = validationLayers.data();
-    
-    VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo {};
-    if ( m_enableValidation )
-    {
-        populateDebugInfo( debugCreateInfo );
-        createInstanceInfo.pNext = &debugCreateInfo;
-    }
-    else
-    {
-        createInstanceInfo.enabledLayerCount = 0;
-    }
-        
-    if ( vkCreateInstance( &createInstanceInfo, nullptr, &m_vkInstance ) != VK_SUCCESS )
-    {
-        throw std::runtime_error( "Error: Failed to create Vulkan instance." );
-    }
+    Instance instance = Instance::create( true );
+    m_vkInstance = instance.getObject();
     
     if ( m_enableValidation )
     {
         setupDebugging( m_vkInstance, m_debugMessenger );
     }
     
-    VkMetalSurfaceCreateInfoEXT createSurfaceInfo {
-        .sType = VK_STRUCTURE_TYPE_METAL_SURFACE_CREATE_INFO_EXT,
-        .pNext = nullptr,
-        .flags = 0,
-        .pLayer = i_layer
-    };
-
-    if ( vkCreateMetalSurfaceEXT( m_vkInstance, &createSurfaceInfo, nullptr, &m_vkSurface )  != VK_SUCCESS )
-    {
-        throw std::runtime_error( "Error: Failed to create Vulkan instance." );
-    }
+    m_surface = Surface::create( m_vkInstance, i_layer );
     
     // Choose our physical device
-    m_physicalDevice = pickPhysicalDevice( m_vkInstance, m_vkSurface );
+    m_physicalDevice = pickPhysicalDevice( m_vkInstance, m_surface );
     
     // Create logical device
     createLogicalDevice();
@@ -482,7 +516,7 @@ void MlnInstance::deinit()
         destroyDebugUtilsMessengerEXT( m_vkInstance, m_debugMessenger, nullptr );
     }
     
-    vkDestroySurfaceKHR( m_vkInstance, m_vkSurface, nullptr);
+    vkDestroySurfaceKHR( m_vkInstance, m_surface.getObject(), nullptr);
     vkDestroyInstance( m_vkInstance, nullptr );
 }
 
@@ -535,48 +569,14 @@ void MlnInstance::drawFrame()
     vkQueuePresentKHR( m_presentQueue, &presentInfo );
 }
 
-void MlnInstance::getValidationLayers( std::vector< const char* > &o_validationLayers )
-{
-    std::vector< const char* > validationLayers;
-
-    if ( m_enableValidation )
-    {
-        validationLayers.push_back( "VK_LAYER_KHRONOS_validation" );
-    }
-    
-    o_validationLayers.clear();
-    getSupportedValidationLayers( validationLayers, o_validationLayers );
-}
-
-void MlnInstance::getExtensions( std::vector< const char* > &o_extensions )
-{
-    std::vector< const char* > extensions = {
-        VK_EXT_METAL_SURFACE_EXTENSION_NAME,
-        VK_KHR_SURFACE_EXTENSION_NAME,
-    };
-
-    if ( m_enableValidation )
-    {
-        extensions.push_back( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
-    }
-    
-    for ( const char* extension : extensions )
-    {
-        if ( hasRequiredInstanceExtension( extension ) )
-        {
-            o_extensions.push_back( extension );
-        }
-    }
-}
-
 void MlnInstance::createLogicalDevice()
 {
-    QueueFamilyIndices indices;
-    getQueueFamilies( m_physicalDevice, m_vkSurface, indices );
+    QueueFamilyIndices families;
+    getQueueFamilies( m_physicalDevice, m_surface, families );
 
     std::set< uint32_t > queueFamilies {
-        indices.graphicsFamily.value(),
-        indices.presentFamily.value()
+        families.graphicsFamily.value().getIndex(),
+        families.presentFamily.value().getIndex()
     };
     
     float queuePriority = 1.0f;
@@ -609,13 +609,13 @@ void MlnInstance::createLogicalDevice()
     }
     
     // Get our device queues
-    vkGetDeviceQueue( m_vkDevice, indices.graphicsFamily.value(), 0, &m_graphicsQueue );
-    vkGetDeviceQueue( m_vkDevice, indices.presentFamily.value(), 0, &m_presentQueue );
+    vkGetDeviceQueue( m_vkDevice, families.graphicsFamily.value().getIndex(), 0, &m_graphicsQueue );
+    vkGetDeviceQueue( m_vkDevice, families.presentFamily.value().getIndex(), 0, &m_presentQueue );
 }
 
 void MlnInstance::createSwapChain()
 {
-    SwapChainSupportDetails swapChainSupport = querySwapChainSupport( m_physicalDevice.getObject(), m_vkSurface );
+    SwapChainSupportDetails swapChainSupport = querySwapChainSupport( m_physicalDevice.getObject(), m_surface );
 
     VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat( swapChainSupport.formats );
     VkPresentModeKHR presentMode = chooseSwapPresentMode( swapChainSupport.presentModes );
@@ -632,7 +632,7 @@ void MlnInstance::createSwapChain()
     
     VkSwapchainCreateInfoKHR swapChainCreateInfo = {};
     swapChainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    swapChainCreateInfo.surface = m_vkSurface;
+    swapChainCreateInfo.surface = m_surface.getObject();
     
     swapChainCreateInfo.minImageCount = imageCount;
     swapChainCreateInfo.imageFormat = surfaceFormat.format;
@@ -642,11 +642,14 @@ void MlnInstance::createSwapChain()
     swapChainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     
     QueueFamilyIndices indices;
-    getQueueFamilies( m_physicalDevice, m_vkSurface, indices );
+    getQueueFamilies( m_physicalDevice, m_surface, indices );
     
-    uint32_t queueFamilyIndices[] = { indices.graphicsFamily.value(), indices.presentFamily.value() };
+    uint32_t graphicIndex = indices.graphicsFamily.value().getIndex();
+    uint32_t presentIndex = indices.presentFamily.value().getIndex();
 
-    if ( indices.graphicsFamily != indices.presentFamily )
+    uint32_t queueFamilyIndices[] = { graphicIndex, presentIndex };
+
+    if ( graphicIndex != presentIndex )
     {
         swapChainCreateInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
         swapChainCreateInfo.queueFamilyIndexCount = 2;
@@ -974,12 +977,12 @@ void MlnInstance::createFramebuffers()
 void MlnInstance::createCommandPool()
 {
     QueueFamilyIndices familyIndices;
-    getQueueFamilies( m_physicalDevice, m_vkSurface, familyIndices );
+    getQueueFamilies( m_physicalDevice, m_surface, familyIndices );
 
     VkCommandPoolCreateInfo poolInfo {};
     poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-    poolInfo.queueFamilyIndex = familyIndices.graphicsFamily.value();
+    poolInfo.queueFamilyIndex = familyIndices.graphicsFamily.value().getIndex();
     
     if ( vkCreateCommandPool( m_vkDevice, &poolInfo, nullptr, &m_commandPool ) != VK_SUCCESS )
     {

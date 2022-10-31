@@ -19,6 +19,31 @@ namespace marlin
 {
 
 class PhysicalDevice;
+class Surface;
+class QueueFamily;
+
+using QueueFamilies = std::vector< QueueFamily >;
+
+class QueueFamily
+{
+public:
+    
+    QueueFamily( VkPhysicalDevice i_physicalDevice, const VkQueueFamilyProperties &i_properties, uint32_t i_index );
+    ~QueueFamily() = default;
+    
+    bool hasGraphics() const;
+    bool hasCompute() const;
+    bool isSurfaceSupported( const Surface &i_surface ) const;
+    
+    uint32_t getIndex() const;
+    uint32_t count() const;
+    
+private:
+    
+    VkPhysicalDevice m_physicalDevice;
+    VkQueueFamilyProperties m_properties;
+    uint32_t m_index;
+};
 
 using PhysicalDevices = std::vector< PhysicalDevice >;
 
@@ -31,8 +56,11 @@ public:
     PhysicalDevice() = default;
     explicit PhysicalDevice( VkPhysicalDevice i_device );
 
-    void getQueueFamilyProperties( std::vector< VkQueueFamilyProperties > &properties );
-    void getExtensions( std::vector< VkExtensionProperties > &extensions );
+    VkPhysicalDeviceProperties getProperties() const;
+    VkPhysicalDeviceFeatures getFeatures() const;
+    
+    void getQueueFamilies( QueueFamilies &o_queueFamilies ) const;
+    void getExtensions( std::vector< VkExtensionProperties > &extensions ) const;
 };
 
 } // namespace marlin
