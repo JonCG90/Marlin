@@ -49,10 +49,10 @@ public:
 private:
         
     VkInstance m_vkInstance;
-    Surface m_surface;
+    SurfacePtr m_surface;
 
-    PhysicalDevice m_physicalDevice;
-    Device m_device;
+    PhysicalDevicePtr m_physicalDevice;
+    DevicePtr m_device;
         
     VkQueue m_graphicsQueue;
     VkQueue m_presentQueue;

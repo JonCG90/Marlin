@@ -9,7 +9,10 @@
 #ifndef MARLIN_SURFACE_HPP
 #define MARLIN_SURFACE_HPP
 
+#include "defs.hpp"
 #include "vkObject.hpp"
+
+#include <iostream>
 
 namespace marlin
 {
@@ -18,10 +21,18 @@ class Surface : public VkObjectT< VkSurfaceKHR >
 {
 public:
     
-    static Surface create( VkInstance i_instance, void* i_layer );
+    static SurfacePtr create( VkInstance i_instance, void* i_layer );
     
     Surface() = default;
-    explicit Surface( VkSurfaceKHR i_surface );
+    Surface( VkSurfaceKHR i_surface, VkInstance i_instance );
+    
+    ~Surface() override;
+    
+    void destroy();
+    
+private:
+    
+    VkInstance m_instance;
 };
 
 } // namespace marlin

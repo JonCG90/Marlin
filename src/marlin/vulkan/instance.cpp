@@ -226,9 +226,9 @@ static void setupDebugging( VkInstance i_instance, VkDebugUtilsMessengerEXT &i_d
     }
 }
 
-static int getDevicScore( const PhysicalDevice &i_device )
+static int getDeviceScore( const PhysicalDevicePtr &i_device )
 {
-    VkPhysicalDeviceProperties deviceProperties = i_device.getProperties();
+    VkPhysicalDeviceProperties deviceProperties = i_device->getProperties();
     
     int score = 0;
     
@@ -246,10 +246,10 @@ struct QueueFamilyIndices
     std::optional< QueueFamily > presentFamily;
 };
 
-static void getQueueFamilies( PhysicalDevice i_device, Surface i_surface, QueueFamilyIndices &o_familyIndices )
+static void getQueueFamilies( PhysicalDevicePtr i_device, SurfacePtr i_surface, QueueFamilyIndices &o_familyIndices )
 {
     QueueFamilies queueFamilies;
-    i_device.getQueueFamilies( queueFamilies );
+    i_device->getQueueFamilies( queueFamilies );
     
     for ( QueueFamily family : queueFamilies )
     {
@@ -269,10 +269,10 @@ static const std::vector< const char* > s_deviceExtensions {
     VK_KHR_SWAPCHAIN_EXTENSION_NAME
 };
 
-static bool hasRequiredExtensions( PhysicalDevice i_device )
+static bool hasRequiredExtensions( PhysicalDevicePtr i_device )
 {
     std::vector< VkExtensionProperties > extensions;
-    i_device.getExtensions( extensions );
+    i_device->getExtensions( extensions );
         
     std::set< std::string > requiredExtensions( s_deviceExtensions.begin(), s_deviceExtensions.end() );
     
@@ -335,36 +335,36 @@ VkExtent2D chooseSwapExtent( const VkSurfaceCapabilitiesKHR &i_capabilities )
     return { width, height };
 }
 
-SwapChainSupportDetails querySwapChainSupport( VkPhysicalDevice i_device, Surface i_surface )
+SwapChainSupportDetails querySwapChainSupport( VkPhysicalDevice i_device, SurfacePtr i_surface )
 {
     SwapChainSupportDetails details;
     
     // Query capabilities
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR( i_device, i_surface.getObject(), &details.capabilities );
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR( i_device, i_surface->getObject(), &details.capabilities );
     
     // Query formats
     uint32_t formatCount;
-    vkGetPhysicalDeviceSurfaceFormatsKHR( i_device, i_surface.getObject(), &formatCount, nullptr );
+    vkGetPhysicalDeviceSurfaceFormatsKHR( i_device, i_surface->getObject(), &formatCount, nullptr );
 
     if ( formatCount != 0 )
     {
         details.formats.resize(formatCount);
-        vkGetPhysicalDeviceSurfaceFormatsKHR( i_device, i_surface.getObject(), &formatCount, details.formats.data() );
+        vkGetPhysicalDeviceSurfaceFormatsKHR( i_device, i_surface->getObject(), &formatCount, details.formats.data() );
     }
     
     uint32_t presentModeCount;
-    vkGetPhysicalDeviceSurfacePresentModesKHR( i_device, i_surface.getObject(), &presentModeCount, nullptr );
+    vkGetPhysicalDeviceSurfacePresentModesKHR( i_device, i_surface->getObject(), &presentModeCount, nullptr );
 
     if ( presentModeCount != 0 )
     {
         details.presentModes.resize( presentModeCount );
-        vkGetPhysicalDeviceSurfacePresentModesKHR( i_device, i_surface.getObject(), &presentModeCount, details.presentModes.data() );
+        vkGetPhysicalDeviceSurfacePresentModesKHR( i_device, i_surface->getObject(), &presentModeCount, details.presentModes.data() );
     }
     
     return details;
 }
 
-static bool isDeviceSuitable( PhysicalDevice i_device, Surface i_surface )
+static bool isDeviceSuitable( PhysicalDevicePtr i_device, SurfacePtr i_surface )
 {
     if ( !hasRequiredExtensions( i_device ) )
     {
@@ -379,7 +379,7 @@ static bool isDeviceSuitable( PhysicalDevice i_device, Surface i_surface )
         return false;
     }
     
-    SwapChainSupportDetails swapChainDetails = querySwapChainSupport( i_device.getObject(), i_surface );
+    SwapChainSupportDetails swapChainDetails = querySwapChainSupport( i_device->getObject(), i_surface );
     if ( swapChainDetails.formats.empty() || swapChainDetails.presentModes.empty() )
     {
         return false;
@@ -388,18 +388,18 @@ static bool isDeviceSuitable( PhysicalDevice i_device, Surface i_surface )
     return true;
 }
 
-static PhysicalDevices getSuitableDevices( VkInstance i_instance, Surface i_surface )
+static PhysicalDevicePtrs getSuitableDevices( VkInstance i_instance, SurfacePtr i_surface )
 {
-    PhysicalDevices physicalDevices = PhysicalDevice::getPhysicalDevices( i_instance );
+    PhysicalDevicePtrs physicalDevices = PhysicalDevice::getPhysicalDevices( i_instance );
 
     if ( physicalDevices.empty() )
     {
         throw std::runtime_error( "Error: Unable to find GPUs with Vulkan support." );
     }
 
-    PhysicalDevices suitableDevices;
+    PhysicalDevicePtrs suitableDevices;
     
-    for ( const PhysicalDevice &device : physicalDevices )
+    for ( const PhysicalDevicePtr &device : physicalDevices )
     {
         if ( isDeviceSuitable( device, i_surface ) )
         {
@@ -410,14 +410,14 @@ static PhysicalDevices getSuitableDevices( VkInstance i_instance, Surface i_surf
     return suitableDevices;
 }
 
-static PhysicalDevice pickPhysicalDevice( VkInstance i_instance, Surface i_surface )
+static PhysicalDevicePtr pickPhysicalDevice( VkInstance i_instance, SurfacePtr i_surface )
 {
-    PhysicalDevices devices = getSuitableDevices( i_instance, i_surface );
+    PhysicalDevicePtrs devices = getSuitableDevices( i_instance, i_surface );
     
-    std::multimap< int, PhysicalDevice > deviceScores;
-    for ( const PhysicalDevice &device : devices )
+    std::multimap< int, PhysicalDevicePtr > deviceScores;
+    for ( const PhysicalDevicePtr &device : devices )
     {
-        int score = getDevicScore( device );
+        int score = getDeviceScore( device );
         if ( score > 0 )
         {
             deviceScores.insert( { score, device } );
@@ -487,45 +487,45 @@ void MlnInstance::init( void* i_layer )
 
 void MlnInstance::deinit()
 {
-    vkDestroySemaphore( m_device.getObject(), m_imageAvailableSemaphore, nullptr );
-    vkDestroySemaphore( m_device.getObject(), m_renderFinishedSemaphore, nullptr );
-    vkDestroyFence( m_device.getObject(), m_inFlightFence, nullptr );
+    vkDestroySemaphore( m_device->getObject(), m_imageAvailableSemaphore, nullptr );
+    vkDestroySemaphore( m_device->getObject(), m_renderFinishedSemaphore, nullptr );
+    vkDestroyFence( m_device->getObject(), m_inFlightFence, nullptr );
     
-    vkDestroyCommandPool( m_device.getObject(), m_commandPool, nullptr );
+    vkDestroyCommandPool( m_device->getObject(), m_commandPool, nullptr );
     
     for ( auto framebuffer : m_swapChainFramebuffers )
     {
-        vkDestroyFramebuffer( m_device.getObject(), framebuffer, nullptr );
+        vkDestroyFramebuffer( m_device->getObject(), framebuffer, nullptr );
     }
     
-    vkDestroyPipeline( m_device.getObject(), m_graphicsPipeline, nullptr );
-    vkDestroyPipelineLayout( m_device.getObject(), m_pipelineLayout, nullptr );
-    vkDestroyRenderPass( m_device.getObject(), m_renderPass, nullptr );
+    vkDestroyPipeline( m_device->getObject(), m_graphicsPipeline, nullptr );
+    vkDestroyPipelineLayout( m_device->getObject(), m_pipelineLayout, nullptr );
+    vkDestroyRenderPass( m_device->getObject(), m_renderPass, nullptr );
 
     for ( VkImageView imageView : m_swapChainImageViews )
     {
-        vkDestroyImageView( m_device.getObject(), imageView, nullptr );
+        vkDestroyImageView( m_device->getObject(), imageView, nullptr );
     }
     
-    vkDestroySwapchainKHR( m_device.getObject(), m_swapChain, nullptr );
-    vkDestroyDevice( m_device.getObject(), nullptr );
-    
+    vkDestroySwapchainKHR( m_device->getObject(), m_swapChain, nullptr );
+    m_device->destroy();
+
     if ( m_enableValidation )
     {
         destroyDebugUtilsMessengerEXT( m_vkInstance, m_debugMessenger, nullptr );
     }
     
-    vkDestroySurfaceKHR( m_vkInstance, m_surface.getObject(), nullptr);
+    m_surface->destroy();
     vkDestroyInstance( m_vkInstance, nullptr );
 }
 
 void MlnInstance::drawFrame()
 {
-    vkWaitForFences( m_device.getObject(), 1, &m_inFlightFence, VK_TRUE, UINT64_MAX );
-    vkResetFences( m_device.getObject(), 1, &m_inFlightFence );
+    vkWaitForFences( m_device->getObject(), 1, &m_inFlightFence, VK_TRUE, UINT64_MAX );
+    vkResetFences( m_device->getObject(), 1, &m_inFlightFence );
 
     uint32_t imageIndex;
-    vkAcquireNextImageKHR( m_device.getObject(), m_swapChain, UINT64_MAX, m_imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex );
+    vkAcquireNextImageKHR( m_device->getObject(), m_swapChain, UINT64_MAX, m_imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex );
     
     vkResetCommandBuffer( m_commandBuffer, 0 );
     
@@ -576,13 +576,13 @@ void MlnInstance::createLogicalDevice()
     m_device = Device::create( m_physicalDevice, { families.graphicsFamily.value(), families.presentFamily.value() } );
     
     // Get our device queues
-    m_graphicsQueue = m_device.getQueue( families.graphicsFamily.value(), 0 );
-    m_presentQueue = m_device.getQueue( families.presentFamily.value(), 0 );
+    m_graphicsQueue = m_device->getQueue( families.graphicsFamily.value(), 0 );
+    m_presentQueue = m_device->getQueue( families.presentFamily.value(), 0 );
 }
 
 void MlnInstance::createSwapChain()
 {
-    SwapChainSupportDetails swapChainSupport = querySwapChainSupport( m_physicalDevice.getObject(), m_surface );
+    SwapChainSupportDetails swapChainSupport = querySwapChainSupport( m_physicalDevice->getObject(), m_surface );
 
     VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat( swapChainSupport.formats );
     VkPresentModeKHR presentMode = chooseSwapPresentMode( swapChainSupport.presentModes );
@@ -599,7 +599,7 @@ void MlnInstance::createSwapChain()
     
     VkSwapchainCreateInfoKHR swapChainCreateInfo = {};
     swapChainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    swapChainCreateInfo.surface = m_surface.getObject();
+    swapChainCreateInfo.surface = m_surface->getObject();
     
     swapChainCreateInfo.minImageCount = imageCount;
     swapChainCreateInfo.imageFormat = surfaceFormat.format;
@@ -635,15 +635,15 @@ void MlnInstance::createSwapChain()
     swapChainCreateInfo.clipped = VK_TRUE;
     swapChainCreateInfo.oldSwapchain = VK_NULL_HANDLE;
 
-    if ( vkCreateSwapchainKHR( m_device.getObject(), &swapChainCreateInfo, nullptr, &m_swapChain ) != VK_SUCCESS )
+    if ( vkCreateSwapchainKHR( m_device->getObject(), &swapChainCreateInfo, nullptr, &m_swapChain ) != VK_SUCCESS )
     {
         throw std::runtime_error("Failed to create swap chain!");
     }
     
     // Ge the swap chain images
-    vkGetSwapchainImagesKHR( m_device.getObject(), m_swapChain, &imageCount, nullptr );
+    vkGetSwapchainImagesKHR( m_device->getObject(), m_swapChain, &imageCount, nullptr );
     m_swapChainImages.resize( imageCount );
-    vkGetSwapchainImagesKHR( m_device.getObject(), m_swapChain, &imageCount, m_swapChainImages.data() );
+    vkGetSwapchainImagesKHR( m_device->getObject(), m_swapChain, &imageCount, m_swapChainImages.data() );
     
     m_swapChainImageFormat = surfaceFormat.format;
     m_swapChainExtent = extent;
@@ -675,7 +675,7 @@ void MlnInstance::createImageViews()
         imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
         imageViewCreateInfo.subresourceRange.layerCount = 1;
         
-        if ( vkCreateImageView( m_device.getObject(), &imageViewCreateInfo, nullptr, &m_swapChainImageViews[ i ] ) != VK_SUCCESS )
+        if ( vkCreateImageView( m_device->getObject(), &imageViewCreateInfo, nullptr, &m_swapChainImageViews[ i ] ) != VK_SUCCESS )
         {
             throw std::runtime_error( "Failed to create image views!" );
         }
@@ -759,7 +759,7 @@ void MlnInstance::createRenderPass()
     renderPassInfo.dependencyCount = 1;
     renderPassInfo.pDependencies = &dependency;
     
-    if ( vkCreateRenderPass( m_device.getObject(), &renderPassInfo, nullptr, &m_renderPass ) != VK_SUCCESS )
+    if ( vkCreateRenderPass( m_device->getObject(), &renderPassInfo, nullptr, &m_renderPass ) != VK_SUCCESS )
     {
         throw std::runtime_error("failed to create render pass!");
     }
@@ -773,8 +773,8 @@ void MlnInstance::createGraphicsPipeline()
     readFile( "/Users/jongraham/Projects/Marlin/src/marlin/shaders/vert.spv", vertBytes );
     readFile( "/Users/jongraham/Projects/Marlin/src/marlin/shaders/frag.spv", fragBytes );
     
-    VkShaderModule vertShaderModule = createShaderModule( vertBytes, m_device.getObject() );
-    VkShaderModule fragShaderModule = createShaderModule( fragBytes, m_device.getObject() );
+    VkShaderModule vertShaderModule = createShaderModule( vertBytes, m_device->getObject() );
+    VkShaderModule fragShaderModule = createShaderModule( fragBytes, m_device->getObject() );
     
     VkPipelineShaderStageCreateInfo vertShaderStageInfo {};
     vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -881,7 +881,7 @@ void MlnInstance::createGraphicsPipeline()
     pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
     pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
     
-    if ( vkCreatePipelineLayout( m_device.getObject(), &pipelineLayoutInfo, nullptr, &m_pipelineLayout ) != VK_SUCCESS )
+    if ( vkCreatePipelineLayout( m_device->getObject(), &pipelineLayoutInfo, nullptr, &m_pipelineLayout ) != VK_SUCCESS )
     {
         throw std::runtime_error( "Failed to create pipeline layout!" );
     }
@@ -905,13 +905,13 @@ void MlnInstance::createGraphicsPipeline()
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
     pipelineInfo.basePipelineIndex = -1; // Optional
     
-    if ( vkCreateGraphicsPipelines( m_device.getObject(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_graphicsPipeline ) != VK_SUCCESS )
+    if ( vkCreateGraphicsPipelines( m_device->getObject(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_graphicsPipeline ) != VK_SUCCESS )
     {
         throw std::runtime_error( "failed to create graphics pipeline!" );
     }
     
-    vkDestroyShaderModule( m_device.getObject(), vertShaderModule, nullptr );
-    vkDestroyShaderModule( m_device.getObject(), fragShaderModule, nullptr );
+    vkDestroyShaderModule( m_device->getObject(), vertShaderModule, nullptr );
+    vkDestroyShaderModule( m_device->getObject(), fragShaderModule, nullptr );
 }
 
 void MlnInstance::createFramebuffers()
@@ -934,7 +934,7 @@ void MlnInstance::createFramebuffers()
         framebufferInfo.height = m_swapChainExtent.height;
         framebufferInfo.layers = 1;
 
-        if ( vkCreateFramebuffer( m_device.getObject(), &framebufferInfo, nullptr, &m_swapChainFramebuffers[ i ] ) != VK_SUCCESS )
+        if ( vkCreateFramebuffer( m_device->getObject(), &framebufferInfo, nullptr, &m_swapChainFramebuffers[ i ] ) != VK_SUCCESS )
         {
             throw std::runtime_error("failed to create framebuffer!");
         }
@@ -951,7 +951,7 @@ void MlnInstance::createCommandPool()
     poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
     poolInfo.queueFamilyIndex = familyIndices.graphicsFamily.value().getIndex();
     
-    if ( vkCreateCommandPool( m_device.getObject(), &poolInfo, nullptr, &m_commandPool ) != VK_SUCCESS )
+    if ( vkCreateCommandPool( m_device->getObject(), &poolInfo, nullptr, &m_commandPool ) != VK_SUCCESS )
     {
         throw std::runtime_error( "failed to create command pool!" );
     }
@@ -967,7 +967,7 @@ void MlnInstance::createCommandBuffer()
         .commandBufferCount = 1,
     };
     
-    if ( vkAllocateCommandBuffers( m_device.getObject(), &allocInfo, &m_commandBuffer ) != VK_SUCCESS ) {
+    if ( vkAllocateCommandBuffers( m_device->getObject(), &allocInfo, &m_commandBuffer ) != VK_SUCCESS ) {
         throw std::runtime_error( "failed to allocate command buffers!" );
     }
 }
@@ -1058,9 +1058,9 @@ static void s_createFence( const VkDevice &i_device, VkFence &io_fence )
 
 void MlnInstance::createSyncObjects()
 {
-    s_createSemaphore( m_device.getObject(), m_imageAvailableSemaphore );
-    s_createSemaphore( m_device.getObject(), m_renderFinishedSemaphore );
-    s_createFence( m_device.getObject(), m_inFlightFence );
+    s_createSemaphore( m_device->getObject(), m_imageAvailableSemaphore );
+    s_createSemaphore( m_device->getObject(), m_renderFinishedSemaphore );
+    s_createFence( m_device->getObject(), m_inFlightFence );
 }
 
 } // namespace marlin

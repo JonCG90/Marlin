@@ -9,7 +9,7 @@
 #ifndef MARLIN_DEVICE_HPP
 #define MARLIN_DEVICE_HPP
 
-#include "physicalDevice.hpp"
+#include "defs.hpp"
 #include "vkObject.hpp"
 
 namespace marlin
@@ -19,12 +19,16 @@ class Device : public VkObjectT< VkDevice >
 {
 public:
     
-    static Device create( PhysicalDevice i_device, const QueueFamilies &i_families );
+    static DevicePtr create( PhysicalDevicePtr i_device, const QueueFamilies &i_families );
     
     Device() = default;
     explicit Device( VkDevice i_device );
+        
+    ~Device() override;
     
     VkQueue getQueue( const QueueFamily &i_family, uint32_t i_index ) const;
+    
+    void destroy();
 };
 
 } // namespace marlin

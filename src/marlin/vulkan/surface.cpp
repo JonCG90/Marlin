@@ -15,7 +15,7 @@
 namespace marlin
 {
 
-Surface Surface::create( VkInstance i_instance, void* i_layer )
+SurfacePtr Surface::create( VkInstance i_instance, void* i_layer )
 {
     VkMetalSurfaceCreateInfoEXT createSurfaceInfo {
         .sType = VK_STRUCTURE_TYPE_METAL_SURFACE_CREATE_INFO_EXT,
@@ -30,12 +30,27 @@ Surface Surface::create( VkInstance i_instance, void* i_layer )
         throw std::runtime_error( "Error: Failed to create Vulkan instance." );
     }
     
-    return Surface( vkSurface );
+    return std::make_shared< Surface >( vkSurface, i_instance );
 }
 
-Surface::Surface( VkSurfaceKHR i_surface )
+Surface::Surface( VkSurfaceKHR i_surface, VkInstance i_instance )
 : VkObjectT<VkSurfaceKHR>( i_surface )
+, m_instance( i_instance )
 {}
+
+Surface::~Surface()
+{
+    if ( m_object != VK_NULL_HANDLE )
+    {
+        std::cerr << "Warning: Surface object not released." << std::endl;
+    }
+}
+
+void Surface::destroy()
+{
+    vkDestroySurfaceKHR( m_instance, m_object, nullptr );
+    m_object = VK_NULL_HANDLE;
+}
 
 } // namespace marlin
 

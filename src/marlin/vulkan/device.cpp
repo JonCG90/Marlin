@@ -8,6 +8,8 @@
 
 #include "device.hpp"
 
+#include "physicalDevice.cpp"
+
 #include <set>
 
 namespace marlin
@@ -17,7 +19,7 @@ static const std::vector< const char* > s_deviceExtensions {
     VK_KHR_SWAPCHAIN_EXTENSION_NAME
 };
 
-Device Device::create( PhysicalDevice i_device, const QueueFamilies &i_families )
+DevicePtr Device::create( PhysicalDevicePtr i_device, const QueueFamilies &i_families )
 {
     std::set< uint32_t > familyIndices;
     for ( const QueueFamily &family : i_families )
@@ -53,17 +55,25 @@ Device Device::create( PhysicalDevice i_device, const QueueFamilies &i_families 
 
     
     VkDevice vkDevice;
-    if ( vkCreateDevice( i_device.getObject(), &deviceCreateInfo, nullptr, &vkDevice ) != VK_SUCCESS )
+    if ( vkCreateDevice( i_device->getObject(), &deviceCreateInfo, nullptr, &vkDevice ) != VK_SUCCESS )
     {
         throw std::runtime_error( "Failed to create logical device." );
     }
     
-    return Device( vkDevice );
+    return std::make_shared< Device >( vkDevice );
 }
 
 Device::Device( VkDevice i_device )
 : VkObjectT<VkDevice>( i_device )
 {}
+
+Device::~Device()
+{
+    if ( m_object != VK_NULL_HANDLE )
+    {
+        std::cerr << "Warning: Device object not released." << std::endl;
+    }
+}
 
 VkQueue Device::getQueue( const QueueFamily &i_family, uint32_t i_index ) const
 {
@@ -75,6 +85,12 @@ VkQueue Device::getQueue( const QueueFamily &i_family, uint32_t i_index ) const
     VkQueue queue;
     vkGetDeviceQueue( m_object, i_family.getIndex(), i_index, &queue );
     return queue;
+}
+
+void Device::destroy()
+{
+    vkDestroyDevice( m_object, nullptr );
+    m_object = VK_NULL_HANDLE;
 }
 
 } // namespace marlin

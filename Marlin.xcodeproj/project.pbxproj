@@ -169,6 +169,7 @@
 		23ED677829069D4F0039B92A /* surface.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23ED677629069D4F0039B92A /* surface.hpp */; };
 		23ED677B290FD29E0039B92A /* device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23ED6779290FD29E0039B92A /* device.cpp */; };
 		23ED677C290FD29E0039B92A /* device.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23ED677A290FD29E0039B92A /* device.hpp */; };
+		23ED67802911164E0039B92A /* defs.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23ED677E2911164E0039B92A /* defs.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -472,6 +473,7 @@
 		23ED677629069D4F0039B92A /* surface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = surface.hpp; sourceTree = "<group>"; };
 		23ED6779290FD29E0039B92A /* device.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = device.cpp; sourceTree = "<group>"; };
 		23ED677A290FD29E0039B92A /* device.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = device.hpp; sourceTree = "<group>"; };
+		23ED677E2911164E0039B92A /* defs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = defs.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -889,6 +891,7 @@
 				23ED677629069D4F0039B92A /* surface.hpp */,
 				23ED6779290FD29E0039B92A /* device.cpp */,
 				23ED677A290FD29E0039B92A /* device.hpp */,
+				23ED677E2911164E0039B92A /* defs.hpp */,
 			);
 			path = vulkan;
 			sourceTree = "<group>";
@@ -964,6 +967,7 @@
 				2388165F245040DF00E8444E /* geometric.hpp in Headers */,
 				23881687245040DF00E8444E /* type_mat4x3.hpp in Headers */,
 				238816BC245040DF00E8444E /* gradient_paint.hpp in Headers */,
+				23ED67802911164E0039B92A /* defs.hpp in Headers */,
 				238816D9245040DF00E8444E /* rotate_normalized_axis.hpp in Headers */,
 				2388165E245040DF00E8444E /* trigonometric.hpp in Headers */,
 				2388167D245040DF00E8444E /* intrinsic_integer.hpp in Headers */,

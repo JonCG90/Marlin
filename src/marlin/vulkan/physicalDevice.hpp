@@ -9,6 +9,7 @@
 #ifndef MARLIN_PHYSICALDEVICE_HPP
 #define MARLIN_PHYSICALDEVICE_HPP
 
+#include "defs.hpp"
 #include "vkObject.hpp"
 
 #include <vulkan/vulkan.h>
@@ -17,12 +18,6 @@
 
 namespace marlin
 {
-
-class PhysicalDevice;
-class Surface;
-class QueueFamily;
-
-using QueueFamilies = std::vector< QueueFamily >;
 
 class QueueFamily
 {
@@ -33,7 +28,7 @@ public:
     
     bool hasGraphics() const;
     bool hasCompute() const;
-    bool isSurfaceSupported( const Surface &i_surface ) const;
+    bool isSurfaceSupported( const SurfacePtr &i_surface ) const;
     
     uint32_t getIndex() const;
     uint32_t count() const;
@@ -45,13 +40,11 @@ private:
     uint32_t m_index;
 };
 
-using PhysicalDevices = std::vector< PhysicalDevice >;
-
 class PhysicalDevice : public VkObjectT< VkPhysicalDevice >
 {
 public:
     
-    static PhysicalDevices getPhysicalDevices( VkInstance i_instance );
+    static PhysicalDevicePtrs getPhysicalDevices( VkInstance i_instance );
     
     PhysicalDevice() = default;
     explicit PhysicalDevice( VkPhysicalDevice i_device );

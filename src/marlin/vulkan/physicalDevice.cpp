@@ -29,10 +29,10 @@ bool QueueFamily::hasCompute() const
     return m_properties.queueFlags & VK_QUEUE_COMPUTE_BIT;
 }
 
-bool QueueFamily::isSurfaceSupported( const Surface &i_surface ) const
+bool QueueFamily::isSurfaceSupported( const SurfacePtr &i_surface ) const
 {
     VkBool32 supported = false;
-    vkGetPhysicalDeviceSurfaceSupportKHR( m_physicalDevice, m_index, i_surface.getObject(), &supported );
+    vkGetPhysicalDeviceSurfaceSupportKHR( m_physicalDevice, m_index, i_surface->getObject(), &supported );
     
     return supported;
 }
@@ -47,14 +47,14 @@ uint32_t QueueFamily::count() const
     return m_properties.queueCount;
 }
 
-PhysicalDevices PhysicalDevice::getPhysicalDevices( VkInstance i_instance )
+PhysicalDevicePtrs PhysicalDevice::getPhysicalDevices( VkInstance i_instance )
 {
     VkInstance instance = i_instance;
     
     uint32_t deviceCount = 0;
     vkEnumeratePhysicalDevices( instance, &deviceCount, nullptr );
 
-    PhysicalDevices devices;
+    PhysicalDevicePtrs devices;
     if ( deviceCount == 0 )
     {
         return devices;
@@ -66,7 +66,8 @@ PhysicalDevices PhysicalDevice::getPhysicalDevices( VkInstance i_instance )
     devices.reserve( deviceCount );
     for ( VkPhysicalDevice vkDevice : vkDevices )
     {
-        devices.emplace_back( vkDevice );
+        PhysicalDevicePtr device = std::make_shared< PhysicalDevice >( vkDevice );
+        devices.push_back( device );
     }
     
     return devices;
