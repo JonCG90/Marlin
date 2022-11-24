@@ -284,13 +284,6 @@ static bool hasRequiredExtensions( PhysicalDevicePtr i_device )
     return requiredExtensions.empty();
 }
 
-struct SwapChainSupportDetails
-{
-    VkSurfaceCapabilitiesKHR capabilities;
-    std::vector< VkSurfaceFormatKHR > formats;
-    std::vector< VkPresentModeKHR > presentModes;
-};
-
 VkSurfaceFormatKHR chooseSwapSurfaceFormat( const std::vector< VkSurfaceFormatKHR > &i_availableFormats )
 {
     for ( const VkSurfaceFormatKHR &surfaceFormat : i_availableFormats )
@@ -335,35 +328,6 @@ VkExtent2D chooseSwapExtent( const VkSurfaceCapabilitiesKHR &i_capabilities )
     return { width, height };
 }
 
-SwapChainSupportDetails querySwapChainSupport( VkPhysicalDevice i_device, SurfacePtr i_surface )
-{
-    SwapChainSupportDetails details;
-    
-    // Query capabilities
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR( i_device, i_surface->getObject(), &details.capabilities );
-    
-    // Query formats
-    uint32_t formatCount;
-    vkGetPhysicalDeviceSurfaceFormatsKHR( i_device, i_surface->getObject(), &formatCount, nullptr );
-
-    if ( formatCount != 0 )
-    {
-        details.formats.resize(formatCount);
-        vkGetPhysicalDeviceSurfaceFormatsKHR( i_device, i_surface->getObject(), &formatCount, details.formats.data() );
-    }
-    
-    uint32_t presentModeCount;
-    vkGetPhysicalDeviceSurfacePresentModesKHR( i_device, i_surface->getObject(), &presentModeCount, nullptr );
-
-    if ( presentModeCount != 0 )
-    {
-        details.presentModes.resize( presentModeCount );
-        vkGetPhysicalDeviceSurfacePresentModesKHR( i_device, i_surface->getObject(), &presentModeCount, details.presentModes.data() );
-    }
-    
-    return details;
-}
-
 static bool isDeviceSuitable( PhysicalDevicePtr i_device, SurfacePtr i_surface )
 {
     if ( !hasRequiredExtensions( i_device ) )
@@ -379,7 +343,7 @@ static bool isDeviceSuitable( PhysicalDevicePtr i_device, SurfacePtr i_surface )
         return false;
     }
     
-    SwapChainSupportDetails swapChainDetails = querySwapChainSupport( i_device->getObject(), i_surface );
+    SwapChainSupportDetails swapChainDetails = i_device->getSwapChainSupportDetails( i_surface );
     if ( swapChainDetails.formats.empty() || swapChainDetails.presentModes.empty() )
     {
         return false;
@@ -507,7 +471,7 @@ void MlnInstance::deinit()
         vkDestroyImageView( m_device->getObject(), imageView, nullptr );
     }
     
-    vkDestroySwapchainKHR( m_device->getObject(), m_swapChain, nullptr );
+    m_swapChain->destroy();
     m_device->destroy();
 
     if ( m_enableValidation )
@@ -525,7 +489,7 @@ void MlnInstance::drawFrame()
     vkResetFences( m_device->getObject(), 1, &m_inFlightFence );
 
     uint32_t imageIndex;
-    vkAcquireNextImageKHR( m_device->getObject(), m_swapChain, UINT64_MAX, m_imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex );
+    vkAcquireNextImageKHR( m_device->getObject(), m_swapChain->getObject(), UINT64_MAX, m_imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex );
     
     vkResetCommandBuffer( m_commandBuffer, 0 );
     
@@ -559,7 +523,7 @@ void MlnInstance::drawFrame()
     presentInfo.waitSemaphoreCount = 1;
     presentInfo.pWaitSemaphores = signalSemaphores;
     
-    VkSwapchainKHR swapChains[] = { m_swapChain };
+    VkSwapchainKHR swapChains[] = { m_swapChain->getObject() };
     presentInfo.swapchainCount = 1;
     presentInfo.pSwapchains = swapChains;
     presentInfo.pImageIndices = &imageIndex;
@@ -582,71 +546,39 @@ void MlnInstance::createLogicalDevice()
 
 void MlnInstance::createSwapChain()
 {
-    SwapChainSupportDetails swapChainSupport = querySwapChainSupport( m_physicalDevice->getObject(), m_surface );
+        SwapChainSupportDetails swapChainSupport = m_physicalDevice->getSwapChainSupportDetails( m_surface );
+    
+        VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat( swapChainSupport.formats );
+        VkPresentModeKHR presentMode = chooseSwapPresentMode( swapChainSupport.presentModes );
+        VkExtent2D extent = chooseSwapExtent( swapChainSupport.capabilities );
+    
+        uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1;
+    
+        uint32_t maxImageCount = swapChainSupport.capabilities.maxImageCount;
+        if ( maxImageCount > 0 && imageCount > maxImageCount )
+        {
+            // Clamp just in case
+            imageCount = maxImageCount;
+        }
+    
+        QueueFamilyIndices indices;
+        getQueueFamilies( m_physicalDevice, m_surface, indices );
+        
+        uint32_t graphicIndex = indices.graphicsFamily.value().getIndex();
+        uint32_t presentIndex = indices.presentFamily.value().getIndex();
+    
+        m_swapChain = SwapChain::create( m_device,
+                                         m_surface,
+                                         imageCount,
+                                         extent,
+                                         surfaceFormat.format,
+                                         surfaceFormat.colorSpace,
+                                         graphicIndex,
+                                         presentIndex,
+                                         presentMode,
+                                         swapChainSupport.capabilities.currentTransform );
 
-    VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat( swapChainSupport.formats );
-    VkPresentModeKHR presentMode = chooseSwapPresentMode( swapChainSupport.presentModes );
-    VkExtent2D extent = chooseSwapExtent( swapChainSupport.capabilities );
-    
-    uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1;
-    
-    uint32_t maxImageCount = swapChainSupport.capabilities.maxImageCount;
-    if ( maxImageCount > 0 && imageCount > maxImageCount )
-    {
-        // Clamp just in case
-        imageCount = maxImageCount;
-    }
-    
-    VkSwapchainCreateInfoKHR swapChainCreateInfo = {};
-    swapChainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    swapChainCreateInfo.surface = m_surface->getObject();
-    
-    swapChainCreateInfo.minImageCount = imageCount;
-    swapChainCreateInfo.imageFormat = surfaceFormat.format;
-    swapChainCreateInfo.imageColorSpace = surfaceFormat.colorSpace;
-    swapChainCreateInfo.imageExtent = extent;
-    swapChainCreateInfo.imageArrayLayers = 1;
-    swapChainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-    
-    QueueFamilyIndices indices;
-    getQueueFamilies( m_physicalDevice, m_surface, indices );
-    
-    uint32_t graphicIndex = indices.graphicsFamily.value().getIndex();
-    uint32_t presentIndex = indices.presentFamily.value().getIndex();
-
-    uint32_t queueFamilyIndices[] = { graphicIndex, presentIndex };
-
-    if ( graphicIndex != presentIndex )
-    {
-        swapChainCreateInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-        swapChainCreateInfo.queueFamilyIndexCount = 2;
-        swapChainCreateInfo.pQueueFamilyIndices = queueFamilyIndices;
-    }
-    else
-    {
-        swapChainCreateInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-        swapChainCreateInfo.queueFamilyIndexCount = 0; // Optional
-        swapChainCreateInfo.pQueueFamilyIndices = nullptr; // Optional
-    }
-    
-    swapChainCreateInfo.preTransform = swapChainSupport.capabilities.currentTransform;
-    swapChainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-    swapChainCreateInfo.presentMode = presentMode;
-    swapChainCreateInfo.clipped = VK_TRUE;
-    swapChainCreateInfo.oldSwapchain = VK_NULL_HANDLE;
-
-    if ( vkCreateSwapchainKHR( m_device->getObject(), &swapChainCreateInfo, nullptr, &m_swapChain ) != VK_SUCCESS )
-    {
-        throw std::runtime_error("Failed to create swap chain!");
-    }
-    
-    // Ge the swap chain images
-    vkGetSwapchainImagesKHR( m_device->getObject(), m_swapChain, &imageCount, nullptr );
-    m_swapChainImages.resize( imageCount );
-    vkGetSwapchainImagesKHR( m_device->getObject(), m_swapChain, &imageCount, m_swapChainImages.data() );
-    
-    m_swapChainImageFormat = surfaceFormat.format;
-    m_swapChainExtent = extent;
+    m_swapChainImages = m_swapChain->getImages();
 }
 
 void MlnInstance::createImageViews()
@@ -662,7 +594,7 @@ void MlnInstance::createImageViews()
         imageViewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
         imageViewCreateInfo.image = image;
         imageViewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-        imageViewCreateInfo.format = m_swapChainImageFormat;
+        imageViewCreateInfo.format = m_swapChain->getFormat();
         
         imageViewCreateInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
         imageViewCreateInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
@@ -723,7 +655,7 @@ VkShaderModule createShaderModule( const std::vector< char > &i_code, VkDevice i
 void MlnInstance::createRenderPass()
 {
     VkAttachmentDescription colorAttachment {};
-    colorAttachment.format = m_swapChainImageFormat;
+    colorAttachment.format = m_swapChain->getFormat();
     colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
     colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -811,15 +743,15 @@ void MlnInstance::createGraphicsPipeline()
     VkViewport viewport {};
     viewport.x = 0.0f;
     viewport.y = 0.0f;
-    viewport.width = static_cast< float >( m_swapChainExtent.width );
-    viewport.height = static_cast< float >( m_swapChainExtent.height );
+    viewport.width = static_cast< float >( m_swapChain->getExtent().width );
+    viewport.height = static_cast< float >( m_swapChain->getExtent().height );
     viewport.minDepth = 0.0f;
     viewport.maxDepth = 1.0f;
     
     // Scissor
     VkRect2D scissor {};
     scissor.offset = { 0, 0 };
-    scissor.extent = m_swapChainExtent;
+    scissor.extent = m_swapChain->getExtent();
     
     VkPipelineViewportStateCreateInfo viewportState {};
     viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -930,8 +862,8 @@ void MlnInstance::createFramebuffers()
         framebufferInfo.renderPass = m_renderPass;
         framebufferInfo.attachmentCount = 1;
         framebufferInfo.pAttachments = attachments;
-        framebufferInfo.width = m_swapChainExtent.width;
-        framebufferInfo.height = m_swapChainExtent.height;
+        framebufferInfo.width = m_swapChain->getExtent().width;
+        framebufferInfo.height = m_swapChain->getExtent().height;
         framebufferInfo.layers = 1;
 
         if ( vkCreateFramebuffer( m_device->getObject(), &framebufferInfo, nullptr, &m_swapChainFramebuffers[ i ] ) != VK_SUCCESS )
@@ -994,7 +926,7 @@ void MlnInstance::recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t i
         .renderPass = m_renderPass,
         .framebuffer = m_swapChainFramebuffers[ imageIndex ],
         .renderArea.offset = { 0, 0 },
-        .renderArea.extent = m_swapChainExtent,
+        .renderArea.extent = m_swapChain->getExtent(),
         .clearValueCount = 1,
         .pClearValues = &clearColor,
     };
@@ -1006,8 +938,8 @@ void MlnInstance::recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t i
         VkViewport viewport {
             .x = 0.0f,
             .y = 0.0f,
-            .width = static_cast< float >( m_swapChainExtent.width ),
-            .height = static_cast< float >( m_swapChainExtent.height ),
+            .width = static_cast< float >( m_swapChain->getExtent().width ),
+            .height = static_cast< float >( m_swapChain->getExtent().height ),
             .minDepth = 0.0f,
             .maxDepth = 1.0f,
         };
@@ -1016,7 +948,7 @@ void MlnInstance::recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t i
 
         VkRect2D scissor {
             .offset = { 0, 0 },
-            .extent = m_swapChainExtent,
+            .extent = m_swapChain->getExtent(),
         };
 
         vkCmdSetScissor( commandBuffer, 0, 1, &scissor );

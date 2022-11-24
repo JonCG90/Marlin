@@ -12,6 +12,7 @@
 #include "device.hpp"
 #include "physicalDevice.hpp"
 #include "surface.hpp"
+#include "swapChain.hpp"
 
 #include <vulkan/vulkan.h>
 
@@ -59,12 +60,9 @@ private:
     VkCommandPool m_commandPool;
     VkCommandBuffer m_commandBuffer;
 
-    VkSwapchainKHR m_swapChain;
+    SwapChainPtr m_swapChain;
     std::vector< VkImage > m_swapChainImages;
     std::vector< VkImageView > m_swapChainImageViews;
-    
-    VkFormat m_swapChainImageFormat;
-    VkExtent2D m_swapChainExtent;
     
     VkRenderPass m_renderPass;
     VkPipelineLayout m_pipelineLayout;

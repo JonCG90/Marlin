@@ -123,4 +123,34 @@ void PhysicalDevice::getExtensions( std::vector< VkExtensionProperties > &extens
     vkEnumerateDeviceExtensionProperties( m_object, nullptr, &count, extensions.data() );
 }
 
+SwapChainSupportDetails PhysicalDevice::getSwapChainSupportDetails( SurfacePtr i_surface ) const
+{
+    VkSurfaceKHR surface = i_surface->getObject();
+    SwapChainSupportDetails details;
+    
+    // Query capabilities
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR( m_object, surface, &details.capabilities );
+    
+    // Query formats
+    uint32_t formatCount;
+    vkGetPhysicalDeviceSurfaceFormatsKHR( m_object, surface, &formatCount, nullptr );
+
+    if ( formatCount != 0 )
+    {
+        details.formats.resize( formatCount );
+        vkGetPhysicalDeviceSurfaceFormatsKHR( m_object, surface, &formatCount, details.formats.data() );
+    }
+    
+    uint32_t presentModeCount;
+    vkGetPhysicalDeviceSurfacePresentModesKHR( m_object, surface, &presentModeCount, nullptr );
+
+    if ( presentModeCount != 0 )
+    {
+        details.presentModes.resize( presentModeCount );
+        vkGetPhysicalDeviceSurfacePresentModesKHR( m_object, surface, &presentModeCount, details.presentModes.data() );
+    }
+    
+    return details;
+}
+
 } // namespace marlin

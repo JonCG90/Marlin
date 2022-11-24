@@ -10,6 +10,7 @@
 #define MARLINE_DEFS_HPP
 
 #include <iostream>
+#include <vector>
 
 namespace marlin
 {
@@ -23,6 +24,9 @@ using PhysicalDevicePtrs = std::vector< PhysicalDevicePtr >;
 
 class Surface;
 using SurfacePtr = std::shared_ptr< Surface >;
+
+class SwapChain;
+using SwapChainPtr = std::shared_ptr< SwapChain >;
 
 class QueueFamily;
 using QueueFamilies = std::vector< QueueFamily >;

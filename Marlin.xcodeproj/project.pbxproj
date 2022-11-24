@@ -170,6 +170,8 @@
 		23ED677B290FD29E0039B92A /* device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23ED6779290FD29E0039B92A /* device.cpp */; };
 		23ED677C290FD29E0039B92A /* device.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23ED677A290FD29E0039B92A /* device.hpp */; };
 		23ED67802911164E0039B92A /* defs.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23ED677E2911164E0039B92A /* defs.hpp */; };
+		23ED6783292D943A0039B92A /* swapChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23ED6781292D943A0039B92A /* swapChain.cpp */; };
+		23ED6784292D943A0039B92A /* swapChain.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23ED6782292D943A0039B92A /* swapChain.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -474,6 +476,8 @@
 		23ED6779290FD29E0039B92A /* device.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = device.cpp; sourceTree = "<group>"; };
 		23ED677A290FD29E0039B92A /* device.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = device.hpp; sourceTree = "<group>"; };
 		23ED677E2911164E0039B92A /* defs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = defs.hpp; sourceTree = "<group>"; };
+		23ED6781292D943A0039B92A /* swapChain.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = swapChain.cpp; sourceTree = "<group>"; };
+		23ED6782292D943A0039B92A /* swapChain.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = swapChain.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -892,6 +896,8 @@
 				23ED6779290FD29E0039B92A /* device.cpp */,
 				23ED677A290FD29E0039B92A /* device.hpp */,
 				23ED677E2911164E0039B92A /* defs.hpp */,
+				23ED6781292D943A0039B92A /* swapChain.cpp */,
+				23ED6782292D943A0039B92A /* swapChain.hpp */,
 			);
 			path = vulkan;
 			sourceTree = "<group>";
@@ -939,6 +945,7 @@
 				238816DA245040DF00E8444E /* type_aligned.hpp in Headers */,
 				23881665245040DF00E8444E /* _fixes.hpp in Headers */,
 				238816D0245040DF00E8444E /* transform2.hpp in Headers */,
+				23ED6784292D943A0039B92A /* swapChain.hpp in Headers */,
 				238816BE245040DF00E8444E /* polar_coordinates.hpp in Headers */,
 				23881677245040DF00E8444E /* type_mat.hpp in Headers */,
 				2388166B245040DF00E8444E /* _features.hpp in Headers */,
@@ -1179,6 +1186,7 @@
 				2388167A245040DF00E8444E /* glm.cpp in Sources */,
 				238816E62450472B00E8444E /* instance.cpp in Sources */,
 				23ED677B290FD29E0039B92A /* device.cpp in Sources */,
+				23ED6783292D943A0039B92A /* swapChain.cpp in Sources */,
 				23881676245040DF00E8444E /* dummy.cpp in Sources */,
 				23ED677729069D4F0039B92A /* surface.cpp in Sources */,
 				23ED677328FFE49B0039B92A /* physicalDevice.cpp in Sources */,

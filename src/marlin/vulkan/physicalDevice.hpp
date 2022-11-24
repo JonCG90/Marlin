@@ -40,6 +40,13 @@ private:
     uint32_t m_index;
 };
 
+struct SwapChainSupportDetails
+{
+    VkSurfaceCapabilitiesKHR capabilities;
+    std::vector< VkSurfaceFormatKHR > formats;
+    std::vector< VkPresentModeKHR > presentModes;
+};
+
 class PhysicalDevice : public VkObjectT< VkPhysicalDevice >
 {
 public:
@@ -54,6 +61,7 @@ public:
     
     void getQueueFamilies( QueueFamilies &o_queueFamilies ) const;
     void getExtensions( std::vector< VkExtensionProperties > &extensions ) const;
+    SwapChainSupportDetails getSwapChainSupportDetails( SurfacePtr i_surface ) const;
 };
 
 } // namespace marlin
