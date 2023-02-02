@@ -577,18 +577,18 @@ void MlnInstance::createSwapChain()
                                          presentIndex,
                                          presentMode,
                                          swapChainSupport.capabilities.currentTransform );
-
-    m_swapChainImages = m_swapChain->getImages();
 }
 
 void MlnInstance::createImageViews()
 {
-    size_t imageCount = m_swapChainImages.size();
+    std::vector< VkImage > images = m_swapChain->getImages();
+    
+    size_t imageCount = images.size();
     m_swapChainImageViews.resize( imageCount );
 
     for ( size_t i = 0; i < imageCount; i++ )
     {
-        VkImage image = m_swapChainImages[ i ];
+        VkImage image = images[ i ];
         
         VkImageViewCreateInfo imageViewCreateInfo{};
         imageViewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -760,6 +760,17 @@ void MlnInstance::createGraphicsPipeline()
     viewportState.scissorCount = 1;
     viewportState.pScissors = &scissor;
     
+    std::vector< VkDynamicState > dynamicStates = {
+        VK_DYNAMIC_STATE_VIEWPORT,
+        VK_DYNAMIC_STATE_SCISSOR
+    };
+
+    VkPipelineDynamicStateCreateInfo dynamicState {
+        .sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO,
+        .dynamicStateCount = static_cast< uint32_t >( dynamicStates.size() ),
+        .pDynamicStates = dynamicStates.data()
+    };
+    
     // Rasterizer
     VkPipelineRasterizationStateCreateInfo rasterizer {};
     rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
@@ -830,7 +841,7 @@ void MlnInstance::createGraphicsPipeline()
     pipelineInfo.pMultisampleState = &multisampling;
     pipelineInfo.pDepthStencilState = nullptr; // Optional
     pipelineInfo.pColorBlendState = &colorBlending;
-    pipelineInfo.pDynamicState = nullptr; // Optional
+    pipelineInfo.pDynamicState = &dynamicState;
     pipelineInfo.layout = m_pipelineLayout;
     pipelineInfo.renderPass = m_renderPass;
     pipelineInfo.subpass = 0;

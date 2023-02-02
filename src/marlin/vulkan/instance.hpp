@@ -61,7 +61,6 @@ private:
     VkCommandBuffer m_commandBuffer;
 
     SwapChainPtr m_swapChain;
-    std::vector< VkImage > m_swapChainImages;
     std::vector< VkImageView > m_swapChainImageViews;
     
     VkRenderPass m_renderPass;
