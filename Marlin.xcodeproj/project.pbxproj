@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		23637CAF298BA7B100D4D7A6 /* defs.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23637CAE298BA7B100D4D7A6 /* defs.hpp */; };
 		238811FA244C062F00E8444E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 238811F9244C062F00E8444E /* AppDelegate.m */; };
 		238811FC244C063300E8444E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 238811FB244C063300E8444E /* Assets.xcassets */; };
 		238811FF244C063300E8444E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 238811FD244C063300E8444E /* MainMenu.xib */; };
@@ -194,6 +195,7 @@
 /* Begin PBXFileReference section */
 		23258F0F2488FF3C0005AF13 /* shader.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = shader.vert; sourceTree = "<group>"; };
 		23258F102488FF4A0005AF13 /* shader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = shader.frag; sourceTree = "<group>"; };
+		23637CAE298BA7B100D4D7A6 /* defs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = defs.hpp; sourceTree = "<group>"; };
 		238811E4244C056C00E8444E /* libMarlin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMarlin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F6244C062F00E8444E /* MarlinViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarlinViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F8244C062F00E8444E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -585,6 +587,7 @@
 				238816E32450470800E8444E /* vulkan */,
 				2388123C244F8F5300E8444E /* marlin.hpp */,
 				2388123D244F8F5300E8444E /* marlin.cpp */,
+				23637CAE298BA7B100D4D7A6 /* defs.hpp */,
 			);
 			path = marlin;
 			sourceTree = "<group>";
@@ -1047,6 +1050,7 @@
 				2388167B245040DF00E8444E /* type_mat3x4.hpp in Headers */,
 				238816D1245040DF00E8444E /* extented_min_max.hpp in Headers */,
 				23881695245040DF00E8444E /* type_precision.hpp in Headers */,
+				23637CAF298BA7B100D4D7A6 /* defs.hpp in Headers */,
 				2388165C245040DF00E8444E /* matrix.hpp in Headers */,
 				2388168A245040DF00E8444E /* type_mat2x4.hpp in Headers */,
 				238816CF245040DF00E8444E /* range.hpp in Headers */,
@@ -1071,6 +1075,7 @@
 				238811E0244C056C00E8444E /* Headers */,
 				238811E1244C056C00E8444E /* Sources */,
 				238811E2244C056C00E8444E /* Frameworks */,
+				23637CB0298BA8D600D4D7A6 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1176,6 +1181,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		23637CB0298BA8D600D4D7A6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/Users/jongraham/vulkan/1.2.135.0/macOS/bin/glslc $SRCROOT/src/marlin/shaders/shader.vert -o $SRCROOT/src/marlin/shaders/vert.spv\n/Users/jongraham/vulkan/1.2.135.0/macOS/bin/glslc $SRCROOT/src/marlin/shaders/shader.frag -o $SRCROOT/src/marlin/shaders/frag.spv\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		238811E1244C056C00E8444E /* Sources */ = {
