@@ -94,6 +94,14 @@ VkPhysicalDeviceFeatures PhysicalDevice::getFeatures() const
     return features;
 }
 
+VkPhysicalDeviceMemoryProperties PhysicalDevice::getMemoryProperties() const
+{
+    VkPhysicalDeviceMemoryProperties properties;
+    vkGetPhysicalDeviceMemoryProperties( m_object, &properties );
+    
+    return properties;
+}
+
 void PhysicalDevice::getQueueFamilies( QueueFamilies &o_queueFamilies ) const
 {
     std::vector< VkQueueFamilyProperties > properties;

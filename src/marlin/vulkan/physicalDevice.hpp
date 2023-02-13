@@ -58,6 +58,7 @@ public:
 
     VkPhysicalDeviceProperties getProperties() const;
     VkPhysicalDeviceFeatures getFeatures() const;
+    VkPhysicalDeviceMemoryProperties getMemoryProperties() const;
     
     void getQueueFamilies( QueueFamilies &o_queueFamilies ) const;
     void getExtensions( std::vector< VkExtensionProperties > &extensions ) const;

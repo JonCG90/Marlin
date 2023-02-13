@@ -7,9 +7,11 @@
 //
 
 #include "instance.hpp"
+#include "../defs.hpp"
 
 #include <vulkan/vulkan_metal.h>
 
+#include <array>
 #include <fstream>
 #include <iostream>
 #include <optional>
@@ -19,6 +21,46 @@
 
 namespace marlin
 {
+
+struct Vertex
+{
+    Vec2 pos;
+    Vec3 color;
+    
+    static VkVertexInputBindingDescription getBindingDescription()
+    {
+        VkVertexInputBindingDescription bindingDescription {
+            .binding = 0,
+            .stride = sizeof( Vertex ),
+            .inputRate = VK_VERTEX_INPUT_RATE_VERTEX,
+        };
+
+        return bindingDescription;
+    }
+    
+    static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions() {
+        
+        std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions {};
+        
+        attributeDescriptions[0].binding = 0;
+        attributeDescriptions[0].location = 0;
+        attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
+        attributeDescriptions[0].offset = offsetof(Vertex, pos);
+        
+        attributeDescriptions[1].binding = 0;
+        attributeDescriptions[1].location = 1;
+        attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+        attributeDescriptions[1].offset = offsetof(Vertex, color);
+
+        return attributeDescriptions;
+    }
+};
+
+//const std::vector<Vertex> vertices = {
+//    {{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+//    {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+//    {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+//};
 
 #define VK_EXT_METAL_SURFACE_EXTENSION_NAME "VK_EXT_metal_surface"
 
@@ -444,6 +486,7 @@ void MlnInstance::init( void* i_layer )
     createFramebuffers();
     
     createCommandPool();
+    createVertexBuffer();
     createCommandBuffer();
     
     createSyncObjects();
@@ -455,8 +498,11 @@ void MlnInstance::deinit()
     vkDestroySemaphore( m_device->getObject(), m_renderFinishedSemaphore, nullptr );
     vkDestroyFence( m_device->getObject(), m_inFlightFence, nullptr );
     
+    vkDestroyBuffer( m_device->getObject(), m_vertexBuffer, nullptr );
+    vkFreeMemory( m_device->getObject(), m_vertexBufferMemory, nullptr );
+
     vkDestroyCommandPool( m_device->getObject(), m_commandPool, nullptr );
-    
+
     for ( auto framebuffer : m_swapChainFramebuffers )
     {
         vkDestroyFramebuffer( m_device->getObject(), framebuffer, nullptr );
@@ -726,12 +772,15 @@ void MlnInstance::createGraphicsPipeline()
     };
     
     // Vertex format
+    auto bindingDescription = Vertex::getBindingDescription();
+    auto attributeDescriptions = Vertex::getAttributeDescriptions();
+    
     VkPipelineVertexInputStateCreateInfo vertexInputInfo {};
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    vertexInputInfo.vertexBindingDescriptionCount = 0;
-    vertexInputInfo.pVertexBindingDescriptions = nullptr;
-    vertexInputInfo.vertexAttributeDescriptionCount = 0;
-    vertexInputInfo.pVertexAttributeDescriptions = nullptr;
+    vertexInputInfo.vertexBindingDescriptionCount = 1;
+    vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
+    vertexInputInfo.vertexAttributeDescriptionCount = static_cast< uint32_t >( attributeDescriptions.size() );
+    vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
     
     // Topology
     VkPipelineInputAssemblyStateCreateInfo inputAssembly {};
@@ -900,6 +949,64 @@ void MlnInstance::createCommandPool()
     }
 }
 
+uint32_t findMemoryType( PhysicalDevicePtr i_device, uint32_t i_typeFilter, VkMemoryPropertyFlags i_properties )
+{
+    VkPhysicalDeviceMemoryProperties memProperties = i_device->getMemoryProperties();
+    
+    for ( uint32_t i = 0; i < memProperties.memoryTypeCount; i++ )
+    {
+        if ( ( i_typeFilter & ( 1 << i ) ) && ( memProperties.memoryTypes[i].propertyFlags & i_properties ) == i_properties )
+        {
+            return i;
+        }
+    }
+
+    throw std::runtime_error("failed to find suitable memory type!");
+}
+
+void MlnInstance::createVertexBuffer()
+{
+    const std::vector< Vertex > vertices = {
+        { {  0.0f, -0.5f }, { 1.0f, 0.0f, 0.0f } },
+        { {  0.5f,  0.5f }, { 0.0f, 1.0f, 0.0f } },
+        { { -0.5f,  0.5f }, { 0.0f, 0.0f, 1.0f } }
+    };
+    
+    VkBufferCreateInfo bufferInfo {
+        .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
+        .size = sizeof(Vertex) * vertices.size(),
+        .usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+        .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
+        .flags = 0,
+    };
+    
+    if ( vkCreateBuffer( m_device->getObject(), &bufferInfo, nullptr, &m_vertexBuffer ) != VK_SUCCESS )
+    {
+        throw std::runtime_error("failed to create vertex buffer!");
+    }
+    
+    VkMemoryRequirements memRequirements;
+    vkGetBufferMemoryRequirements( m_device->getObject(), m_vertexBuffer, &memRequirements );
+    
+    VkMemoryAllocateInfo allocInfo {
+        .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+        .allocationSize = memRequirements.size,
+        .memoryTypeIndex = findMemoryType( m_physicalDevice, memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT )
+    };
+    
+    if ( vkAllocateMemory( m_device->getObject(), &allocInfo, nullptr, &m_vertexBufferMemory ) != VK_SUCCESS )
+    {
+        throw std::runtime_error("failed to allocate vertex buffer memory!");
+    }
+    
+    vkBindBufferMemory( m_device->getObject(), m_vertexBuffer, m_vertexBufferMemory, 0 );
+    
+    void* data;
+    vkMapMemory( m_device->getObject(), m_vertexBufferMemory, 0, bufferInfo.size, 0, &data );
+    memcpy( data, vertices.data(), static_cast< size_t >( bufferInfo.size ) );
+    vkUnmapMemory( m_device->getObject(), m_vertexBufferMemory );
+}
+
 void MlnInstance::createCommandBuffer()
 {
     VkCommandBufferAllocateInfo allocInfo
@@ -954,15 +1061,17 @@ void MlnInstance::recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t i
             .minDepth = 0.0f,
             .maxDepth = 1.0f,
         };
-
         vkCmdSetViewport( commandBuffer, 0, 1, &viewport );
 
         VkRect2D scissor {
             .offset = { 0, 0 },
             .extent = m_swapChain->getExtent(),
         };
-
         vkCmdSetScissor( commandBuffer, 0, 1, &scissor );
+        
+        VkBuffer vertexBuffers[] = { m_vertexBuffer };
+        VkDeviceSize offsets[] = { 0 };
+        vkCmdBindVertexBuffers( commandBuffer, 0, 1, vertexBuffers, offsets );
         
         vkCmdDraw( commandBuffer, 3, 1, 0, 0 );
     }

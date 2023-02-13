@@ -58,6 +58,8 @@ private:
     VkQueue m_graphicsQueue;
     VkQueue m_presentQueue;
     VkCommandPool m_commandPool;
+    VkBuffer m_vertexBuffer;
+    VkDeviceMemory m_vertexBufferMemory;
     VkCommandBuffer m_commandBuffer;
 
     SwapChainPtr m_swapChain;
@@ -86,6 +88,7 @@ private:
     void createGraphicsPipeline();
     void createFramebuffers();
     void createCommandPool();
+    void createVertexBuffer();
     void createCommandBuffer();
     void recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t imageIndex );
     void createSyncObjects();
