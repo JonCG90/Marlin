@@ -60,6 +60,8 @@ private:
     VkCommandPool m_commandPool;
     VkBuffer m_vertexBuffer;
     VkDeviceMemory m_vertexBufferMemory;
+    VkBuffer m_indexBuffer;
+    VkDeviceMemory m_indexBufferMemory;
     VkCommandBuffer m_commandBuffer;
 
     SwapChainPtr m_swapChain;
@@ -91,6 +93,7 @@ private:
     void copyBuffer( VkBuffer i_srcBuffer, VkBuffer i_dstBuffer, VkDeviceSize i_size );
     void createBuffer( VkDeviceSize i_size, VkBufferUsageFlags i_usage, VkMemoryPropertyFlags i_properties, VkBuffer &o_buffer, VkDeviceMemory &o_bufferMemory );
     void createVertexBuffer();
+    void createIndexBuffer();
     void createCommandBuffer();
     void recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t imageIndex );
     void createSyncObjects();

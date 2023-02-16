@@ -487,6 +487,7 @@ void MlnInstance::init( void* i_layer )
     
     createCommandPool();
     createVertexBuffer();
+    createIndexBuffer();
     createCommandBuffer();
     
     createSyncObjects();
@@ -497,6 +498,9 @@ void MlnInstance::deinit()
     vkDestroySemaphore( m_device->getObject(), m_imageAvailableSemaphore, nullptr );
     vkDestroySemaphore( m_device->getObject(), m_renderFinishedSemaphore, nullptr );
     vkDestroyFence( m_device->getObject(), m_inFlightFence, nullptr );
+    
+    vkDestroyBuffer( m_device->getObject(), m_indexBuffer, nullptr );
+    vkFreeMemory( m_device->getObject(), m_indexBufferMemory, nullptr );
     
     vkDestroyBuffer( m_device->getObject(), m_vertexBuffer, nullptr );
     vkFreeMemory( m_device->getObject(), m_vertexBufferMemory, nullptr );
@@ -1039,10 +1043,11 @@ void MlnInstance::copyBuffer( VkBuffer i_srcBuffer, VkBuffer i_dstBuffer, VkDevi
 
 void MlnInstance::createVertexBuffer()
 {
-    const std::vector< Vertex > vertices = {
-        { {  0.0f, -0.5f }, { 1.0f, 0.0f, 0.0f } },
-        { {  0.5f,  0.5f }, { 0.0f, 1.0f, 0.0f } },
-        { { -0.5f,  0.5f }, { 0.0f, 0.0f, 1.0f } }
+    const std::vector<Vertex> vertices = {
+        {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+        {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
+        {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+        {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
     };
     
     const VkDeviceSize size = sizeof(Vertex) * vertices.size();
@@ -1060,6 +1065,32 @@ void MlnInstance::createVertexBuffer()
     createBuffer( size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_vertexBuffer, m_vertexBufferMemory );
     
     copyBuffer( stagingBuffer, m_vertexBuffer, size );
+    
+    vkDestroyBuffer( m_device->getObject(), stagingBuffer, nullptr );
+    vkFreeMemory( m_device->getObject(), stagingBufferMemory, nullptr );
+}
+
+void MlnInstance::createIndexBuffer()
+{
+    const std::vector< uint32_t > indices = {
+        0, 1, 2, 2, 3, 0
+    };
+    
+    const VkDeviceSize size = sizeof( uint32_t ) * indices.size();
+    
+    VkBuffer stagingBuffer;
+    VkDeviceMemory stagingBufferMemory;
+    
+    createBuffer( size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory );
+    
+    void* data;
+    vkMapMemory( m_device->getObject(), stagingBufferMemory, 0, size, 0, &data );
+    memcpy( data, indices.data(), static_cast< size_t >( size ) );
+    vkUnmapMemory( m_device->getObject(), stagingBufferMemory );
+    
+    createBuffer( size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_indexBuffer, m_indexBufferMemory );
+    
+    copyBuffer( stagingBuffer, m_indexBuffer, size );
     
     vkDestroyBuffer( m_device->getObject(), stagingBuffer, nullptr );
     vkFreeMemory( m_device->getObject(), stagingBufferMemory, nullptr );
@@ -1130,8 +1161,9 @@ void MlnInstance::recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t i
         VkBuffer vertexBuffers[] = { m_vertexBuffer };
         VkDeviceSize offsets[] = { 0 };
         vkCmdBindVertexBuffers( commandBuffer, 0, 1, vertexBuffers, offsets );
-        
-        vkCmdDraw( commandBuffer, 3, 1, 0, 0 );
+        vkCmdBindIndexBuffer( commandBuffer, m_indexBuffer, 0, VK_INDEX_TYPE_UINT32 );
+
+        vkCmdDrawIndexed( commandBuffer, static_cast< uint32_t >( 6 ), 1, 0, 0, 0 );
     }
     vkCmdEndRenderPass( commandBuffer );
     
