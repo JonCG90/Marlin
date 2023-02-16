@@ -964,6 +964,79 @@ uint32_t findMemoryType( PhysicalDevicePtr i_device, uint32_t i_typeFilter, VkMe
     throw std::runtime_error("failed to find suitable memory type!");
 }
 
+void MlnInstance::createBuffer( VkDeviceSize i_size, VkBufferUsageFlags i_usage, VkMemoryPropertyFlags i_properties, VkBuffer &o_buffer, VkDeviceMemory &o_bufferMemory )
+{
+    VkBufferCreateInfo bufferInfo {
+        .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
+        .size = i_size,
+        .usage = i_usage,
+        .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
+        .flags = 0,
+    };
+    
+    if ( vkCreateBuffer( m_device->getObject(), &bufferInfo, nullptr, &o_buffer ) != VK_SUCCESS )
+    {
+        throw std::runtime_error("failed to create vertex buffer!");
+    }
+    
+    VkMemoryRequirements memRequirements;
+    vkGetBufferMemoryRequirements( m_device->getObject(), o_buffer, &memRequirements );
+    
+    VkMemoryAllocateInfo allocInfo {
+        .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+        .allocationSize = memRequirements.size,
+        .memoryTypeIndex = findMemoryType( m_physicalDevice, memRequirements.memoryTypeBits, i_properties )
+    };
+    
+    if ( vkAllocateMemory( m_device->getObject(), &allocInfo, nullptr, &o_bufferMemory ) != VK_SUCCESS )
+    {
+        throw std::runtime_error("failed to allocate vertex buffer memory!");
+    }
+    
+    vkBindBufferMemory( m_device->getObject(), o_buffer, o_bufferMemory, 0 );
+}
+
+void MlnInstance::copyBuffer( VkBuffer i_srcBuffer, VkBuffer i_dstBuffer, VkDeviceSize i_size )
+{
+    VkCommandBufferAllocateInfo allocInfo {
+        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+        .level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+        .commandPool = m_commandPool,
+        .commandBufferCount = 1
+    };
+
+    VkCommandBuffer commandBuffer;
+    vkAllocateCommandBuffers( m_device->getObject(), &allocInfo, &commandBuffer );
+    
+    VkCommandBufferBeginInfo beginInfo {
+        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+        .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT
+    };
+
+    vkBeginCommandBuffer( commandBuffer, &beginInfo );
+    
+    VkBufferCopy copyRegion {
+        .srcOffset = 0, // Optional
+        .dstOffset = 0, // Optional
+        .size = i_size
+    };
+
+    vkCmdCopyBuffer( commandBuffer, i_srcBuffer, i_dstBuffer, 1, &copyRegion );
+    
+    vkEndCommandBuffer( commandBuffer );
+    
+    VkSubmitInfo submitInfo {
+        .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+        .commandBufferCount = 1,
+        .pCommandBuffers = &commandBuffer
+    };
+
+    vkQueueSubmit( m_graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE );
+    vkQueueWaitIdle( m_graphicsQueue );
+
+    vkFreeCommandBuffers( m_device->getObject(), m_commandPool, 1, &commandBuffer );
+}
+
 void MlnInstance::createVertexBuffer()
 {
     const std::vector< Vertex > vertices = {
@@ -972,39 +1045,24 @@ void MlnInstance::createVertexBuffer()
         { { -0.5f,  0.5f }, { 0.0f, 0.0f, 1.0f } }
     };
     
-    VkBufferCreateInfo bufferInfo {
-        .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
-        .size = sizeof(Vertex) * vertices.size(),
-        .usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
-        .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
-        .flags = 0,
-    };
+    const VkDeviceSize size = sizeof(Vertex) * vertices.size();
     
-    if ( vkCreateBuffer( m_device->getObject(), &bufferInfo, nullptr, &m_vertexBuffer ) != VK_SUCCESS )
-    {
-        throw std::runtime_error("failed to create vertex buffer!");
-    }
+    VkBuffer stagingBuffer;
+    VkDeviceMemory stagingBufferMemory;
     
-    VkMemoryRequirements memRequirements;
-    vkGetBufferMemoryRequirements( m_device->getObject(), m_vertexBuffer, &memRequirements );
-    
-    VkMemoryAllocateInfo allocInfo {
-        .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
-        .allocationSize = memRequirements.size,
-        .memoryTypeIndex = findMemoryType( m_physicalDevice, memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT )
-    };
-    
-    if ( vkAllocateMemory( m_device->getObject(), &allocInfo, nullptr, &m_vertexBufferMemory ) != VK_SUCCESS )
-    {
-        throw std::runtime_error("failed to allocate vertex buffer memory!");
-    }
-    
-    vkBindBufferMemory( m_device->getObject(), m_vertexBuffer, m_vertexBufferMemory, 0 );
+    createBuffer( size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory );
     
     void* data;
-    vkMapMemory( m_device->getObject(), m_vertexBufferMemory, 0, bufferInfo.size, 0, &data );
-    memcpy( data, vertices.data(), static_cast< size_t >( bufferInfo.size ) );
-    vkUnmapMemory( m_device->getObject(), m_vertexBufferMemory );
+    vkMapMemory( m_device->getObject(), stagingBufferMemory, 0, size, 0, &data );
+    memcpy( data, vertices.data(), static_cast< size_t >( size ) );
+    vkUnmapMemory( m_device->getObject(), stagingBufferMemory );
+    
+    createBuffer( size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_vertexBuffer, m_vertexBufferMemory );
+    
+    copyBuffer( stagingBuffer, m_vertexBuffer, size );
+    
+    vkDestroyBuffer( m_device->getObject(), stagingBuffer, nullptr );
+    vkFreeMemory( m_device->getObject(), stagingBufferMemory, nullptr );
 }
 
 void MlnInstance::createCommandBuffer()
