@@ -228,6 +228,31 @@ Instance::Instance( VkInstance i_instance )
 {
 }
 
+SurfacePtr Instance::getSurface()
+{
+    return m_surface;
+}
+
+PhysicalDevicePtr Instance::getPhysicalDevice()
+{
+    return m_physicalDevice;
+}
+
+DevicePtr Instance::getDevice()
+{
+    return m_device;
+}
+    
+VkQueue Instance::getGraphicsQueue()
+{
+    return m_graphicsQueue;
+}
+
+VkQueue Instance::getPresentQueue()
+{
+    return m_presentQueue;
+}
+
 //**
 // Old
 //**
@@ -286,6 +311,8 @@ struct QueueFamilyIndices
 {
     std::optional< QueueFamily > graphicsFamily;
     std::optional< QueueFamily > presentFamily;
+    std::optional< QueueFamily > computeFamily;
+    std::optional< QueueFamily > transferFamily;
 };
 
 static void getQueueFamilies( PhysicalDevicePtr i_device, SurfacePtr i_surface, QueueFamilyIndices &o_familyIndices )
@@ -298,6 +325,16 @@ static void getQueueFamilies( PhysicalDevicePtr i_device, SurfacePtr i_surface, 
         if ( family.hasGraphics() )
         {
             o_familyIndices.graphicsFamily = family;
+        }
+        
+        if ( family.hasTransfer() )
+        {
+            o_familyIndices.transferFamily = family;
+        }
+        
+        if ( family.hasCompute() )
+        {
+            o_familyIndices.computeFamily = family;
         }
         
         if ( family.isSurfaceSupported( i_surface ) )
@@ -380,7 +417,10 @@ static bool isDeviceSuitable( PhysicalDevicePtr i_device, SurfacePtr i_surface )
     QueueFamilyIndices familyIndices;
     getQueueFamilies( i_device, i_surface, familyIndices );
     
-    if ( !familyIndices.graphicsFamily.has_value() || !familyIndices.presentFamily.has_value() )
+    if ( !familyIndices.graphicsFamily.has_value() ||
+         !familyIndices.presentFamily.has_value()  ||
+         !familyIndices.transferFamily.has_value() ||
+         !familyIndices.computeFamily.has_value() )
     {
         return false;
     }
@@ -485,10 +525,8 @@ void MlnInstance::init( void* i_layer )
     
     createFramebuffers();
     
-    createCommandPool();
     createVertexBuffer();
     createIndexBuffer();
-    createCommandBuffer();
     
     createSyncObjects();
 }
@@ -504,8 +542,6 @@ void MlnInstance::deinit()
     
     vkDestroyBuffer( m_device->getObject(), m_vertexBuffer, nullptr );
     vkFreeMemory( m_device->getObject(), m_vertexBufferMemory, nullptr );
-
-    vkDestroyCommandPool( m_device->getObject(), m_commandPool, nullptr );
 
     for ( auto framebuffer : m_swapChainFramebuffers )
     {
@@ -541,9 +577,10 @@ void MlnInstance::drawFrame()
     uint32_t imageIndex;
     vkAcquireNextImageKHR( m_device->getObject(), m_swapChain->getObject(), UINT64_MAX, m_imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex );
     
-    vkResetCommandBuffer( m_commandBuffer, 0 );
+    VkCommandBuffer commandBuffer = m_device->getCommandBuffer( QueueTypeGraphics )->getObject();
+    vkResetCommandBuffer( commandBuffer, 0 );
     
-    recordCommandBuffer( m_commandBuffer, imageIndex );
+    recordCommandBuffer( commandBuffer, imageIndex );
     
     VkSubmitInfo submitInfo {
         .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO
@@ -556,7 +593,7 @@ void MlnInstance::drawFrame()
     submitInfo.pWaitDstStageMask = waitStages;
     
     submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = &m_commandBuffer;
+    submitInfo.pCommandBuffers = &commandBuffer;
     
     VkSemaphore signalSemaphores[] = { m_renderFinishedSemaphore };
     submitInfo.signalSemaphoreCount = 1;
@@ -583,15 +620,18 @@ void MlnInstance::drawFrame()
 }
 
 void MlnInstance::createLogicalDevice()
-{
-    QueueFamilyIndices families;
-    getQueueFamilies( m_physicalDevice, m_surface, families );
-    
-    m_device = Device::create( m_physicalDevice, { families.graphicsFamily.value(), families.presentFamily.value() } );
+{    
+    QueueCreateCounts queuesToCreate {
+        { QueueTypeGraphics, 1 },
+        { QueueTypePresent,  1 },
+        { QueueTypeTransfer, 1 },
+    };
+    m_device = Device::create( m_physicalDevice, m_surface, queuesToCreate );
     
     // Get our device queues
-    m_graphicsQueue = m_device->getQueue( families.graphicsFamily.value(), 0 );
-    m_presentQueue = m_device->getQueue( families.presentFamily.value(), 0 );
+    m_graphicsQueue = m_device->getQueue( QueueTypeGraphics, 0 );
+    m_presentQueue = m_device->getQueue( QueueTypePresent, 0 );
+    m_transferQueue = m_device->getQueue( QueueTypeTransfer, 0 );
 }
 
 void MlnInstance::createSwapChain()
@@ -937,22 +977,6 @@ void MlnInstance::createFramebuffers()
     }
 }
 
-void MlnInstance::createCommandPool()
-{
-    QueueFamilyIndices familyIndices;
-    getQueueFamilies( m_physicalDevice, m_surface, familyIndices );
-
-    VkCommandPoolCreateInfo poolInfo {};
-    poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-    poolInfo.queueFamilyIndex = familyIndices.graphicsFamily.value().getIndex();
-    
-    if ( vkCreateCommandPool( m_device->getObject(), &poolInfo, nullptr, &m_commandPool ) != VK_SUCCESS )
-    {
-        throw std::runtime_error( "failed to create command pool!" );
-    }
-}
-
 uint32_t findMemoryType( PhysicalDevicePtr i_device, uint32_t i_typeFilter, VkMemoryPropertyFlags i_properties )
 {
     VkPhysicalDeviceMemoryProperties memProperties = i_device->getMemoryProperties();
@@ -1002,15 +1026,7 @@ void MlnInstance::createBuffer( VkDeviceSize i_size, VkBufferUsageFlags i_usage,
 
 void MlnInstance::copyBuffer( VkBuffer i_srcBuffer, VkBuffer i_dstBuffer, VkDeviceSize i_size )
 {
-    VkCommandBufferAllocateInfo allocInfo {
-        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
-        .level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
-        .commandPool = m_commandPool,
-        .commandBufferCount = 1
-    };
-
-    VkCommandBuffer commandBuffer;
-    vkAllocateCommandBuffers( m_device->getObject(), &allocInfo, &commandBuffer );
+    VkCommandBuffer commandBuffer = m_device->getCommandBuffer( QueueTypeTransfer )->getObject();
     
     VkCommandBufferBeginInfo beginInfo {
         .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
@@ -1035,10 +1051,8 @@ void MlnInstance::copyBuffer( VkBuffer i_srcBuffer, VkBuffer i_dstBuffer, VkDevi
         .pCommandBuffers = &commandBuffer
     };
 
-    vkQueueSubmit( m_graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE );
-    vkQueueWaitIdle( m_graphicsQueue );
-
-    vkFreeCommandBuffers( m_device->getObject(), m_commandPool, 1, &commandBuffer );
+    vkQueueSubmit( m_transferQueue, 1, &submitInfo, VK_NULL_HANDLE );
+    vkQueueWaitIdle( m_transferQueue );
 }
 
 void MlnInstance::createVertexBuffer()
@@ -1094,21 +1108,6 @@ void MlnInstance::createIndexBuffer()
     
     vkDestroyBuffer( m_device->getObject(), stagingBuffer, nullptr );
     vkFreeMemory( m_device->getObject(), stagingBufferMemory, nullptr );
-}
-
-void MlnInstance::createCommandBuffer()
-{
-    VkCommandBufferAllocateInfo allocInfo
-    {
-        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
-        .commandPool = m_commandPool,
-        .level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
-        .commandBufferCount = 1,
-    };
-    
-    if ( vkAllocateCommandBuffers( m_device->getObject(), &allocInfo, &m_commandBuffer ) != VK_SUCCESS ) {
-        throw std::runtime_error( "failed to allocate command buffers!" );
-    }
 }
 
 void MlnInstance::recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t imageIndex )

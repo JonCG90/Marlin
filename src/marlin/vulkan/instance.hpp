@@ -9,6 +9,7 @@
 #ifndef MARLIN_INSTANCE_HPP
 #define MARLIN_INSTANCE_HPP
 
+#include "commandBuffer.hpp"
 #include "device.hpp"
 #include "physicalDevice.hpp"
 #include "surface.hpp"
@@ -29,6 +30,25 @@ public:
     
     Instance() = default;
     explicit Instance( VkInstance i_instance );
+    
+    SurfacePtr getSurface();
+
+    PhysicalDevicePtr getPhysicalDevice();
+    DevicePtr getDevice();
+        
+    VkQueue getGraphicsQueue();
+    VkQueue getPresentQueue();
+    VkCommandPool getCommandPool();
+    
+private:
+    
+    SurfacePtr m_surface;
+
+    PhysicalDevicePtr m_physicalDevice;
+    DevicePtr m_device;
+        
+    VkQueue m_graphicsQueue;
+    VkQueue m_presentQueue;
 };
 
 class MlnInstance
@@ -57,12 +77,12 @@ private:
         
     VkQueue m_graphicsQueue;
     VkQueue m_presentQueue;
-    VkCommandPool m_commandPool;
+    VkQueue m_transferQueue;
+
     VkBuffer m_vertexBuffer;
     VkDeviceMemory m_vertexBufferMemory;
     VkBuffer m_indexBuffer;
     VkDeviceMemory m_indexBufferMemory;
-    VkCommandBuffer m_commandBuffer;
 
     SwapChainPtr m_swapChain;
     std::vector< VkImageView > m_swapChainImageViews;
@@ -89,12 +109,10 @@ private:
     void createRenderPass();
     void createGraphicsPipeline();
     void createFramebuffers();
-    void createCommandPool();
     void copyBuffer( VkBuffer i_srcBuffer, VkBuffer i_dstBuffer, VkDeviceSize i_size );
     void createBuffer( VkDeviceSize i_size, VkBufferUsageFlags i_usage, VkMemoryPropertyFlags i_properties, VkBuffer &o_buffer, VkDeviceMemory &o_bufferMemory );
     void createVertexBuffer();
     void createIndexBuffer();
-    void createCommandBuffer();
     void recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t imageIndex );
     void createSyncObjects();
 };

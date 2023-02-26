@@ -12,6 +12,8 @@
 namespace marlin
 {
 
+#define THROW_INVALID( str ) if ( !isValid() ) { throw std::runtime_error( str ); }
+
 template < class T >
 class VkObjectT
 {

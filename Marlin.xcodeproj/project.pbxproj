@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		23637CAF298BA7B100D4D7A6 /* defs.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23637CAE298BA7B100D4D7A6 /* defs.hpp */; };
+		23637CB329A4B50700D4D7A6 /* buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23637CB129A4B50700D4D7A6 /* buffer.cpp */; };
+		23637CB429A4B50700D4D7A6 /* buffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23637CB229A4B50700D4D7A6 /* buffer.hpp */; };
+		23637CB729A8C26E00D4D7A6 /* commandBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23637CB529A8C26E00D4D7A6 /* commandBuffer.cpp */; };
+		23637CB829A8C26E00D4D7A6 /* commandBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23637CB629A8C26E00D4D7A6 /* commandBuffer.hpp */; };
 		238811FA244C062F00E8444E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 238811F9244C062F00E8444E /* AppDelegate.m */; };
 		238811FC244C063300E8444E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 238811FB244C063300E8444E /* Assets.xcassets */; };
 		238811FF244C063300E8444E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 238811FD244C063300E8444E /* MainMenu.xib */; };
@@ -196,6 +200,10 @@
 		23258F0F2488FF3C0005AF13 /* shader.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = shader.vert; sourceTree = "<group>"; };
 		23258F102488FF4A0005AF13 /* shader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = shader.frag; sourceTree = "<group>"; };
 		23637CAE298BA7B100D4D7A6 /* defs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = defs.hpp; sourceTree = "<group>"; };
+		23637CB129A4B50700D4D7A6 /* buffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = buffer.cpp; sourceTree = "<group>"; };
+		23637CB229A4B50700D4D7A6 /* buffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = buffer.hpp; sourceTree = "<group>"; };
+		23637CB529A8C26E00D4D7A6 /* commandBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = commandBuffer.cpp; sourceTree = "<group>"; };
+		23637CB629A8C26E00D4D7A6 /* commandBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = commandBuffer.hpp; sourceTree = "<group>"; };
 		238811E4244C056C00E8444E /* libMarlin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMarlin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F6244C062F00E8444E /* MarlinViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarlinViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F8244C062F00E8444E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -901,6 +909,10 @@
 				23ED677E2911164E0039B92A /* defs.hpp */,
 				23ED6781292D943A0039B92A /* swapChain.cpp */,
 				23ED6782292D943A0039B92A /* swapChain.hpp */,
+				23637CB129A4B50700D4D7A6 /* buffer.cpp */,
+				23637CB229A4B50700D4D7A6 /* buffer.hpp */,
+				23637CB529A8C26E00D4D7A6 /* commandBuffer.cpp */,
+				23637CB629A8C26E00D4D7A6 /* commandBuffer.hpp */,
 			);
 			path = vulkan;
 			sourceTree = "<group>";
@@ -976,11 +988,13 @@
 				238816A3245040DF00E8444E /* integer.hpp in Headers */,
 				2388165F245040DF00E8444E /* geometric.hpp in Headers */,
 				23881687245040DF00E8444E /* type_mat4x3.hpp in Headers */,
+				23637CB829A8C26E00D4D7A6 /* commandBuffer.hpp in Headers */,
 				238816BC245040DF00E8444E /* gradient_paint.hpp in Headers */,
 				23ED67802911164E0039B92A /* defs.hpp in Headers */,
 				238816D9245040DF00E8444E /* rotate_normalized_axis.hpp in Headers */,
 				2388165E245040DF00E8444E /* trigonometric.hpp in Headers */,
 				2388167D245040DF00E8444E /* intrinsic_integer.hpp in Headers */,
+				23637CB429A4B50700D4D7A6 /* buffer.hpp in Headers */,
 				23881691245040DF00E8444E /* ulp.hpp in Headers */,
 				238816BD245040DF00E8444E /* quaternion.hpp in Headers */,
 				238816AE245040DF00E8444E /* raw_data.hpp in Headers */,
@@ -1208,12 +1222,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				238816DB245041FC00E8444E /* marlin.cpp in Sources */,
+				23637CB729A8C26E00D4D7A6 /* commandBuffer.cpp in Sources */,
 				2388167A245040DF00E8444E /* glm.cpp in Sources */,
 				238816E62450472B00E8444E /* instance.cpp in Sources */,
 				23ED677B290FD29E0039B92A /* device.cpp in Sources */,
 				23ED6783292D943A0039B92A /* swapChain.cpp in Sources */,
 				23881676245040DF00E8444E /* dummy.cpp in Sources */,
 				23ED677729069D4F0039B92A /* surface.cpp in Sources */,
+				23637CB329A4B50700D4D7A6 /* buffer.cpp in Sources */,
 				23ED677328FFE49B0039B92A /* physicalDevice.cpp in Sources */,
 				23ED676F28FFE2520039B92A /* vkObject.tpp in Sources */,
 			);

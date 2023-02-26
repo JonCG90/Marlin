@@ -29,6 +29,11 @@ bool QueueFamily::hasCompute() const
     return m_properties.queueFlags & VK_QUEUE_COMPUTE_BIT;
 }
 
+bool QueueFamily::hasTransfer() const
+{
+    return m_properties.queueFlags & VK_QUEUE_TRANSFER_BIT;
+}
+
 bool QueueFamily::isSurfaceSupported( const SurfacePtr &i_surface ) const
 {
     VkBool32 supported = false;

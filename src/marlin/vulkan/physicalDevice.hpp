@@ -24,10 +24,12 @@ class QueueFamily
 public:
     
     QueueFamily( VkPhysicalDevice i_physicalDevice, const VkQueueFamilyProperties &i_properties, uint32_t i_index );
+    QueueFamily() = default;
     ~QueueFamily() = default;
     
     bool hasGraphics() const;
     bool hasCompute() const;
+    bool hasTransfer() const;
     bool isSurfaceSupported( const SurfacePtr &i_surface ) const;
     
     uint32_t getIndex() const;

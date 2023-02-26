@@ -15,6 +15,12 @@
 namespace marlin
 {
 
+class Buffer;
+using BufferPtr = std::shared_ptr< Buffer >;
+
+class CommandBuffer;
+using CommandBufferPtr = std::shared_ptr< CommandBuffer >;
+
 class Device;
 using DevicePtr = std::shared_ptr< Device >;
 
