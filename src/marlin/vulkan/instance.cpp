@@ -1026,29 +1026,26 @@ void MlnInstance::createBuffer( VkDeviceSize i_size, VkBufferUsageFlags i_usage,
 
 void MlnInstance::copyBuffer( VkBuffer i_srcBuffer, VkBuffer i_dstBuffer, VkDeviceSize i_size )
 {
-    VkCommandBuffer commandBuffer = m_device->getCommandBuffer( QueueTypeTransfer )->getObject();
+    CommandBufferPtr commandBuffer = m_device->getCommandBuffer( QueueTypeTransfer );
+    commandBuffer->reset();
     
-    VkCommandBufferBeginInfo beginInfo {
-        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
-        .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT
-    };
+    {
+        CommandBufferRecordPtr scopedRecord = commandBuffer->scopedRecord( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+                
+        VkBufferCopy copyRegion {
+            .srcOffset = 0, // Optional
+            .dstOffset = 0, // Optional
+            .size = i_size
+        };
 
-    vkBeginCommandBuffer( commandBuffer, &beginInfo );
+        vkCmdCopyBuffer( commandBuffer->getObject(), i_srcBuffer, i_dstBuffer, 1, &copyRegion );
+    }
     
-    VkBufferCopy copyRegion {
-        .srcOffset = 0, // Optional
-        .dstOffset = 0, // Optional
-        .size = i_size
-    };
-
-    vkCmdCopyBuffer( commandBuffer, i_srcBuffer, i_dstBuffer, 1, &copyRegion );
-    
-    vkEndCommandBuffer( commandBuffer );
-    
+    VkCommandBuffer vkCommandBuffer = commandBuffer->getObject();
     VkSubmitInfo submitInfo {
         .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
         .commandBufferCount = 1,
-        .pCommandBuffers = &commandBuffer
+        .pCommandBuffers = &vkCommandBuffer
     };
 
     vkQueueSubmit( m_transferQueue, 1, &submitInfo, VK_NULL_HANDLE );
