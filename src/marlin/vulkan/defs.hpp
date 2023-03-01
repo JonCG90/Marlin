@@ -15,8 +15,11 @@
 namespace marlin
 {
 
-class Buffer;
-using BufferPtr = std::shared_ptr< Buffer >;
+template< class T >
+class BufferT;
+
+template< class T >
+using BufferTPtr = std::shared_ptr< BufferT< T > >;
 
 class CommandBuffer;
 using CommandBufferPtr = std::shared_ptr< CommandBuffer >;

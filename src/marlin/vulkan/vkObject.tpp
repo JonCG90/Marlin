@@ -6,8 +6,6 @@
 //  Copyright © 2022 Jonathan Graham. All rights reserved.
 //
 
-#include "vkObject.hpp"
-
 #include <vulkan/vulkan.h>
 
 #include <iostream>

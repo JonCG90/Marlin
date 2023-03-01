@@ -9,18 +9,51 @@
 #ifndef MARLIN_INSTANCE_HPP
 #define MARLIN_INSTANCE_HPP
 
-#include "commandBuffer.hpp"
-#include "device.hpp"
-#include "physicalDevice.hpp"
-#include "surface.hpp"
-#include "swapChain.hpp"
+#include "defs.hpp"
+#include "vkObject.hpp"
+#include "../defs.hpp"
 
 #include <vulkan/vulkan.h>
 
+#include <array>
 #include <vector>
 
 namespace marlin
 {
+
+struct Vertex
+{
+    Vec2 pos;
+    Vec3 color;
+    
+    static VkVertexInputBindingDescription getBindingDescription()
+    {
+        VkVertexInputBindingDescription bindingDescription {
+            .binding = 0,
+            .stride = sizeof( Vertex ),
+            .inputRate = VK_VERTEX_INPUT_RATE_VERTEX,
+        };
+
+        return bindingDescription;
+    }
+    
+    static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions() {
+        
+        std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions {};
+        
+        attributeDescriptions[0].binding = 0;
+        attributeDescriptions[0].location = 0;
+        attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
+        attributeDescriptions[0].offset = offsetof(Vertex, pos);
+        
+        attributeDescriptions[1].binding = 0;
+        attributeDescriptions[1].location = 1;
+        attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+        attributeDescriptions[1].offset = offsetof(Vertex, color);
+
+        return attributeDescriptions;
+    }
+};
 
 class Instance : public VkObjectT< VkInstance >
 {
@@ -77,12 +110,9 @@ private:
         
     VkQueue m_graphicsQueue;
     VkQueue m_presentQueue;
-    VkQueue m_transferQueue;
 
-    VkBuffer m_vertexBuffer;
-    VkDeviceMemory m_vertexBufferMemory;
-    VkBuffer m_indexBuffer;
-    VkDeviceMemory m_indexBufferMemory;
+    BufferTPtr< Vertex > m_vertexBuffer;
+    BufferTPtr< uint32_t > m_indexBuffer;
 
     SwapChainPtr m_swapChain;
     std::vector< VkImageView > m_swapChainImageViews;

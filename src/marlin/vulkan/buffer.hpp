@@ -15,25 +15,28 @@
 namespace marlin
 {
 
-class Buffer : public VkObjectT< VkBuffer >
+template < class T >
+class BufferT : public VkObjectT< VkBuffer >
 {
 public:
     
-    static BufferPtr create( DevicePtr i_device );
+    static std::shared_ptr< BufferT< T > > create( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice, const std::vector< T > &i_data, VkBufferUsageFlagBits i_usage );
     
-    Buffer( VkDevice i_device );
+    BufferT( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice, const std::vector< T > &i_data, VkBufferUsageFlagBits i_usage );
     
-    Buffer() = default;
-    ~Buffer() override;
+    BufferT() = default;
+    ~BufferT() override;
     
     void destroy();
     
 private:
-    
-    VkDevice m_device;
+        
+    DevicePtr m_device;
     VkDeviceMemory m_memory;
 };
 
 } // namespace marlin
+
+#include "buffer.tpp"
 
 #endif /* MARLIN_BUFFER_HPP */

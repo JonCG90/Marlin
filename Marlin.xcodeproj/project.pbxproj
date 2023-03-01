@@ -204,6 +204,7 @@
 		23637CB229A4B50700D4D7A6 /* buffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = buffer.hpp; sourceTree = "<group>"; };
 		23637CB529A8C26E00D4D7A6 /* commandBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = commandBuffer.cpp; sourceTree = "<group>"; };
 		23637CB629A8C26E00D4D7A6 /* commandBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = commandBuffer.hpp; sourceTree = "<group>"; };
+		23637CB929AF552E00D4D7A6 /* buffer.tpp */ = {isa = PBXFileReference; lastKnownFileType = text; path = buffer.tpp; sourceTree = "<group>"; };
 		238811E4244C056C00E8444E /* libMarlin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMarlin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F6244C062F00E8444E /* MarlinViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarlinViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F8244C062F00E8444E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -910,6 +911,7 @@
 				23ED6781292D943A0039B92A /* swapChain.cpp */,
 				23ED6782292D943A0039B92A /* swapChain.hpp */,
 				23637CB129A4B50700D4D7A6 /* buffer.cpp */,
+				23637CB929AF552E00D4D7A6 /* buffer.tpp */,
 				23637CB229A4B50700D4D7A6 /* buffer.hpp */,
 				23637CB529A8C26E00D4D7A6 /* commandBuffer.cpp */,
 				23637CB629A8C26E00D4D7A6 /* commandBuffer.hpp */,

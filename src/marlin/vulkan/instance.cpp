@@ -7,60 +7,22 @@
 //
 
 #include "instance.hpp"
-#include "../defs.hpp"
+
+#include "buffer.hpp"
+#include "commandBuffer.hpp"
+#include "device.hpp"
+#include "physicalDevice.hpp"
+#include "surface.hpp"
+#include "swapChain.hpp"
 
 #include <vulkan/vulkan_metal.h>
 
-#include <array>
 #include <fstream>
-#include <iostream>
-#include <optional>
-#include <map>
 #include <set>
 #include <sstream>
 
 namespace marlin
 {
-
-struct Vertex
-{
-    Vec2 pos;
-    Vec3 color;
-    
-    static VkVertexInputBindingDescription getBindingDescription()
-    {
-        VkVertexInputBindingDescription bindingDescription {
-            .binding = 0,
-            .stride = sizeof( Vertex ),
-            .inputRate = VK_VERTEX_INPUT_RATE_VERTEX,
-        };
-
-        return bindingDescription;
-    }
-    
-    static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions() {
-        
-        std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions {};
-        
-        attributeDescriptions[0].binding = 0;
-        attributeDescriptions[0].location = 0;
-        attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
-        attributeDescriptions[0].offset = offsetof(Vertex, pos);
-        
-        attributeDescriptions[1].binding = 0;
-        attributeDescriptions[1].location = 1;
-        attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attributeDescriptions[1].offset = offsetof(Vertex, color);
-
-        return attributeDescriptions;
-    }
-};
-
-//const std::vector<Vertex> vertices = {
-//    {{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-//    {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
-//    {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
-//};
 
 #define VK_EXT_METAL_SURFACE_EXTENSION_NAME "VK_EXT_metal_surface"
 
@@ -537,11 +499,8 @@ void MlnInstance::deinit()
     vkDestroySemaphore( m_device->getObject(), m_renderFinishedSemaphore, nullptr );
     vkDestroyFence( m_device->getObject(), m_inFlightFence, nullptr );
     
-    vkDestroyBuffer( m_device->getObject(), m_indexBuffer, nullptr );
-    vkFreeMemory( m_device->getObject(), m_indexBufferMemory, nullptr );
-    
-    vkDestroyBuffer( m_device->getObject(), m_vertexBuffer, nullptr );
-    vkFreeMemory( m_device->getObject(), m_vertexBufferMemory, nullptr );
+    m_indexBuffer->destroy();
+    m_vertexBuffer->destroy();
 
     for ( auto framebuffer : m_swapChainFramebuffers )
     {
@@ -631,7 +590,6 @@ void MlnInstance::createLogicalDevice()
     // Get our device queues
     m_graphicsQueue = m_device->getQueue( QueueTypeGraphics, 0 );
     m_presentQueue = m_device->getQueue( QueueTypePresent, 0 );
-    m_transferQueue = m_device->getQueue( QueueTypeTransfer, 0 );
 }
 
 void MlnInstance::createSwapChain()
@@ -977,7 +935,7 @@ void MlnInstance::createFramebuffers()
     }
 }
 
-uint32_t findMemoryType( PhysicalDevicePtr i_device, uint32_t i_typeFilter, VkMemoryPropertyFlags i_properties )
+uint32_t findMemoryType2( PhysicalDevicePtr i_device, uint32_t i_typeFilter, VkMemoryPropertyFlags i_properties )
 {
     VkPhysicalDeviceMemoryProperties memProperties = i_device->getMemoryProperties();
     
@@ -1013,7 +971,7 @@ void MlnInstance::createBuffer( VkDeviceSize i_size, VkBufferUsageFlags i_usage,
     VkMemoryAllocateInfo allocInfo {
         .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
         .allocationSize = memRequirements.size,
-        .memoryTypeIndex = findMemoryType( m_physicalDevice, memRequirements.memoryTypeBits, i_properties )
+        .memoryTypeIndex = findMemoryType2( m_physicalDevice, memRequirements.memoryTypeBits, i_properties )
     };
     
     if ( vkAllocateMemory( m_device->getObject(), &allocInfo, nullptr, &o_bufferMemory ) != VK_SUCCESS )
@@ -1048,8 +1006,9 @@ void MlnInstance::copyBuffer( VkBuffer i_srcBuffer, VkBuffer i_dstBuffer, VkDevi
         .pCommandBuffers = &vkCommandBuffer
     };
 
-    vkQueueSubmit( m_transferQueue, 1, &submitInfo, VK_NULL_HANDLE );
-    vkQueueWaitIdle( m_transferQueue );
+    VkQueue queue = m_device->getQueue( QueueTypeTransfer, 0 );
+    vkQueueSubmit( queue, 1, &submitInfo, VK_NULL_HANDLE );
+    vkQueueWaitIdle( queue );
 }
 
 void MlnInstance::createVertexBuffer()
@@ -1061,24 +1020,7 @@ void MlnInstance::createVertexBuffer()
         {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
     };
     
-    const VkDeviceSize size = sizeof(Vertex) * vertices.size();
-    
-    VkBuffer stagingBuffer;
-    VkDeviceMemory stagingBufferMemory;
-    
-    createBuffer( size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory );
-    
-    void* data;
-    vkMapMemory( m_device->getObject(), stagingBufferMemory, 0, size, 0, &data );
-    memcpy( data, vertices.data(), static_cast< size_t >( size ) );
-    vkUnmapMemory( m_device->getObject(), stagingBufferMemory );
-    
-    createBuffer( size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_vertexBuffer, m_vertexBufferMemory );
-    
-    copyBuffer( stagingBuffer, m_vertexBuffer, size );
-    
-    vkDestroyBuffer( m_device->getObject(), stagingBuffer, nullptr );
-    vkFreeMemory( m_device->getObject(), stagingBufferMemory, nullptr );
+    m_vertexBuffer = BufferT< Vertex >::create( m_device, m_physicalDevice, vertices, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT );
 }
 
 void MlnInstance::createIndexBuffer()
@@ -1087,24 +1029,7 @@ void MlnInstance::createIndexBuffer()
         0, 1, 2, 2, 3, 0
     };
     
-    const VkDeviceSize size = sizeof( uint32_t ) * indices.size();
-    
-    VkBuffer stagingBuffer;
-    VkDeviceMemory stagingBufferMemory;
-    
-    createBuffer( size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory );
-    
-    void* data;
-    vkMapMemory( m_device->getObject(), stagingBufferMemory, 0, size, 0, &data );
-    memcpy( data, indices.data(), static_cast< size_t >( size ) );
-    vkUnmapMemory( m_device->getObject(), stagingBufferMemory );
-    
-    createBuffer( size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_indexBuffer, m_indexBufferMemory );
-    
-    copyBuffer( stagingBuffer, m_indexBuffer, size );
-    
-    vkDestroyBuffer( m_device->getObject(), stagingBuffer, nullptr );
-    vkFreeMemory( m_device->getObject(), stagingBufferMemory, nullptr );
+    m_indexBuffer = BufferT< uint32_t >::create( m_device, m_physicalDevice, indices, VK_BUFFER_USAGE_INDEX_BUFFER_BIT );
 }
 
 void MlnInstance::recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t imageIndex )
@@ -1154,10 +1079,10 @@ void MlnInstance::recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t i
         };
         vkCmdSetScissor( commandBuffer, 0, 1, &scissor );
         
-        VkBuffer vertexBuffers[] = { m_vertexBuffer };
+        VkBuffer vertexBuffers[] = { m_vertexBuffer->getObject() };
         VkDeviceSize offsets[] = { 0 };
         vkCmdBindVertexBuffers( commandBuffer, 0, 1, vertexBuffers, offsets );
-        vkCmdBindIndexBuffer( commandBuffer, m_indexBuffer, 0, VK_INDEX_TYPE_UINT32 );
+        vkCmdBindIndexBuffer( commandBuffer, m_indexBuffer->getObject(), 0, VK_INDEX_TYPE_UINT32 );
 
         vkCmdDrawIndexed( commandBuffer, static_cast< uint32_t >( 6 ), 1, 0, 0, 0 );
     }

@@ -35,9 +35,6 @@ public:
     explicit CommandBuffer( VkCommandBuffer i_commandBuffer );
     void reset();
     CommandBufferRecordPtr scopedRecord( VkCommandBufferUsageFlags i_flags );
-    
-private:
-    
 };
 
 } // namespace marlin
