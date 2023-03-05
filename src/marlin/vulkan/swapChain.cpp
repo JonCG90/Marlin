@@ -120,7 +120,7 @@ VkFormat SwapChain::getFormat() const
     return m_format;
 }
 
-VkExtent2D SwapChain::getExtent() const
+const VkExtent2D & SwapChain::getExtent() const
 {
     return m_extent;
 }

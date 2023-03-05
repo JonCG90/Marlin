@@ -15,6 +15,12 @@
 #include "surface.hpp"
 #include "swapChain.hpp"
 
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <chrono>
+
 #include <vulkan/vulkan_metal.h>
 
 #include <fstream>
@@ -23,6 +29,15 @@
 
 namespace marlin
 {
+
+// TODO FIX
+const int MAX_FRAMES_IN_FLIGHT = 2;
+
+struct UniformBufferObject {
+    Mat4f model;
+    Mat4f view;
+    Mat4f projection;
+};
 
 #define VK_EXT_METAL_SURFACE_EXTENSION_NAME "VK_EXT_metal_surface"
 
@@ -483,12 +498,14 @@ void MlnInstance::init( void* i_layer )
     createRenderPass();
     
     // Create our pipeline
+    createDescriptorSetLayout();
     createGraphicsPipeline();
     
     createFramebuffers();
     
     createVertexBuffer();
     createIndexBuffer();
+    createUniformBuffers();
     
     createSyncObjects();
 }
@@ -507,9 +524,17 @@ void MlnInstance::deinit()
         vkDestroyFramebuffer( m_device->getObject(), framebuffer, nullptr );
     }
     
+    vkDestroyDescriptorSetLayout( m_device->getObject(), m_descriptorSetLayout, nullptr );
     vkDestroyPipeline( m_device->getObject(), m_graphicsPipeline, nullptr );
     vkDestroyPipelineLayout( m_device->getObject(), m_pipelineLayout, nullptr );
     vkDestroyRenderPass( m_device->getObject(), m_renderPass, nullptr );
+    
+    for ( size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++ ) {
+        vkDestroyBuffer( m_device->getObject(), m_uniformBuffers[i], nullptr);
+        vkFreeMemory( m_device->getObject(), m_uniformBuffersMemory[i], nullptr);
+    }
+
+    vkDestroyDescriptorSetLayout(m_device->getObject(), m_descriptorSetLayout, nullptr);
 
     for ( VkImageView imageView : m_swapChainImageViews )
     {
@@ -535,6 +560,8 @@ void MlnInstance::drawFrame()
 
     uint32_t imageIndex;
     vkAcquireNextImageKHR( m_device->getObject(), m_swapChain->getObject(), UINT64_MAX, m_imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex );
+    
+    updateUniformBuffer( 0 );
     
     VkCommandBuffer commandBuffer = m_device->getCommandBuffer( QueueTypeGraphics )->getObject();
     vkResetCommandBuffer( commandBuffer, 0 );
@@ -576,6 +603,26 @@ void MlnInstance::drawFrame()
     presentInfo.pResults = nullptr; // Optional
 
     vkQueuePresentKHR( m_presentQueue, &presentInfo );
+}
+
+void MlnInstance::updateUniformBuffer( uint32_t currentImage )
+{
+    static auto startTime = std::chrono::high_resolution_clock::now();
+
+    auto currentTime = std::chrono::high_resolution_clock::now();
+    float time = std::chrono::duration< float, std::chrono::seconds::period >( currentTime - startTime ).count();
+    
+    VkExtent2D extend = m_swapChain->getExtent();
+    
+    UniformBufferObject ubo {};
+    ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    ubo.projection = glm::perspective(glm::radians(45.0f), extend.width / (float) extend.height, 0.1f, 10.0f);
+    ubo.projection[1][1] *= -1;
+    
+    memcpy( m_uniformBuffersMapped[ currentImage ], &ubo, sizeof( ubo ) );
+
+
 }
 
 void MlnInstance::createLogicalDevice()
@@ -745,6 +792,28 @@ void MlnInstance::createRenderPass()
     }
 }
 
+void MlnInstance::createDescriptorSetLayout()
+{
+    VkDescriptorSetLayoutBinding uboLayoutBinding {
+        .binding = 0,
+        .descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+        .descriptorCount = 1,
+        .stageFlags = VK_SHADER_STAGE_VERTEX_BIT,
+        .pImmutableSamplers = nullptr, // Optional
+    };
+
+    VkDescriptorSetLayoutCreateInfo layoutInfo {
+        .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+        .bindingCount = 1,
+        .pBindings = &uboLayoutBinding,
+    };
+
+    if ( vkCreateDescriptorSetLayout( m_device->getObject(), &layoutInfo, nullptr, &m_descriptorSetLayout ) != VK_SUCCESS)
+    {
+        throw std::runtime_error("Erro: Failed to create descriptor set layout.");
+    }
+}
+
 void MlnInstance::createGraphicsPipeline()
 {
     std::vector< char > vertBytes;
@@ -870,8 +939,8 @@ void MlnInstance::createGraphicsPipeline()
     
     VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-    pipelineLayoutInfo.setLayoutCount = 0; // Optional
-    pipelineLayoutInfo.pSetLayouts = nullptr; // Optional
+    pipelineLayoutInfo.setLayoutCount = 1; // Optional
+    pipelineLayoutInfo.pSetLayouts = &m_descriptorSetLayout; // Optional
     pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
     pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
     
@@ -1032,6 +1101,21 @@ void MlnInstance::createIndexBuffer()
     m_indexBuffer = BufferT< uint32_t >::create( m_device, m_physicalDevice, indices, VK_BUFFER_USAGE_INDEX_BUFFER_BIT );
 }
 
+void MlnInstance::createUniformBuffers()
+{
+    VkDeviceSize bufferSize = sizeof(UniformBufferObject);
+
+    m_uniformBuffers.resize(MAX_FRAMES_IN_FLIGHT);
+    m_uniformBuffersMemory.resize(MAX_FRAMES_IN_FLIGHT);
+    m_uniformBuffersMapped.resize(MAX_FRAMES_IN_FLIGHT);
+
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_uniformBuffers[i], m_uniformBuffersMemory[i]);
+
+        vkMapMemory(m_device->getObject(), m_uniformBuffersMemory[i], 0, bufferSize, 0, &m_uniformBuffersMapped[i]);
+    }
+}
+
 void MlnInstance::recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t imageIndex )
 {
     VkCommandBufferBeginInfo beginInfo
@@ -1047,14 +1131,15 @@ void MlnInstance::recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t i
     }
     
     VkClearValue clearColor = { { { 0.0f, 0.0f, 0.0f, 1.0f } } };
-
+    const VkExtent2D &extend = m_swapChain->getExtent();
+    
     VkRenderPassBeginInfo renderPassInfo
     {
         .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
         .renderPass = m_renderPass,
         .framebuffer = m_swapChainFramebuffers[ imageIndex ],
         .renderArea.offset = { 0, 0 },
-        .renderArea.extent = m_swapChain->getExtent(),
+        .renderArea.extent = extend,
         .clearValueCount = 1,
         .pClearValues = &clearColor,
     };
@@ -1066,8 +1151,8 @@ void MlnInstance::recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t i
         VkViewport viewport {
             .x = 0.0f,
             .y = 0.0f,
-            .width = static_cast< float >( m_swapChain->getExtent().width ),
-            .height = static_cast< float >( m_swapChain->getExtent().height ),
+            .width = static_cast< float >( extend.width ),
+            .height = static_cast< float >( extend.height ),
             .minDepth = 0.0f,
             .maxDepth = 1.0f,
         };
@@ -1075,7 +1160,7 @@ void MlnInstance::recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t i
 
         VkRect2D scissor {
             .offset = { 0, 0 },
-            .extent = m_swapChain->getExtent(),
+            .extent = extend,
         };
         vkCmdSetScissor( commandBuffer, 0, 1, &scissor );
         

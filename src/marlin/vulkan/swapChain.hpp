@@ -47,7 +47,7 @@ public:
     std::vector< VkImage > getImages();
     
     VkFormat getFormat() const;
-    VkExtent2D getExtent() const;
+    const VkExtent2D & getExtent() const;
     
     void destroy();
     

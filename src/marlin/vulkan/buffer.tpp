@@ -25,7 +25,7 @@ inline uint32_t findMemoryType( const VkPhysicalDeviceMemoryProperties &i_device
         }
     }
 
-    throw std::runtime_error("failed to find suitable memory type!");
+    throw std::runtime_error( "Error: Failed to find suitable memory type." );
 }
 
 inline void createBuffer( DevicePtr i_device,
@@ -46,7 +46,7 @@ inline void createBuffer( DevicePtr i_device,
 
     if ( vkCreateBuffer( i_device->getObject(), &bufferInfo, nullptr, &o_buffer ) != VK_SUCCESS )
     {
-        throw std::runtime_error("failed to create buffer!");
+        throw std::runtime_error( "Error: Failed to create buffer" );
     }
 
     VkMemoryRequirements memRequirements;
@@ -60,7 +60,7 @@ inline void createBuffer( DevicePtr i_device,
 
     if ( vkAllocateMemory( i_device->getObject(), &allocInfo, nullptr, &o_bufferMemory ) != VK_SUCCESS )
     {
-        throw std::runtime_error("failed to allocate vertex buffer memory!");
+        throw std::runtime_error( "Error: Failed to allocate buffer memory" );
     }
 
     vkBindBufferMemory( i_device->getObject(), o_buffer, o_bufferMemory, 0 );
@@ -96,7 +96,7 @@ inline void copyBuffer( DevicePtr i_device, VkBuffer i_srcBuffer, VkBuffer i_dst
 }
 
 template < class T >
-std::shared_ptr< BufferT< T > > BufferT< T >::create( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice, const std::vector< T > &i_data, VkBufferUsageFlagBits i_usage )
+BufferTPtr< T > BufferT< T >::create( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice, const std::vector< T > &i_data, VkBufferUsageFlagBits i_usage )
 {
     return std::make_shared< BufferT< T > >( i_device, i_physicalDevice, i_data, i_usage );
 }

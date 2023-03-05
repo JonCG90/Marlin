@@ -96,7 +96,8 @@ public:
     void deinit();
     
     void drawFrame();
-    
+    void updateUniformBuffer(uint32_t currentImage);
+
     MlnInstance( MlnInstance const &i_instance ) = delete;
     void operator=( MlnInstance const &i_instance )  = delete;
     
@@ -113,11 +114,16 @@ private:
 
     BufferTPtr< Vertex > m_vertexBuffer;
     BufferTPtr< uint32_t > m_indexBuffer;
+    
+    std::vector<VkBuffer> m_uniformBuffers;
+    std::vector<VkDeviceMemory> m_uniformBuffersMemory;
+    std::vector<void*> m_uniformBuffersMapped;
 
     SwapChainPtr m_swapChain;
     std::vector< VkImageView > m_swapChainImageViews;
     
     VkRenderPass m_renderPass;
+    VkDescriptorSetLayout m_descriptorSetLayout;
     VkPipelineLayout m_pipelineLayout;
     VkPipeline m_graphicsPipeline;
     std::vector< VkFramebuffer > m_swapChainFramebuffers;
@@ -137,12 +143,14 @@ private:
     void createSwapChain();
     void createImageViews();
     void createRenderPass();
+    void createDescriptorSetLayout();
     void createGraphicsPipeline();
     void createFramebuffers();
     void copyBuffer( VkBuffer i_srcBuffer, VkBuffer i_dstBuffer, VkDeviceSize i_size );
     void createBuffer( VkDeviceSize i_size, VkBufferUsageFlags i_usage, VkMemoryPropertyFlags i_properties, VkBuffer &o_buffer, VkDeviceMemory &o_bufferMemory );
     void createVertexBuffer();
     void createIndexBuffer();
+    void createUniformBuffers();
     void recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t imageIndex );
     void createSyncObjects();
 };

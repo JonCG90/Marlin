@@ -20,7 +20,7 @@ class BufferT : public VkObjectT< VkBuffer >
 {
 public:
     
-    static std::shared_ptr< BufferT< T > > create( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice, const std::vector< T > &i_data, VkBufferUsageFlagBits i_usage );
+    static BufferTPtr< T > create( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice, const std::vector< T > &i_data, VkBufferUsageFlagBits i_usage );
     
     BufferT( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice, const std::vector< T > &i_data, VkBufferUsageFlagBits i_usage );
     
