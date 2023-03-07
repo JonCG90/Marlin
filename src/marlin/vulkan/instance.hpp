@@ -157,7 +157,7 @@ private:
     void createDescriptorPool();
     void createDescriptorSets();
     
-    void recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t imageIndex );
+    void recordCommandBuffer( CommandBufferPtr commandBuffer, uint32_t imageIndex );
     void createSyncObjects();
 };
 

@@ -27,10 +27,12 @@ public:
     BufferT() = default;
     ~BufferT() override;
     
+    size_t getCount() const;
     void destroy();
     
 private:
-        
+       
+    size_t m_count;
     DevicePtr m_device;
     VkDeviceMemory m_memory;
 };

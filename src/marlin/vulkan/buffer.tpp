@@ -104,6 +104,7 @@ BufferTPtr< T > BufferT< T >::create( DevicePtr i_device, PhysicalDevicePtr i_ph
 template < class T >
 BufferT< T >::BufferT( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice, const std::vector< T > &i_data, VkBufferUsageFlagBits i_usage )
 : m_device( i_device )
+, m_count( i_data.size() )
 {
     const VkDeviceSize size = sizeof( T ) * i_data.size();
     const VkPhysicalDeviceMemoryProperties deviceMemoryProperties = i_physicalDevice->getMemoryProperties();
@@ -138,6 +139,12 @@ BufferT< T >::~BufferT()
     {
         std::cerr << "Warning: Buffer memory not released." << std::endl;
     }
+}
+
+template < class T >
+size_t BufferT< T >::getCount() const
+{
+    return m_count;
 }
 
 template < class T >

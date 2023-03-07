@@ -566,9 +566,9 @@ void MlnInstance::drawFrame()
     
     updateUniformBuffer( 0 );
     
-    VkCommandBuffer commandBuffer = m_device->getCommandBuffer( QueueTypeGraphics )->getObject();
-    vkResetCommandBuffer( commandBuffer, 0 );
-    
+    CommandBufferPtr commandBuffer = m_device->getCommandBuffer( QueueTypeGraphics );
+    commandBuffer->reset();
+
     recordCommandBuffer( commandBuffer, imageIndex );
     
     VkSubmitInfo submitInfo {
@@ -582,7 +582,9 @@ void MlnInstance::drawFrame()
     submitInfo.pWaitDstStageMask = waitStages;
     
     submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = &commandBuffer;
+    
+    VkCommandBuffer vkCommandBuffer = commandBuffer->getObject();
+    submitInfo.pCommandBuffers = &vkCommandBuffer;
     
     VkSemaphore signalSemaphores[] = { m_renderFinishedSemaphore };
     submitInfo.signalSemaphoreCount = 1;
@@ -1181,25 +1183,14 @@ void MlnInstance::createDescriptorSets()
     }
 }
 
-void MlnInstance::recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t imageIndex )
+void MlnInstance::recordCommandBuffer( CommandBufferPtr commandBuffer, uint32_t imageIndex )
 {
-    VkCommandBufferBeginInfo beginInfo
-    {
-        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
-        .flags = 0,
-        .pInheritanceInfo = nullptr,
-    };
-    
-    if ( vkBeginCommandBuffer( commandBuffer, &beginInfo ) != VK_SUCCESS )
-    {
-        throw std::runtime_error( "failed to begin recording command buffer!" );
-    }
+    CommandBufferRecordPtr scopedRecord = commandBuffer->scopedRecord( 0 );
     
     VkClearValue clearColor = { { { 0.0f, 0.0f, 0.0f, 1.0f } } };
     const VkExtent2D &extend = m_swapChain->getExtent();
     
-    VkRenderPassBeginInfo renderPassInfo
-    {
+    VkRenderPassBeginInfo renderPassInfo {
         .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
         .renderPass = m_renderPass,
         .framebuffer = m_swapChainFramebuffers[ imageIndex ],
@@ -1209,9 +1200,10 @@ void MlnInstance::recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t i
         .pClearValues = &clearColor,
     };
     
-    vkCmdBeginRenderPass( commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE );
+    VkCommandBuffer vkCommandBuffer = commandBuffer->getObject();
+    vkCmdBeginRenderPass( vkCommandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE );
     {
-        vkCmdBindPipeline( commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_graphicsPipeline );
+        vkCmdBindPipeline( vkCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_graphicsPipeline );
 
         VkViewport viewport {
             .x = 0.0f,
@@ -1221,29 +1213,26 @@ void MlnInstance::recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t i
             .minDepth = 0.0f,
             .maxDepth = 1.0f,
         };
-        vkCmdSetViewport( commandBuffer, 0, 1, &viewport );
+        vkCmdSetViewport( vkCommandBuffer, 0, 1, &viewport );
 
         VkRect2D scissor {
             .offset = { 0, 0 },
             .extent = extend,
         };
-        vkCmdSetScissor( commandBuffer, 0, 1, &scissor );
+        vkCmdSetScissor( vkCommandBuffer, 0, 1, &scissor );
         
         VkBuffer vertexBuffers[] = { m_vertexBuffer->getObject() };
         VkDeviceSize offsets[] = { 0 };
-        vkCmdBindVertexBuffers( commandBuffer, 0, 1, vertexBuffers, offsets );
-        vkCmdBindIndexBuffer( commandBuffer, m_indexBuffer->getObject(), 0, VK_INDEX_TYPE_UINT32 );
+        vkCmdBindVertexBuffers( vkCommandBuffer, 0, 1, vertexBuffers, offsets );
+        vkCmdBindIndexBuffer( vkCommandBuffer, m_indexBuffer->getObject(), 0, VK_INDEX_TYPE_UINT32 );
 
-        vkCmdBindDescriptorSets( commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipelineLayout, 0, 1, &m_descriptorSets[ 0 ], 0, nullptr );
+        vkCmdBindDescriptorSets( vkCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipelineLayout, 0, 1, &m_descriptorSets[ 0 ], 0, nullptr );
         
-        vkCmdDrawIndexed( commandBuffer, static_cast< uint32_t >( 6 ), 1, 0, 0, 0 );
+        uint32_t count =  static_cast< uint32_t >( m_indexBuffer->getCount() );
+        vkCmdDrawIndexed( vkCommandBuffer, count, 1, 0, 0, 0 );
     }
-    vkCmdEndRenderPass( commandBuffer );
     
-    if ( vkEndCommandBuffer( commandBuffer ) != VK_SUCCESS )
-    {
-        throw std::runtime_error("failed to record command buffer!");
-    }
+    vkCmdEndRenderPass( vkCommandBuffer );
 }
 
 static void s_createSemaphore( const VkDevice &i_device, VkSemaphore &io_semaphor )
