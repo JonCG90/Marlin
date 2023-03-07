@@ -506,6 +506,8 @@ void MlnInstance::init( void* i_layer )
     createVertexBuffer();
     createIndexBuffer();
     createUniformBuffers();
+    createDescriptorPool();
+    createDescriptorSets();
     
     createSyncObjects();
 }
@@ -524,6 +526,7 @@ void MlnInstance::deinit()
         vkDestroyFramebuffer( m_device->getObject(), framebuffer, nullptr );
     }
     
+    vkDestroyDescriptorPool( m_device->getObject(), m_descriptorPool, nullptr );
     vkDestroyDescriptorSetLayout( m_device->getObject(), m_descriptorSetLayout, nullptr );
     vkDestroyPipeline( m_device->getObject(), m_graphicsPipeline, nullptr );
     vkDestroyPipelineLayout( m_device->getObject(), m_pipelineLayout, nullptr );
@@ -899,7 +902,7 @@ void MlnInstance::createGraphicsPipeline()
     rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
     rasterizer.lineWidth = 1.0f;
     rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
-    rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE;
+    rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
     rasterizer.depthBiasEnable = VK_FALSE;
     rasterizer.depthBiasConstantFactor = 0.0f; // Optional
     rasterizer.depthBiasClamp = 0.0f; // Optional
@@ -1116,6 +1119,68 @@ void MlnInstance::createUniformBuffers()
     }
 }
 
+void MlnInstance::createDescriptorPool()
+{
+    VkDescriptorPoolSize poolSize {
+        .type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+        .descriptorCount = static_cast< uint32_t >( MAX_FRAMES_IN_FLIGHT )
+    };
+    
+    VkDescriptorPoolCreateInfo poolInfo {
+        .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
+        .poolSizeCount = 1,
+        .pPoolSizes = &poolSize,
+        .maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT),
+    };
+    
+    if ( vkCreateDescriptorPool( m_device->getObject(), &poolInfo, nullptr, &m_descriptorPool ) != VK_SUCCESS )
+    {
+        throw std::runtime_error( "failed to create descriptor pool!" );
+    }
+}
+
+void MlnInstance::createDescriptorSets()
+{
+    std::vector< VkDescriptorSetLayout > layouts( MAX_FRAMES_IN_FLIGHT, m_descriptorSetLayout );
+    
+    VkDescriptorSetAllocateInfo allocInfo {
+        .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
+        .descriptorPool = m_descriptorPool,
+        .descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT),
+        .pSetLayouts = layouts.data(),
+    };
+    
+    m_descriptorSets.resize( MAX_FRAMES_IN_FLIGHT );
+    if ( vkAllocateDescriptorSets( m_device->getObject(), &allocInfo, m_descriptorSets.data() ) != VK_SUCCESS )
+    {
+        throw std::runtime_error("failed to allocate descriptor sets!");
+    }
+    
+    for ( size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++ )
+    {
+        VkDescriptorBufferInfo bufferInfo {
+            .buffer = m_uniformBuffers[i],
+            .offset = 0,
+            .range = sizeof( UniformBufferObject ),
+        };
+        
+        VkWriteDescriptorSet descriptorWrite {
+            .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+            .dstSet = m_descriptorSets[i],
+            .dstBinding = 0,
+            .dstArrayElement = 0,
+            .descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+            .descriptorCount = 1,
+            .pBufferInfo = &bufferInfo,
+            .pImageInfo = nullptr, // Optional
+            .pTexelBufferView = nullptr, // Optional
+        };
+
+        vkUpdateDescriptorSets( m_device->getObject(), 1, &descriptorWrite, 0, nullptr );
+
+    }
+}
+
 void MlnInstance::recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t imageIndex )
 {
     VkCommandBufferBeginInfo beginInfo
@@ -1169,6 +1234,8 @@ void MlnInstance::recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t i
         vkCmdBindVertexBuffers( commandBuffer, 0, 1, vertexBuffers, offsets );
         vkCmdBindIndexBuffer( commandBuffer, m_indexBuffer->getObject(), 0, VK_INDEX_TYPE_UINT32 );
 
+        vkCmdBindDescriptorSets( commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipelineLayout, 0, 1, &m_descriptorSets[ 0 ], 0, nullptr );
+        
         vkCmdDrawIndexed( commandBuffer, static_cast< uint32_t >( 6 ), 1, 0, 0, 0 );
     }
     vkCmdEndRenderPass( commandBuffer );

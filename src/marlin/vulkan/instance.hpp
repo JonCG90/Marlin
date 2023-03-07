@@ -118,7 +118,9 @@ private:
     std::vector<VkBuffer> m_uniformBuffers;
     std::vector<VkDeviceMemory> m_uniformBuffersMemory;
     std::vector<void*> m_uniformBuffersMapped;
-
+    VkDescriptorPool m_descriptorPool;
+    std::vector<VkDescriptorSet> m_descriptorSets;
+    
     SwapChainPtr m_swapChain;
     std::vector< VkImageView > m_swapChainImageViews;
     
@@ -144,6 +146,7 @@ private:
     void createImageViews();
     void createRenderPass();
     void createDescriptorSetLayout();
+    
     void createGraphicsPipeline();
     void createFramebuffers();
     void copyBuffer( VkBuffer i_srcBuffer, VkBuffer i_dstBuffer, VkDeviceSize i_size );
@@ -151,6 +154,9 @@ private:
     void createVertexBuffer();
     void createIndexBuffer();
     void createUniformBuffers();
+    void createDescriptorPool();
+    void createDescriptorSets();
+    
     void recordCommandBuffer( VkCommandBuffer commandBuffer, uint32_t imageIndex );
     void createSyncObjects();
 };
