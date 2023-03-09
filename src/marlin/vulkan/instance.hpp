@@ -21,6 +21,12 @@
 namespace marlin
 {
 
+struct UniformBufferObject {
+    Mat4f model;
+    Mat4f view;
+    Mat4f projection;
+};
+
 struct Vertex
 {
     Vec2 pos;
@@ -115,8 +121,7 @@ private:
     BufferTPtr< Vertex > m_vertexBuffer;
     BufferTPtr< uint32_t > m_indexBuffer;
     
-    std::vector<VkBuffer> m_uniformBuffers;
-    std::vector<VkDeviceMemory> m_uniformBuffersMemory;
+    std::vector< BufferTPtr< UniformBufferObject > > m_uniformBuffers;
     std::vector<void*> m_uniformBuffersMapped;
     VkDescriptorPool m_descriptorPool;
     std::vector<VkDescriptorSet> m_descriptorSets;

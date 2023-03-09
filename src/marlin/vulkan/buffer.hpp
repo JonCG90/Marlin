@@ -15,26 +15,50 @@
 namespace marlin
 {
 
+enum class BufferMode
+{
+    Local,
+    Device,
+};
+
 template < class T >
 class BufferT : public VkObjectT< VkBuffer >
 {
 public:
     
-    static BufferTPtr< T > create( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice, const std::vector< T > &i_data, VkBufferUsageFlagBits i_usage );
+    static BufferTPtr< T > create( DevicePtr i_device,
+                                   PhysicalDevicePtr i_physicalDevice,
+                                   VkBufferUsageFlagBits i_usage,
+                                   BufferMode i_mode,
+                                   const std::vector< T > &i_data );
+    static BufferTPtr< T > create( DevicePtr i_device,
+                                   PhysicalDevicePtr i_physicalDevice,
+                                   VkBufferUsageFlagBits i_usage,
+                                   BufferMode i_mode,
+                                   T i_data );
     
-    BufferT( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice, const std::vector< T > &i_data, VkBufferUsageFlagBits i_usage );
+    BufferT( DevicePtr i_device,
+             PhysicalDevicePtr i_physicalDevice,
+             VkBufferUsageFlagBits i_usage,
+             BufferMode i_mode,
+             const std::vector< T > &i_data );
     
     BufferT() = default;
     ~BufferT() override;
     
+    void* mapMemory();
+    void unmapMemory();
+
     size_t getCount() const;
     void destroy();
     
 private:
        
     size_t m_count;
+    VkDeviceSize m_size;
     DevicePtr m_device;
     VkDeviceMemory m_memory;
+    BufferMode m_mode;
 };
 
 } // namespace marlin

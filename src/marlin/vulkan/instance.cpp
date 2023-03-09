@@ -33,12 +33,6 @@ namespace marlin
 // TODO FIX
 const int MAX_FRAMES_IN_FLIGHT = 2;
 
-struct UniformBufferObject {
-    Mat4f model;
-    Mat4f view;
-    Mat4f projection;
-};
-
 #define VK_EXT_METAL_SURFACE_EXTENSION_NAME "VK_EXT_metal_surface"
 
 // Callback for debug output on validation layers
@@ -532,10 +526,11 @@ void MlnInstance::deinit()
     vkDestroyPipelineLayout( m_device->getObject(), m_pipelineLayout, nullptr );
     vkDestroyRenderPass( m_device->getObject(), m_renderPass, nullptr );
     
-    for ( size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++ ) {
-        vkDestroyBuffer( m_device->getObject(), m_uniformBuffers[i], nullptr);
-        vkFreeMemory( m_device->getObject(), m_uniformBuffersMemory[i], nullptr);
+    for ( BufferTPtr< UniformBufferObject > buffer : m_uniformBuffers )
+    {
+        buffer->destroy();
     }
+    m_uniformBuffers.clear();
 
     vkDestroyDescriptorSetLayout(m_device->getObject(), m_descriptorSetLayout, nullptr);
 
@@ -1094,7 +1089,7 @@ void MlnInstance::createVertexBuffer()
         {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
     };
     
-    m_vertexBuffer = BufferT< Vertex >::create( m_device, m_physicalDevice, vertices, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT );
+    m_vertexBuffer = BufferT< Vertex >::create( m_device, m_physicalDevice, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, BufferMode::Device, vertices );
 }
 
 void MlnInstance::createIndexBuffer()
@@ -1103,21 +1098,19 @@ void MlnInstance::createIndexBuffer()
         0, 1, 2, 2, 3, 0
     };
     
-    m_indexBuffer = BufferT< uint32_t >::create( m_device, m_physicalDevice, indices, VK_BUFFER_USAGE_INDEX_BUFFER_BIT );
+    m_indexBuffer = BufferT< uint32_t >::create( m_device, m_physicalDevice, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, BufferMode::Device, indices );
 }
 
 void MlnInstance::createUniformBuffers()
 {
-    VkDeviceSize bufferSize = sizeof(UniformBufferObject);
-
-    m_uniformBuffers.resize(MAX_FRAMES_IN_FLIGHT);
-    m_uniformBuffersMemory.resize(MAX_FRAMES_IN_FLIGHT);
-    m_uniformBuffersMapped.resize(MAX_FRAMES_IN_FLIGHT);
+    UniformBufferObject ubo;
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_uniformBuffers[i], m_uniformBuffersMemory[i]);
-
-        vkMapMemory(m_device->getObject(), m_uniformBuffersMemory[i], 0, bufferSize, 0, &m_uniformBuffersMapped[i]);
+        
+        BufferTPtr< UniformBufferObject > buffer = BufferT< UniformBufferObject >::create( m_device, m_physicalDevice, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, BufferMode::Local, ubo );
+        
+        m_uniformBuffersMapped.push_back( buffer->mapMemory() );
+        m_uniformBuffers.push_back( buffer );
     }
 }
 
@@ -1161,7 +1154,7 @@ void MlnInstance::createDescriptorSets()
     for ( size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++ )
     {
         VkDescriptorBufferInfo bufferInfo {
-            .buffer = m_uniformBuffers[i],
+            .buffer = m_uniformBuffers[i]->getObject(),
             .offset = 0,
             .range = sizeof( UniformBufferObject ),
         };
