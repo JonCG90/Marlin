@@ -12,6 +12,10 @@
 		23637CB429A4B50700D4D7A6 /* buffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23637CB229A4B50700D4D7A6 /* buffer.hpp */; };
 		23637CB729A8C26E00D4D7A6 /* commandBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23637CB529A8C26E00D4D7A6 /* commandBuffer.cpp */; };
 		23637CB829A8C26E00D4D7A6 /* commandBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23637CB629A8C26E00D4D7A6 /* commandBuffer.hpp */; };
+		23637CBE29BC5DE100D4D7A6 /* spirv_reflect.h in Headers */ = {isa = PBXBuildFile; fileRef = 23637CBB29BC5DE100D4D7A6 /* spirv_reflect.h */; };
+		23637CBF29BC5DE100D4D7A6 /* spirv_reflect.c in Sources */ = {isa = PBXBuildFile; fileRef = 23637CBC29BC5DE100D4D7A6 /* spirv_reflect.c */; };
+		23637CC029BC5DE100D4D7A6 /* spirv_reflect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23637CBD29BC5DE100D4D7A6 /* spirv_reflect.cpp */; };
+		23637CC529BC5FDB00D4D7A6 /* spirv.h in Headers */ = {isa = PBXBuildFile; fileRef = 23637CC429BC5FDB00D4D7A6 /* spirv.h */; };
 		238811FA244C062F00E8444E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 238811F9244C062F00E8444E /* AppDelegate.m */; };
 		238811FC244C063300E8444E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 238811FB244C063300E8444E /* Assets.xcassets */; };
 		238811FF244C063300E8444E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 238811FD244C063300E8444E /* MainMenu.xib */; };
@@ -205,6 +209,10 @@
 		23637CB529A8C26E00D4D7A6 /* commandBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = commandBuffer.cpp; sourceTree = "<group>"; };
 		23637CB629A8C26E00D4D7A6 /* commandBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = commandBuffer.hpp; sourceTree = "<group>"; };
 		23637CB929AF552E00D4D7A6 /* buffer.tpp */ = {isa = PBXFileReference; lastKnownFileType = text; path = buffer.tpp; sourceTree = "<group>"; };
+		23637CBB29BC5DE100D4D7A6 /* spirv_reflect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = spirv_reflect.h; sourceTree = "<group>"; };
+		23637CBC29BC5DE100D4D7A6 /* spirv_reflect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = spirv_reflect.c; sourceTree = "<group>"; };
+		23637CBD29BC5DE100D4D7A6 /* spirv_reflect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = spirv_reflect.cpp; sourceTree = "<group>"; };
+		23637CC429BC5FDB00D4D7A6 /* spirv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = spirv.h; sourceTree = "<group>"; };
 		238811E4244C056C00E8444E /* libMarlin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMarlin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F6244C062F00E8444E /* MarlinViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarlinViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F8244C062F00E8444E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -526,6 +534,41 @@
 			path = shaders;
 			sourceTree = "<group>";
 		};
+		23637CBA29BC5D5A00D4D7A6 /* SPIRV-Reflect */ = {
+			isa = PBXGroup;
+			children = (
+				23637CC129BC5FDB00D4D7A6 /* include */,
+				23637CBC29BC5DE100D4D7A6 /* spirv_reflect.c */,
+				23637CBD29BC5DE100D4D7A6 /* spirv_reflect.cpp */,
+				23637CBB29BC5DE100D4D7A6 /* spirv_reflect.h */,
+			);
+			path = "SPIRV-Reflect";
+			sourceTree = "<group>";
+		};
+		23637CC129BC5FDB00D4D7A6 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				23637CC229BC5FDB00D4D7A6 /* spirv */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		23637CC229BC5FDB00D4D7A6 /* spirv */ = {
+			isa = PBXGroup;
+			children = (
+				23637CC329BC5FDB00D4D7A6 /* unified1 */,
+			);
+			path = spirv;
+			sourceTree = "<group>";
+		};
+		23637CC329BC5FDB00D4D7A6 /* unified1 */ = {
+			isa = PBXGroup;
+			children = (
+				23637CC429BC5FDB00D4D7A6 /* spirv.h */,
+			);
+			path = unified1;
+			sourceTree = "<group>";
+		};
 		238811DB244C056C00E8444E = {
 			isa = PBXGroup;
 			children = (
@@ -604,6 +647,7 @@
 		2388123E244F8F5300E8444E /* thirdparty */ = {
 			isa = PBXGroup;
 			children = (
+				23637CBA29BC5D5A00D4D7A6 /* SPIRV-Reflect */,
 				23881549245040DF00E8444E /* glm */,
 			);
 			path = thirdparty;
@@ -974,12 +1018,14 @@
 				23881654245040DF00E8444E /* fwd.hpp in Headers */,
 				238816BA245040DF00E8444E /* matrix_query.hpp in Headers */,
 				238816BB245040DF00E8444E /* extend.hpp in Headers */,
+				23637CBE29BC5DE100D4D7A6 /* spirv_reflect.h in Headers */,
 				23881661245040DF00E8444E /* func_geometric.hpp in Headers */,
 				23881674245040DF00E8444E /* type_mat3x3.hpp in Headers */,
 				2388169E245040DF00E8444E /* epsilon.hpp in Headers */,
 				238816D2245040DF00E8444E /* scalar_multiplication.hpp in Headers */,
 				238816B8245040DF00E8444E /* matrix_transform_2d.hpp in Headers */,
 				23881692245040DF00E8444E /* packing.hpp in Headers */,
+				23637CC529BC5FDB00D4D7A6 /* spirv.h in Headers */,
 				23881669245040DF00E8444E /* _noise.hpp in Headers */,
 				23881666245040DF00E8444E /* func_integer.hpp in Headers */,
 				2388164D245040DF00E8444E /* vector_relational.hpp in Headers */,
@@ -1223,12 +1269,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23637CBF29BC5DE100D4D7A6 /* spirv_reflect.c in Sources */,
 				238816DB245041FC00E8444E /* marlin.cpp in Sources */,
 				23637CB729A8C26E00D4D7A6 /* commandBuffer.cpp in Sources */,
 				2388167A245040DF00E8444E /* glm.cpp in Sources */,
 				238816E62450472B00E8444E /* instance.cpp in Sources */,
 				23ED677B290FD29E0039B92A /* device.cpp in Sources */,
 				23ED6783292D943A0039B92A /* swapChain.cpp in Sources */,
+				23637CC029BC5DE100D4D7A6 /* spirv_reflect.cpp in Sources */,
 				23881676245040DF00E8444E /* dummy.cpp in Sources */,
 				23ED677729069D4F0039B92A /* surface.cpp in Sources */,
 				23637CB329A4B50700D4D7A6 /* buffer.cpp in Sources */,

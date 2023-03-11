@@ -19,6 +19,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <SPIRV-Reflect/spirv_reflect.h>
+
 #include <chrono>
 
 #include <vulkan/vulkan_metal.h>
@@ -621,8 +623,6 @@ void MlnInstance::updateUniformBuffer( uint32_t currentImage )
     ubo.projection[1][1] *= -1;
     
     memcpy( m_uniformBuffersMapped[ currentImage ], &ubo, sizeof( ubo ) );
-
-
 }
 
 void MlnInstance::createLogicalDevice()
