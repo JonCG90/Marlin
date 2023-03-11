@@ -6,14 +6,14 @@
 //  Copyright © 2020 Jonathan Graham. All rights reserved.
 //
 
-#include "instance.hpp"
+#include <marlin/vulkan/instance.hpp>
 
-#include "buffer.hpp"
-#include "commandBuffer.hpp"
-#include "device.hpp"
-#include "physicalDevice.hpp"
-#include "surface.hpp"
-#include "swapChain.hpp"
+#include <marlin/vulkan/buffer.hpp>
+#include <marlin/vulkan/commandBuffer.hpp>
+#include <marlin/vulkan/device.hpp>
+#include <marlin/vulkan/physicalDevice.hpp>
+#include <marlin/vulkan/surface.hpp>
+#include <marlin/vulkan/swapChain.hpp>
 
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>

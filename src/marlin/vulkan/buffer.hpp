@@ -9,8 +9,8 @@
 #ifndef MARLIN_BUFFER_HPP
 #define MARLIN_BUFFER_HPP
 
-#include "defs.hpp"
-#include "vkObject.hpp"
+#include <marlin/vulkan/defs.hpp>
+#include <marlin/vulkan/vkObject.hpp>
 
 namespace marlin
 {

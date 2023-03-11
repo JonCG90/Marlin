@@ -9,8 +9,8 @@
 #ifndef MARLIN_SURFACE_HPP
 #define MARLIN_SURFACE_HPP
 
-#include "defs.hpp"
-#include "vkObject.hpp"
+#include <marlin/vulkan/defs.hpp>
+#include <marlin/vulkan/vkObject.hpp>
 
 #include <iostream>
 

@@ -6,7 +6,7 @@
 //  Copyright © 2023 Jonathan Graham. All rights reserved.
 //
 
-#include "buffer.hpp"
+#include <marlin/vulkan/buffer.hpp>
 
 namespace marlin
 {

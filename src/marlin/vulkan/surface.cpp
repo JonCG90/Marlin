@@ -6,7 +6,7 @@
 //  Copyright © 2022 Jonathan Graham. All rights reserved.
 //
 
-#include "surface.hpp"
+#include <marlin/vulkan/surface.hpp>
 
 #include <vulkan/vulkan_metal.h>
 

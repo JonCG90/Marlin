@@ -6,10 +6,10 @@
 //  Copyright © 2022 Jonathan Graham. All rights reserved.
 //
 
-#include "device.hpp"
+#include <marlin/vulkan/device.hpp>
 
-#include "physicalDevice.hpp"
-#include "commandBuffer.hpp"
+#include <marlin/vulkan/physicalDevice.hpp>
+#include <marlin/vulkan/commandBuffer.hpp>
 
 namespace marlin
 {

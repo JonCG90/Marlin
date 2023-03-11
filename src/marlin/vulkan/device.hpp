@@ -9,11 +9,9 @@
 #ifndef MARLIN_DEVICE_HPP
 #define MARLIN_DEVICE_HPP
 
-#include "defs.hpp"
-#include "physicalDevice.hpp"
-#include "vkObject.hpp"
+#include <marlin/vulkan/defs.hpp>
+#include <marlin/vulkan/vkObject.hpp>
 
-#include <optional>
 #include <map>
 
 namespace marlin

@@ -8,8 +8,6 @@
 
 #include <vulkan/vulkan.h>
 
-#include <iostream>
-
 namespace marlin
 {
 

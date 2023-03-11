@@ -9,9 +9,9 @@
 #ifndef MARLIN_INSTANCE_HPP
 #define MARLIN_INSTANCE_HPP
 
-#include "defs.hpp"
-#include "vkObject.hpp"
-#include "../defs.hpp"
+#include <marlin/vulkan/../defs.hpp>
+#include <marlin/vulkan/defs.hpp>
+#include <marlin/vulkan/vkObject.hpp>
 
 #include <vulkan/vulkan.h>
 

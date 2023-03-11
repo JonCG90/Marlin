@@ -6,8 +6,8 @@
 //  Copyright © 2022 Jonathan Graham. All rights reserved.
 //
 
-#include "physicalDevice.hpp"
-#include "surface.hpp"
+#include <marlin/vulkan/physicalDevice.hpp>
+#include <marlin/vulkan/surface.hpp>
 
 namespace marlin
 {

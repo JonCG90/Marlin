@@ -6,9 +6,10 @@
 //  Copyright © 2022 Jonathan Graham. All rights reserved.
 //
 
-#include "swapChain.hpp"
-#include "device.hpp"
-#include "surface.hpp"
+#include <marlin/vulkan/swapChain.hpp>
+
+#include <marlin/vulkan/device.hpp>
+#include <marlin/vulkan/surface.hpp>
 
 #include <vulkan/vulkan.h>
 

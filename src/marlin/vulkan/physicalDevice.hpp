@@ -9,8 +9,8 @@
 #ifndef MARLIN_PHYSICALDEVICE_HPP
 #define MARLIN_PHYSICALDEVICE_HPP
 
-#include "defs.hpp"
-#include "vkObject.hpp"
+#include <marlin/vulkan/defs.hpp>
+#include <marlin/vulkan/vkObject.hpp>
 
 #include <vulkan/vulkan.h>
 
