@@ -510,9 +510,12 @@ void MlnInstance::init( void* i_layer )
 
 void MlnInstance::deinit()
 {
-    vkDestroySemaphore( m_device->getObject(), m_imageAvailableSemaphore, nullptr );
-    vkDestroySemaphore( m_device->getObject(), m_renderFinishedSemaphore, nullptr );
-    vkDestroyFence( m_device->getObject(), m_inFlightFence, nullptr );
+    for ( size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++ )
+    {
+        vkDestroySemaphore( m_device->getObject(), m_imageAvailableSemaphores[ i ], nullptr );
+        vkDestroySemaphore( m_device->getObject(), m_renderFinishedSemaphores[ i ], nullptr );
+        vkDestroyFence( m_device->getObject(), m_inFlightFences[ i ], nullptr );
+    }
     
     m_indexBuffer->destroy();
     m_vertexBuffer->destroy();
@@ -555,15 +558,15 @@ void MlnInstance::deinit()
 
 void MlnInstance::drawFrame()
 {
-    vkWaitForFences( m_device->getObject(), 1, &m_inFlightFence, VK_TRUE, UINT64_MAX );
-    vkResetFences( m_device->getObject(), 1, &m_inFlightFence );
+    vkWaitForFences( m_device->getObject(), 1, &m_inFlightFences[ m_currentFrame ], VK_TRUE, UINT64_MAX );
+    vkResetFences( m_device->getObject(), 1, &m_inFlightFences[ m_currentFrame ] );
 
     uint32_t imageIndex;
-    vkAcquireNextImageKHR( m_device->getObject(), m_swapChain->getObject(), UINT64_MAX, m_imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex );
+    vkAcquireNextImageKHR( m_device->getObject(), m_swapChain->getObject(), UINT64_MAX, m_imageAvailableSemaphores[ m_currentFrame ], VK_NULL_HANDLE, &imageIndex );
     
     updateUniformBuffer( 0 );
     
-    CommandBufferPtr commandBuffer = m_device->getCommandBuffer( QueueTypeGraphics );
+    CommandBufferPtr commandBuffer = m_device->getCommandBuffer( QueueTypeGraphics, m_currentFrame );
     commandBuffer->reset();
 
     recordCommandBuffer( commandBuffer, imageIndex );
@@ -572,7 +575,7 @@ void MlnInstance::drawFrame()
         .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO
     };
 
-    VkSemaphore waitSemaphores[] = { m_imageAvailableSemaphore };
+    VkSemaphore waitSemaphores[] = { m_imageAvailableSemaphores[ m_currentFrame ] };
     VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
     submitInfo.waitSemaphoreCount = 1;
     submitInfo.pWaitSemaphores = waitSemaphores;
@@ -583,11 +586,11 @@ void MlnInstance::drawFrame()
     VkCommandBuffer vkCommandBuffer = commandBuffer->getObject();
     submitInfo.pCommandBuffers = &vkCommandBuffer;
     
-    VkSemaphore signalSemaphores[] = { m_renderFinishedSemaphore };
+    VkSemaphore signalSemaphores[] = { m_renderFinishedSemaphores[ m_currentFrame ] };
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = signalSemaphores;
 
-    if ( vkQueueSubmit( m_graphicsQueue, 1, &submitInfo, m_inFlightFence ) != VK_SUCCESS )
+    if ( vkQueueSubmit( m_graphicsQueue, 1, &submitInfo, m_inFlightFences[ m_currentFrame ] ) != VK_SUCCESS )
     {
         throw std::runtime_error( "Error: Failed to submit draw command buffer!" );
     }
@@ -605,6 +608,8 @@ void MlnInstance::drawFrame()
     presentInfo.pResults = nullptr; // Optional
 
     vkQueuePresentKHR( m_presentQueue, &presentInfo );
+    
+    m_currentFrame = ( m_currentFrame + 1 ) % MAX_FRAMES_IN_FLIGHT;
 }
 
 void MlnInstance::updateUniformBuffer( uint32_t currentImage )
@@ -627,12 +632,18 @@ void MlnInstance::updateUniformBuffer( uint32_t currentImage )
 
 void MlnInstance::createLogicalDevice()
 {    
-    QueueCreateCounts queuesToCreate {
+    QueueCreateCounts queuesCounts {
         { QueueTypeGraphics, 1 },
         { QueueTypePresent,  1 },
         { QueueTypeTransfer, 1 },
     };
-    m_device = Device::create( m_physicalDevice, m_surface, queuesToCreate );
+    QueueCreateCounts bufferCounts {
+        { QueueTypeGraphics, MAX_FRAMES_IN_FLIGHT },
+        { QueueTypePresent,  MAX_FRAMES_IN_FLIGHT },
+        { QueueTypeTransfer, MAX_FRAMES_IN_FLIGHT },
+    };
+    
+    m_device = Device::create( m_physicalDevice, m_surface, queuesCounts, bufferCounts );
     
     // Get our device queues
     m_graphicsQueue = m_device->getQueue( QueueTypeGraphics, 0 );
@@ -1053,7 +1064,7 @@ void MlnInstance::createBuffer( VkDeviceSize i_size, VkBufferUsageFlags i_usage,
 
 void MlnInstance::copyBuffer( VkBuffer i_srcBuffer, VkBuffer i_dstBuffer, VkDeviceSize i_size )
 {
-    CommandBufferPtr commandBuffer = m_device->getCommandBuffer( QueueTypeTransfer );
+    CommandBufferPtr commandBuffer = m_device->getCommandBuffer( QueueTypeTransfer, 0 );
     commandBuffer->reset();
     
     {
@@ -1255,9 +1266,20 @@ static void s_createFence( const VkDevice &i_device, VkFence &io_fence )
 
 void MlnInstance::createSyncObjects()
 {
-    s_createSemaphore( m_device->getObject(), m_imageAvailableSemaphore );
-    s_createSemaphore( m_device->getObject(), m_renderFinishedSemaphore );
-    s_createFence( m_device->getObject(), m_inFlightFence );
+    for ( size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++ )
+    {
+        VkSemaphore imageAvailableSemaphore;
+        s_createSemaphore( m_device->getObject(), imageAvailableSemaphore );
+        m_imageAvailableSemaphores.push_back( imageAvailableSemaphore );
+
+        VkSemaphore renderFinishedSemaphore;
+        s_createSemaphore( m_device->getObject(), renderFinishedSemaphore );
+        m_renderFinishedSemaphores.push_back( renderFinishedSemaphore );
+        
+        VkFence inFlightFence;
+        s_createFence( m_device->getObject(), inFlightFence );
+        m_inFlightFences.push_back( inFlightFence );
+    }
 }
 
 } // namespace marlin

@@ -135,11 +135,13 @@ private:
     VkPipeline m_graphicsPipeline;
     std::vector< VkFramebuffer > m_swapChainFramebuffers;
     
-    VkSemaphore m_imageAvailableSemaphore;
-    VkSemaphore m_renderFinishedSemaphore;
-    VkFence m_inFlightFence;
+    std::vector< VkSemaphore > m_imageAvailableSemaphores;
+    std::vector< VkSemaphore > m_renderFinishedSemaphores;
+    std::vector< VkFence > m_inFlightFences;
 
     bool m_enableValidation;
+    uint32_t m_currentFrame = 0;
+
     VkDebugUtilsMessengerEXT m_debugMessenger;
     
     void setupDebugMessenger();

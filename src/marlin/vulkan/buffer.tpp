@@ -68,7 +68,7 @@ inline void createBuffer( DevicePtr i_device,
 
 inline void copyBuffer( DevicePtr i_device, VkBuffer i_srcBuffer, VkBuffer i_dstBuffer, VkDeviceSize i_size )
 {
-    CommandBufferPtr commandBuffer = i_device->getCommandBuffer( QueueTypeTransfer );
+    CommandBufferPtr commandBuffer = i_device->getCommandBuffer( QueueTypeTransfer, 0 );
     commandBuffer->reset();
     
     {

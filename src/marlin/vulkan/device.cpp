@@ -18,7 +18,7 @@ static const std::vector< const char* > s_deviceExtensions {
     VK_KHR_SWAPCHAIN_EXTENSION_NAME
 };
 
-DevicePtr Device::create( PhysicalDevicePtr i_device, const SurfacePtr i_surface, const QueueCreateCounts &queuesCounts )
+DevicePtr Device::create( PhysicalDevicePtr i_device, const SurfacePtr i_surface, const QueueCreateCounts &i_queuesCounts, const BufferCreateCounts &i_bufferCounts )
 {
     QueueFamilies deviceFamilies;
     i_device->getQueueFamilies( deviceFamilies );
@@ -27,22 +27,22 @@ DevicePtr Device::create( PhysicalDevicePtr i_device, const SurfacePtr i_surface
 
     for ( const QueueFamily &family : deviceFamilies )
     {
-        if ( family.hasGraphics() && ( queuesCounts.find( QueueTypeGraphics ) != queuesCounts.end() ) )
+        if ( family.hasGraphics() && ( i_queuesCounts.find( QueueTypeGraphics ) != i_queuesCounts.end() ) )
         {
             queueFamilies[ QueueTypeGraphics ] = family;
         }
 
-        if ( family.hasTransfer() && ( queuesCounts.find( QueueTypeTransfer ) != queuesCounts.end() ) )
+        if ( family.hasTransfer() && ( i_queuesCounts.find( QueueTypeTransfer ) != i_queuesCounts.end() ) )
         {
             queueFamilies[ QueueTypeTransfer ] = family;
         }
 
-        if ( family.hasCompute() && ( queuesCounts.find( QueueTypeCompute ) != queuesCounts.end() ) )
+        if ( family.hasCompute() && ( i_queuesCounts.find( QueueTypeCompute ) != i_queuesCounts.end() ) )
         {
             queueFamilies[ QueueTypeCompute ] = family;
         }
 
-        if ( family.isSurfaceSupported( i_surface ) && ( queuesCounts.find( QueueTypePresent ) != queuesCounts.end() ) )
+        if ( family.isSurfaceSupported( i_surface ) && ( i_queuesCounts.find( QueueTypePresent ) != i_queuesCounts.end() ) )
         {
             queueFamilies[ QueueTypePresent ] = family;
         }
@@ -63,7 +63,7 @@ DevicePtr Device::create( PhysicalDevicePtr i_device, const SurfacePtr i_surface
         uint32_t queueCount = 1;
         for ( QueueType type : pair.second )
         {
-            queueCount = std::max( queueCount, queuesCounts.at( type ) );
+            queueCount = std::max( queueCount, i_queuesCounts.at( type ) );
         }
 
         VkDeviceQueueCreateInfo queueCreateInfo {
@@ -93,12 +93,13 @@ DevicePtr Device::create( PhysicalDevicePtr i_device, const SurfacePtr i_surface
         throw std::runtime_error( "Failed to create logical device." );
     }
     
-    return std::make_shared< Device >( vkDevice, queueFamilies );
+    return std::make_shared< Device >( vkDevice, queueFamilies, i_bufferCounts );
 }
 
-Device::Device( VkDevice i_device, const QueueToFamily &i_supportedQueues )
+Device::Device( VkDevice i_device, const QueueToFamily &i_supportedQueues, const BufferCreateCounts &i_bufferCounts )
 : VkObjectT<VkDevice>( i_device )
 , m_supportedQueues( i_supportedQueues )
+, m_bufferCounts( i_bufferCounts )
 {}
 
 Device::~Device()
@@ -130,7 +131,7 @@ VkQueue Device::getQueue( QueueType i_type, uint32_t i_index ) const
     return queue;
 }
 
-CommandBufferPtr Device::getCommandBuffer( QueueType i_type )
+CommandBufferPtr Device::getCommandBuffer( QueueType i_type, uint32_t i_index )
 {
     THROW_INVALID( "Invalid Device" );
     
@@ -139,33 +140,42 @@ CommandBufferPtr Device::getCommandBuffer( QueueType i_type )
         throw std::runtime_error( "Unsupported queue type." );
     }
     
+    if ( i_index >= m_bufferCounts[ i_type ] )
+    {
+        throw std::runtime_error( "Trying to access command buffer outside of specified range." );
+    }
+    
     // Find existing
     const auto it = m_commandBuffers.find( i_type );
-    if ( it != m_commandBuffers.end() )
+    if ( it != m_commandBuffers.end() && !it->second.empty() )
     {
-        return it->second;
+        return it->second[ i_index ];
     }
     
     // Create one
     VkCommandPool commandPool = getCommandPool( i_type );
-    VkCommandBuffer vkCommandBuffer;
+    std::vector< VkCommandBuffer > commandBuffers( m_bufferCounts[ i_type ] );
     
     VkCommandBufferAllocateInfo allocInfo {
         .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
         .commandPool = commandPool,
         .level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
-        .commandBufferCount = 1,
+        .commandBufferCount = m_bufferCounts[ i_type ],
     };
     
-    if ( vkAllocateCommandBuffers( m_object, &allocInfo, &vkCommandBuffer ) != VK_SUCCESS )
+    if ( vkAllocateCommandBuffers( m_object, &allocInfo, commandBuffers.data() ) != VK_SUCCESS )
     {
         throw std::runtime_error( "Failed to allocate command buffers!" );
     }
     
-    CommandBufferPtr commandBuffer = std::make_shared< CommandBuffer >( vkCommandBuffer );
-    m_commandBuffers[ i_type ] = commandBuffer;
+    std::vector< CommandBufferPtr > &queueCommandBuffer = m_commandBuffers[ i_type ];
+    for ( VkCommandBuffer vkCommandBuffer : commandBuffers )
+    {
+        CommandBufferPtr commandBuffer = std::make_shared< CommandBuffer >( vkCommandBuffer );
+        queueCommandBuffer.push_back( commandBuffer );
+    }
     
-    return commandBuffer;
+    return queueCommandBuffer[ i_index ];
 }
 
 void Device::destroy()
