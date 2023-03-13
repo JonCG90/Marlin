@@ -20,6 +20,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <SPIRV-Reflect/spirv_reflect.h>
+#include <stb/stb_image.h>
 
 #include <chrono>
 

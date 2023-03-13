@@ -16,6 +16,7 @@
 		23637CBF29BC5DE100D4D7A6 /* spirv_reflect.c in Sources */ = {isa = PBXBuildFile; fileRef = 23637CBC29BC5DE100D4D7A6 /* spirv_reflect.c */; };
 		23637CC029BC5DE100D4D7A6 /* spirv_reflect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23637CBD29BC5DE100D4D7A6 /* spirv_reflect.cpp */; };
 		23637CC529BC5FDB00D4D7A6 /* spirv.h in Headers */ = {isa = PBXBuildFile; fileRef = 23637CC429BC5FDB00D4D7A6 /* spirv.h */; };
+		23637CC829BEAACD00D4D7A6 /* stb_image.h in Headers */ = {isa = PBXBuildFile; fileRef = 23637CC729BEAACD00D4D7A6 /* stb_image.h */; };
 		238811FA244C062F00E8444E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 238811F9244C062F00E8444E /* AppDelegate.m */; };
 		238811FC244C063300E8444E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 238811FB244C063300E8444E /* Assets.xcassets */; };
 		238811FF244C063300E8444E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 238811FD244C063300E8444E /* MainMenu.xib */; };
@@ -213,6 +214,7 @@
 		23637CBC29BC5DE100D4D7A6 /* spirv_reflect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = spirv_reflect.c; sourceTree = "<group>"; };
 		23637CBD29BC5DE100D4D7A6 /* spirv_reflect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = spirv_reflect.cpp; sourceTree = "<group>"; };
 		23637CC429BC5FDB00D4D7A6 /* spirv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = spirv.h; sourceTree = "<group>"; };
+		23637CC729BEAACD00D4D7A6 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		238811E4244C056C00E8444E /* libMarlin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMarlin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F6244C062F00E8444E /* MarlinViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarlinViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F8244C062F00E8444E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -569,6 +571,14 @@
 			path = unified1;
 			sourceTree = "<group>";
 		};
+		23637CC629BEA9FD00D4D7A6 /* stb */ = {
+			isa = PBXGroup;
+			children = (
+				23637CC729BEAACD00D4D7A6 /* stb_image.h */,
+			);
+			path = stb;
+			sourceTree = "<group>";
+		};
 		238811DB244C056C00E8444E = {
 			isa = PBXGroup;
 			children = (
@@ -647,6 +657,7 @@
 		2388123E244F8F5300E8444E /* thirdparty */ = {
 			isa = PBXGroup;
 			children = (
+				23637CC629BEA9FD00D4D7A6 /* stb */,
 				23637CBA29BC5D5A00D4D7A6 /* SPIRV-Reflect */,
 				23881549245040DF00E8444E /* glm */,
 			);
@@ -1116,6 +1127,7 @@
 				2388165C245040DF00E8444E /* matrix.hpp in Headers */,
 				2388168A245040DF00E8444E /* type_mat2x4.hpp in Headers */,
 				238816CF245040DF00E8444E /* range.hpp in Headers */,
+				23637CC829BEAACD00D4D7A6 /* stb_image.h in Headers */,
 				2388165B245040DF00E8444E /* mat3x4.hpp in Headers */,
 				238816AD245040DF00E8444E /* optimum_pow.hpp in Headers */,
 				23881685245040DF00E8444E /* type_gentype.hpp in Headers */,
