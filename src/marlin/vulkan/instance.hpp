@@ -11,6 +11,7 @@
 
 #include <marlin/vulkan/../defs.hpp>
 #include <marlin/vulkan/defs.hpp>
+#include <marlin/vulkan/pipeline.hpp>
 #include <marlin/vulkan/vkObject.hpp>
 
 #include <vulkan/vulkan.h>
@@ -20,46 +21,6 @@
 
 namespace marlin
 {
-
-struct UniformBufferObject {
-    Mat4f model;
-    Mat4f view;
-    Mat4f projection;
-};
-
-struct Vertex
-{
-    Vec2 pos;
-    Vec3 color;
-    
-    static VkVertexInputBindingDescription getBindingDescription()
-    {
-        VkVertexInputBindingDescription bindingDescription {
-            .binding = 0,
-            .stride = sizeof( Vertex ),
-            .inputRate = VK_VERTEX_INPUT_RATE_VERTEX,
-        };
-
-        return bindingDescription;
-    }
-    
-    static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions() {
-        
-        std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions {};
-        
-        attributeDescriptions[0].binding = 0;
-        attributeDescriptions[0].location = 0;
-        attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
-        attributeDescriptions[0].offset = offsetof(Vertex, pos);
-        
-        attributeDescriptions[1].binding = 0;
-        attributeDescriptions[1].location = 1;
-        attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attributeDescriptions[1].offset = offsetof(Vertex, color);
-
-        return attributeDescriptions;
-    }
-};
 
 class Instance : public VkObjectT< VkInstance >
 {
@@ -131,8 +92,7 @@ private:
     
     VkRenderPass m_renderPass;
     VkDescriptorSetLayout m_descriptorSetLayout;
-    VkPipelineLayout m_pipelineLayout;
-    VkPipeline m_graphicsPipeline;
+    GraphicsPipelinePtr m_pipeline;
     std::vector< VkFramebuffer > m_swapChainFramebuffers;
     
     std::vector< VkSemaphore > m_imageAvailableSemaphores;

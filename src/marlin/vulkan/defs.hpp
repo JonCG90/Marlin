@@ -30,6 +30,9 @@ using CommandBufferRecordPtr = std::shared_ptr< CommandBufferRecord >;
 class Device;
 using DevicePtr = std::shared_ptr< Device >;
 
+class GraphicsPipeline;
+using GraphicsPipelinePtr = std::shared_ptr< GraphicsPipeline >;
+
 class PhysicalDevice;
 using PhysicalDevicePtr = std::shared_ptr< PhysicalDevice >;
 using PhysicalDevicePtrs = std::vector< PhysicalDevicePtr >;

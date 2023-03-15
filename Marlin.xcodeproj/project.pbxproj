@@ -17,6 +17,8 @@
 		23637CC029BC5DE100D4D7A6 /* spirv_reflect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23637CBD29BC5DE100D4D7A6 /* spirv_reflect.cpp */; };
 		23637CC529BC5FDB00D4D7A6 /* spirv.h in Headers */ = {isa = PBXBuildFile; fileRef = 23637CC429BC5FDB00D4D7A6 /* spirv.h */; };
 		23637CC829BEAACD00D4D7A6 /* stb_image.h in Headers */ = {isa = PBXBuildFile; fileRef = 23637CC729BEAACD00D4D7A6 /* stb_image.h */; };
+		23637CCB29C1BEFC00D4D7A6 /* pipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23637CC929C1BEFC00D4D7A6 /* pipeline.cpp */; };
+		23637CCC29C1BEFC00D4D7A6 /* pipeline.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23637CCA29C1BEFC00D4D7A6 /* pipeline.hpp */; };
 		238811FA244C062F00E8444E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 238811F9244C062F00E8444E /* AppDelegate.m */; };
 		238811FC244C063300E8444E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 238811FB244C063300E8444E /* Assets.xcassets */; };
 		238811FF244C063300E8444E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 238811FD244C063300E8444E /* MainMenu.xib */; };
@@ -215,6 +217,8 @@
 		23637CBD29BC5DE100D4D7A6 /* spirv_reflect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = spirv_reflect.cpp; sourceTree = "<group>"; };
 		23637CC429BC5FDB00D4D7A6 /* spirv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = spirv.h; sourceTree = "<group>"; };
 		23637CC729BEAACD00D4D7A6 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
+		23637CC929C1BEFC00D4D7A6 /* pipeline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pipeline.cpp; sourceTree = "<group>"; };
+		23637CCA29C1BEFC00D4D7A6 /* pipeline.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = pipeline.hpp; sourceTree = "<group>"; };
 		238811E4244C056C00E8444E /* libMarlin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMarlin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F6244C062F00E8444E /* MarlinViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarlinViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F8244C062F00E8444E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -970,6 +974,8 @@
 				23637CB229A4B50700D4D7A6 /* buffer.hpp */,
 				23637CB529A8C26E00D4D7A6 /* commandBuffer.cpp */,
 				23637CB629A8C26E00D4D7A6 /* commandBuffer.hpp */,
+				23637CC929C1BEFC00D4D7A6 /* pipeline.cpp */,
+				23637CCA29C1BEFC00D4D7A6 /* pipeline.hpp */,
 			);
 			path = vulkan;
 			sourceTree = "<group>";
@@ -1045,6 +1051,7 @@
 				238816B1245040DF00E8444E /* io.hpp in Headers */,
 				23881660245040DF00E8444E /* type_vec.hpp in Headers */,
 				238816A3245040DF00E8444E /* integer.hpp in Headers */,
+				23637CCC29C1BEFC00D4D7A6 /* pipeline.hpp in Headers */,
 				2388165F245040DF00E8444E /* geometric.hpp in Headers */,
 				23881687245040DF00E8444E /* type_mat4x3.hpp in Headers */,
 				23637CB829A8C26E00D4D7A6 /* commandBuffer.hpp in Headers */,
@@ -1292,6 +1299,7 @@
 				23881676245040DF00E8444E /* dummy.cpp in Sources */,
 				23ED677729069D4F0039B92A /* surface.cpp in Sources */,
 				23637CB329A4B50700D4D7A6 /* buffer.cpp in Sources */,
+				23637CCB29C1BEFC00D4D7A6 /* pipeline.cpp in Sources */,
 				23ED677328FFE49B0039B92A /* physicalDevice.cpp in Sources */,
 				23ED676F28FFE2520039B92A /* vkObject.tpp in Sources */,
 			);
