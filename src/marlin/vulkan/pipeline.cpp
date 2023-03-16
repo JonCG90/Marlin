@@ -9,50 +9,10 @@
 #include <marlin/vulkan/pipeline.hpp>
 
 #include <marlin/vulkan/device.hpp>
-
-
-#include <fstream>
+#include <marlin/vulkan/shader.hpp>
 
 namespace marlin
 {
-
-void readFile( const std::string &i_filename, std::vector< char > &o_bytes )
-{
-    std::ifstream file( i_filename, std::ios::ate | std::ios::binary );
-
-    if ( !file.is_open() )
-    {
-        throw std::runtime_error( "Failed to open file!" );
-    }
-    
-    const size_t fileSize = static_cast< size_t >( file.tellg() );
-    
-    file.seekg( 0 );
-    
-    o_bytes.resize( fileSize );
-    file.read( o_bytes.data(), fileSize );
-    
-    file.close();
-}
-
-VkShaderModule createShaderModule( const std::vector< char > &i_code, VkDevice i_device )
-{
-    VkShaderModuleCreateInfo createInfo {
-        .sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
-        .pNext = nullptr,
-        .flags = 0,
-        .codeSize = i_code.size(),
-        .pCode = reinterpret_cast< const uint32_t* >( i_code.data() )
-    };
-    
-    VkShaderModule shaderModule;
-    if ( vkCreateShaderModule( i_device, &createInfo, nullptr, &shaderModule ) != VK_SUCCESS )
-    {
-        throw std::runtime_error("Failed to create shader module!");
-    }
-    
-    return shaderModule;
-}
 
 Pipeline::Pipeline( VkPipeline i_pipeline, VkPipelineLayout i_layout, DevicePtr i_device )
 : VkObjectT< VkPipeline >( i_pipeline )
@@ -81,26 +41,38 @@ VkPipelineLayout Pipeline::getLayout() const
 
 GraphicsPipelinePtr GraphicsPipeline::create( DevicePtr i_device, VkRenderPass i_renderPass, const VkExtent2D &i_extent, VkDescriptorSetLayout i_descriptorSetLayout )
 {
-    std::vector< char > vertBytes;
-    std::vector< char > fragBytes;
+    ShaderModulePtr vertShaderModule = ShaderModule::create( "/Users/jongraham/Projects/Marlin/src/marlin/shaders/vert.spv", i_device );
+    ShaderModulePtr fragShaderModule = ShaderModule::create( "/Users/jongraham/Projects/Marlin/src/marlin/shaders/frag.spv", i_device );
 
-    readFile( "/Users/jongraham/Projects/Marlin/src/marlin/shaders/vert.spv", vertBytes );
-    readFile( "/Users/jongraham/Projects/Marlin/src/marlin/shaders/frag.spv", fragBytes );
+//    std::vector< DescriptorSetLayoutData > layouts;
+//    vertShaderModule->getDescriptorSetLayouts( layouts );
+//
+//    VkDescriptorSetLayoutCreateInfo layoutInfo {
+//        .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+//        .bindingCount = static_cast< uint32_t >( layouts[0].bindings.size() ),
+//        .pBindings = layouts[0].bindings.data(),
+//    };
+//
+//    VkDescriptorSetLayout descriptorSetLayout;
+//    if ( vkCreateDescriptorSetLayout( i_device->getObject(), &layoutInfo, nullptr, &descriptorSetLayout ) != VK_SUCCESS)
+//    {
+//        throw std::runtime_error("Erro: Failed to create descriptor set layout.");
+//    }
     
-    VkShaderModule vertShaderModule = createShaderModule( vertBytes, i_device->getObject() );
-    VkShaderModule fragShaderModule = createShaderModule( fragBytes, i_device->getObject() );
     
-    VkPipelineShaderStageCreateInfo vertShaderStageInfo {};
-    vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-    vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
-    vertShaderStageInfo.module = vertShaderModule;
-    vertShaderStageInfo.pName = "main";
+    VkPipelineShaderStageCreateInfo vertShaderStageInfo {
+        .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+        .stage = vertShaderModule->getStage(),
+        .module = vertShaderModule->getObject(),
+        .pName = vertShaderModule->getEntryPoint().c_str(),
+    };
     
-    VkPipelineShaderStageCreateInfo fragShaderStageInfo{};
-    fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-    fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-    fragShaderStageInfo.module = fragShaderModule;
-    fragShaderStageInfo.pName = "main";
+    VkPipelineShaderStageCreateInfo fragShaderStageInfo {
+        .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+        .stage = fragShaderModule->getStage(),
+        .module = fragShaderModule->getObject(),
+        .pName = fragShaderModule->getEntryPoint().c_str(),
+    };
     
     VkPipelineShaderStageCreateInfo shaderStages[] = {
         vertShaderStageInfo,
@@ -240,9 +212,9 @@ GraphicsPipelinePtr GraphicsPipeline::create( DevicePtr i_device, VkRenderPass i
         throw std::runtime_error( "failed to create graphics pipeline!" );
     }
     
-    vkDestroyShaderModule( i_device->getObject(), vertShaderModule, nullptr );
-    vkDestroyShaderModule( i_device->getObject(), fragShaderModule, nullptr );
-    
+    vertShaderModule->destroy();
+    fragShaderModule->destroy();
+
     return std::make_shared< GraphicsPipeline >( pipeline, pipelineLayout, i_device );
 }
 

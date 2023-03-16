@@ -37,6 +37,9 @@ class PhysicalDevice;
 using PhysicalDevicePtr = std::shared_ptr< PhysicalDevice >;
 using PhysicalDevicePtrs = std::vector< PhysicalDevicePtr >;
 
+class ShaderModule;
+using ShaderModulePtr = std::shared_ptr< ShaderModule >;
+
 class Surface;
 using SurfacePtr = std::shared_ptr< Surface >;
 
