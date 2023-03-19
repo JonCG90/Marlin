@@ -561,7 +561,7 @@ void MlnInstance::drawFrame()
     vkResetFences( m_device->getObject(), 1, &m_inFlightFences[ m_currentFrame ] );
 
     uint32_t imageIndex;
-    vkAcquireNextImageKHR( m_device->getObject(), m_swapChain->getObject(), UINT64_MAX, m_imageAvailableSemaphores[ m_currentFrame ], VK_NULL_HANDLE, &imageIndex );
+    m_swapChain->acquireImage( m_imageAvailableSemaphores[ m_currentFrame ], VK_NULL_HANDLE, imageIndex );
     
     updateUniformBuffer( 0 );
     

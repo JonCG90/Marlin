@@ -126,6 +126,11 @@ const VkExtent2D & SwapChain::getExtent() const
     return m_extent;
 }
 
+void SwapChain::acquireImage( VkSemaphore i_semaphore, VkFence i_fence, uint32_t &o_imageIndex )
+{
+    vkAcquireNextImageKHR( m_device, m_object, UINT64_MAX, i_semaphore, VK_NULL_HANDLE, &o_imageIndex );
+}
+
 void SwapChain::destroy()
 {
     vkDestroySwapchainKHR( m_device, m_object, nullptr );

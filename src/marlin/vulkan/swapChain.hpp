@@ -49,6 +49,8 @@ public:
     VkFormat getFormat() const;
     const VkExtent2D & getExtent() const;
     
+    void acquireImage( VkSemaphore i_semaphore, VkFence i_fence, uint32_t &o_imageIndex );
+    
     void destroy();
     
 private:
