@@ -28,13 +28,13 @@ inline uint32_t findMemoryType( const VkPhysicalDeviceMemoryProperties &i_device
     throw std::runtime_error( "Error: Failed to find suitable memory type." );
 }
 
-inline void createBuffer( DevicePtr i_device,
-                          VkDeviceSize i_size,
-                          const VkPhysicalDeviceMemoryProperties &i_deviceMemoryProperties,
-                          VkBufferUsageFlags i_usage,
-                          VkMemoryPropertyFlags i_properties,
-                          VkBuffer &o_buffer,
-                          VkDeviceMemory &o_bufferMemory )
+void createBuffer( DevicePtr i_device,
+                   VkDeviceSize i_size,
+                   const VkPhysicalDeviceMemoryProperties &i_deviceMemoryProperties,
+                   VkBufferUsageFlags i_usage,
+                   VkMemoryPropertyFlags i_properties,
+                   VkBuffer &o_buffer,
+                   VkDeviceMemory &o_bufferMemory )
 {
     VkBufferCreateInfo bufferInfo {
         .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
@@ -66,7 +66,7 @@ inline void createBuffer( DevicePtr i_device,
     vkBindBufferMemory( i_device->getObject(), o_buffer, o_bufferMemory, 0 );
 }
 
-inline void copyBuffer( DevicePtr i_device, VkBuffer i_srcBuffer, VkBuffer i_dstBuffer, VkDeviceSize i_size )
+void copyBuffer( DevicePtr i_device, VkBuffer i_srcBuffer, VkBuffer i_dstBuffer, VkDeviceSize i_size )
 {
     CommandBufferPtr commandBuffer = i_device->getCommandBuffer( QueueTypeTransfer, 0 );
     commandBuffer->reset();

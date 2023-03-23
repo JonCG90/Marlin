@@ -10,6 +10,7 @@
 
 #include <marlin/vulkan/buffer.hpp>
 #include <marlin/vulkan/commandBuffer.hpp>
+#include <marlin/vulkan/commands.hpp>
 #include <marlin/vulkan/device.hpp>
 #include <marlin/vulkan/physicalDevice.hpp>
 #include <marlin/vulkan/surface.hpp>
@@ -833,67 +834,6 @@ uint32_t findMemoryType2( PhysicalDevicePtr i_device, uint32_t i_typeFilter, VkM
     throw std::runtime_error("failed to find suitable memory type!");
 }
 
-void MlnInstance::createBuffer( VkDeviceSize i_size, VkBufferUsageFlags i_usage, VkMemoryPropertyFlags i_properties, VkBuffer &o_buffer, VkDeviceMemory &o_bufferMemory )
-{
-    VkBufferCreateInfo bufferInfo {
-        .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
-        .size = i_size,
-        .usage = i_usage,
-        .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
-        .flags = 0,
-    };
-    
-    if ( vkCreateBuffer( m_device->getObject(), &bufferInfo, nullptr, &o_buffer ) != VK_SUCCESS )
-    {
-        throw std::runtime_error("failed to create vertex buffer!");
-    }
-    
-    VkMemoryRequirements memRequirements;
-    vkGetBufferMemoryRequirements( m_device->getObject(), o_buffer, &memRequirements );
-    
-    VkMemoryAllocateInfo allocInfo {
-        .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
-        .allocationSize = memRequirements.size,
-        .memoryTypeIndex = findMemoryType2( m_physicalDevice, memRequirements.memoryTypeBits, i_properties )
-    };
-    
-    if ( vkAllocateMemory( m_device->getObject(), &allocInfo, nullptr, &o_bufferMemory ) != VK_SUCCESS )
-    {
-        throw std::runtime_error("failed to allocate vertex buffer memory!");
-    }
-    
-    vkBindBufferMemory( m_device->getObject(), o_buffer, o_bufferMemory, 0 );
-}
-
-void MlnInstance::copyBuffer( VkBuffer i_srcBuffer, VkBuffer i_dstBuffer, VkDeviceSize i_size )
-{
-    CommandBufferPtr commandBuffer = m_device->getCommandBuffer( QueueTypeTransfer, 0 );
-    commandBuffer->reset();
-    
-    {
-        CommandBufferRecordPtr scopedRecord = commandBuffer->scopedRecord( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-                
-        VkBufferCopy copyRegion {
-            .srcOffset = 0, // Optional
-            .dstOffset = 0, // Optional
-            .size = i_size
-        };
-
-        vkCmdCopyBuffer( commandBuffer->getObject(), i_srcBuffer, i_dstBuffer, 1, &copyRegion );
-    }
-    
-    VkCommandBuffer vkCommandBuffer = commandBuffer->getObject();
-    VkSubmitInfo submitInfo {
-        .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
-        .commandBufferCount = 1,
-        .pCommandBuffers = &vkCommandBuffer
-    };
-
-    VkQueue queue = m_device->getQueue( QueueTypeTransfer, 0 );
-    vkQueueSubmit( queue, 1, &submitInfo, VK_NULL_HANDLE );
-    vkQueueWaitIdle( queue );
-}
-
 void MlnInstance::createVertexBuffer()
 {
     const std::vector<Vertex> vertices = {
@@ -992,41 +932,23 @@ void MlnInstance::createDescriptorSets()
 
 void MlnInstance::recordCommandBuffer( CommandBufferPtr commandBuffer, uint32_t imageIndex )
 {
+    const VkExtent2D &extent = m_swapChain->getExtent();
+    
+    CommandPtr beginPass = CommandFactory::beginRenderPass( m_renderPass, m_swapChainFramebuffers[ imageIndex ], extent );
+    CommandPtr bind = CommandFactory::bindPipeline( m_pipeline );
+    CommandPtr viewport = CommandFactory::setViewport( Vec2f( 0.0 ), Vec2f( extent.width, extent.height ) );
+    CommandPtr scissor = CommandFactory::setScissor( Vec2i( 0 ), Vec2u( extent.width, extent.height ) );
+    CommandPtr endPass = CommandFactory::endRenderPass();
+    
     CommandBufferRecordPtr scopedRecord = commandBuffer->scopedRecord( 0 );
     
-    VkClearValue clearColor = { { { 0.0f, 0.0f, 0.0f, 1.0f } } };
-    const VkExtent2D &extend = m_swapChain->getExtent();
-    
-    VkRenderPassBeginInfo renderPassInfo {
-        .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-        .renderPass = m_renderPass,
-        .framebuffer = m_swapChainFramebuffers[ imageIndex ],
-        .renderArea.offset = { 0, 0 },
-        .renderArea.extent = extend,
-        .clearValueCount = 1,
-        .pClearValues = &clearColor,
-    };
-    
     VkCommandBuffer vkCommandBuffer = commandBuffer->getObject();
-    vkCmdBeginRenderPass( vkCommandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE );
+    beginPass->record( commandBuffer );
     {
-        vkCmdBindPipeline( vkCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline->getObject() );
-
-        VkViewport viewport {
-            .x = 0.0f,
-            .y = 0.0f,
-            .width = static_cast< float >( extend.width ),
-            .height = static_cast< float >( extend.height ),
-            .minDepth = 0.0f,
-            .maxDepth = 1.0f,
-        };
-        vkCmdSetViewport( vkCommandBuffer, 0, 1, &viewport );
-
-        VkRect2D scissor {
-            .offset = { 0, 0 },
-            .extent = extend,
-        };
-        vkCmdSetScissor( vkCommandBuffer, 0, 1, &scissor );
+        
+        bind->record( commandBuffer );
+        viewport->record( commandBuffer );
+        scissor->record( commandBuffer );
         
         VkBuffer vertexBuffers[] = { m_vertexBuffer->getObject() };
         VkDeviceSize offsets[] = { 0 };
@@ -1039,7 +961,7 @@ void MlnInstance::recordCommandBuffer( CommandBufferPtr commandBuffer, uint32_t 
         vkCmdDrawIndexed( vkCommandBuffer, count, 1, 0, 0, 0 );
     }
     
-    vkCmdEndRenderPass( vkCommandBuffer );
+    endPass->record( commandBuffer );
 }
 
 static void s_createSemaphore( const VkDevice &i_device, VkSemaphore &io_semaphor )
