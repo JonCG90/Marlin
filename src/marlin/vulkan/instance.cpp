@@ -11,6 +11,7 @@
 #include <marlin/vulkan/buffer.hpp>
 #include <marlin/vulkan/commandBuffer.hpp>
 #include <marlin/vulkan/commands.hpp>
+#include <marlin/vulkan/descriptor/descriptorCache.hpp>
 #include <marlin/vulkan/device.hpp>
 #include <marlin/vulkan/physicalDevice.hpp>
 #include <marlin/vulkan/surface.hpp>
@@ -644,6 +645,7 @@ void MlnInstance::createLogicalDevice()
     };
     
     m_device = Device::create( m_physicalDevice, m_surface, queuesCounts, bufferCounts );
+    m_descriptorCache = std::make_unique< DescriptorCache >( m_device );
     
     // Get our device queues
     m_graphicsQueue = m_device->getQueue( QueueTypeGraphics, 0 );
@@ -789,7 +791,7 @@ void MlnInstance::createDescriptorSetLayout()
 
 void MlnInstance::createGraphicsPipeline()
 {
-    m_pipeline = GraphicsPipeline::create( m_device, m_renderPass, m_swapChain->getExtent(), m_descriptorSetLayout );
+    m_pipeline = GraphicsPipeline::create( m_device, m_renderPass, m_swapChain->getExtent(), m_descriptorCache );
 }
 
 void MlnInstance::createFramebuffers()

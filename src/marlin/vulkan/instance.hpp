@@ -78,6 +78,8 @@ private:
         
     VkQueue m_graphicsQueue;
     VkQueue m_presentQueue;
+    
+    DescriptorCachePtr m_descriptorCache;
 
     BufferTPtr< Vertex > m_vertexBuffer;
     BufferTPtr< uint32_t > m_indexBuffer;

@@ -18,9 +18,10 @@ namespace marlin
 
 void PrintDescriptorBinding(std::ostream& os, const SpvReflectDescriptorBinding& obj, bool write_set, const char* indent);
 
-static uint32_t FormatSize(VkFormat format) {
+uint32_t formatSize( VkFormat format )
+{
   uint32_t result = 0;
-  switch (format) {
+  switch ( format ) {
     case VK_FORMAT_UNDEFINED:
       result = 0;
       break;
@@ -968,7 +969,7 @@ void foo( const std::vector< char > &i_bytes )
                   });
         // Compute final offsets of each attribute, and total vertex stride.
         for (auto& attribute : attribute_descriptions) {
-          uint32_t format_size = FormatSize(attribute.format);
+          uint32_t format_size = formatSize(attribute.format);
           attribute.offset = binding_description.stride;
           binding_description.stride += format_size;
         }
@@ -1088,56 +1089,30 @@ void readFile( const std::string &i_filename, std::vector< char > &o_bytes )
     
     file.close();
 }
-
-
-ShaderModulePtr ShaderModule::create( const std::string &i_path, DevicePtr i_device )
-{
-    std::vector< char > bytes;
-    readFile( i_path, bytes );
     
-    foo( bytes );
+ShaderStage::ShaderStage( const std::string &i_path )
+{    
+    readFile( i_path, m_bytes );
     
-    return std::make_shared< ShaderModule >( bytes, i_device );
-}
-    
-ShaderModule::ShaderModule( const std::vector< char > i_bytes, DevicePtr i_device )
-: VkObjectT< VkShaderModule >( VK_NULL_HANDLE )
-, m_device( i_device )
-{
-    VkShaderModuleCreateInfo createInfo {
-        .sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
-        .pNext = nullptr,
-        .flags = 0,
-        .codeSize = i_bytes.size(),
-        .pCode = reinterpret_cast< const uint32_t* >( i_bytes.data() )
-    };
-    
-    if ( vkCreateShaderModule( i_device->getObject(), &createInfo, nullptr, &m_object ) != VK_SUCCESS )
-    {
-        throw std::runtime_error( "Failed to create shader module!" );
-    }
-    
-    if ( spvReflectCreateShaderModule( i_bytes.size(), i_bytes.data(), &m_spvModule ) != SPV_REFLECT_RESULT_SUCCESS )
+    if ( spvReflectCreateShaderModule( m_bytes.size(), m_bytes.data(), &m_spvModule ) != SPV_REFLECT_RESULT_SUCCESS )
     {
         throw std::runtime_error( "Failed to create spv shader module!" );
     }
 }
 
-ShaderModule::~ShaderModule()
+ShaderStage::~ShaderStage()
 {
-    if ( m_object != VK_NULL_HANDLE )
-    {
-        std::cerr << "Warning: Shader module object not released." << std::endl;
-    }
+    spvReflectDestroyShaderModule( &m_spvModule );
 }
 
-std::string ShaderModule::getEntryPoint() const
+std::string ShaderStage::getEntryPoint() const
 {
     return m_spvModule.entry_point_name;
 }
 
-void ShaderModule::getDescriptorSetLayouts( std::vector< DescriptorSetLayoutData > &o_layouts ) const
+void ShaderStage::getDescriptorSetLayouts( std::vector< DescriptorSetLayoutData > &o_layouts ) const
 {
+    // Taken from spv examples
     uint32_t count = 0;
     if ( spvReflectEnumerateDescriptorSets( &m_spvModule, &count, nullptr ) != SPV_REFLECT_RESULT_SUCCESS )
     {
@@ -1163,7 +1138,7 @@ void ShaderModule::getDescriptorSetLayouts( std::vector< DescriptorSetLayoutData
             const SpvReflectDescriptorBinding &setBinding = *( descriptorSet.bindings[ bindingIdx ] );
             VkDescriptorSetLayoutBinding &layoutBinding = layout.bindings[ bindingIdx ];
             layoutBinding.binding = setBinding.binding;
-            layoutBinding.descriptorType = static_cast<VkDescriptorType>( setBinding.descriptor_type );
+            layoutBinding.descriptorType = static_cast< VkDescriptorType >( setBinding.descriptor_type );
             layoutBinding.descriptorCount = 1;
             for ( uint32_t dimIdx = 0; dimIdx < setBinding.array.dims_count; dimIdx++ )
             {
@@ -1174,7 +1149,7 @@ void ShaderModule::getDescriptorSetLayouts( std::vector< DescriptorSetLayoutData
     }
 }
 
-VkShaderStageFlagBits ShaderModule::getStage() const
+VkShaderStageFlagBits ShaderStage::getStage() const
 {
     switch ( m_spvModule.shader_stage ) {
         case SPV_REFLECT_SHADER_STAGE_VERTEX_BIT:
@@ -1190,11 +1165,9 @@ VkShaderStageFlagBits ShaderModule::getStage() const
     return VK_SHADER_STAGE_FLAG_BITS_MAX_ENUM;
 }
 
-void ShaderModule::destroy()
+const std::vector< char > & ShaderStage::getBytes() const
 {
-    vkDestroyShaderModule( m_device->getObject(), m_object, nullptr );
-    m_object = VK_NULL_HANDLE;
-    spvReflectDestroyShaderModule( &m_spvModule );
+    return m_bytes;
 }
 
 } // namespace marlin

@@ -23,6 +23,10 @@
 		23637CD029C306DD00D4D7A6 /* shader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23637CCE29C306DD00D4D7A6 /* shader.hpp */; };
 		23637CD329C9A66E00D4D7A6 /* commands.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23637CD129C9A66E00D4D7A6 /* commands.cpp */; };
 		23637CD429C9A66E00D4D7A6 /* commands.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23637CD229C9A66E00D4D7A6 /* commands.hpp */; };
+		2384C72929D2B80300380DD3 /* descriptorCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2384C72729D2B80300380DD3 /* descriptorCache.cpp */; };
+		2384C72A29D2B80300380DD3 /* descriptorCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2384C72829D2B80300380DD3 /* descriptorCache.hpp */; };
+		2384C72E29D5815700380DD3 /* descriptorAlloc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2384C72C29D5815700380DD3 /* descriptorAlloc.cpp */; };
+		2384C72F29D5815700380DD3 /* descriptorAlloc.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2384C72D29D5815700380DD3 /* descriptorAlloc.hpp */; };
 		238811FA244C062F00E8444E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 238811F9244C062F00E8444E /* AppDelegate.m */; };
 		238811FC244C063300E8444E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 238811FB244C063300E8444E /* Assets.xcassets */; };
 		238811FF244C063300E8444E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 238811FD244C063300E8444E /* MainMenu.xib */; };
@@ -227,6 +231,10 @@
 		23637CCE29C306DD00D4D7A6 /* shader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = shader.hpp; sourceTree = "<group>"; };
 		23637CD129C9A66E00D4D7A6 /* commands.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = commands.cpp; sourceTree = "<group>"; };
 		23637CD229C9A66E00D4D7A6 /* commands.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = commands.hpp; sourceTree = "<group>"; };
+		2384C72729D2B80300380DD3 /* descriptorCache.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = descriptorCache.cpp; sourceTree = "<group>"; };
+		2384C72829D2B80300380DD3 /* descriptorCache.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = descriptorCache.hpp; sourceTree = "<group>"; };
+		2384C72C29D5815700380DD3 /* descriptorAlloc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = descriptorAlloc.cpp; sourceTree = "<group>"; };
+		2384C72D29D5815700380DD3 /* descriptorAlloc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = descriptorAlloc.hpp; sourceTree = "<group>"; };
 		238811E4244C056C00E8444E /* libMarlin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMarlin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F6244C062F00E8444E /* MarlinViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarlinViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		238811F8244C062F00E8444E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -589,6 +597,17 @@
 				23637CC729BEAACD00D4D7A6 /* stb_image.h */,
 			);
 			path = stb;
+			sourceTree = "<group>";
+		};
+		2384C72B29D580D100380DD3 /* descriptor */ = {
+			isa = PBXGroup;
+			children = (
+				2384C72729D2B80300380DD3 /* descriptorCache.cpp */,
+				2384C72829D2B80300380DD3 /* descriptorCache.hpp */,
+				2384C72C29D5815700380DD3 /* descriptorAlloc.cpp */,
+				2384C72D29D5815700380DD3 /* descriptorAlloc.hpp */,
+			);
+			path = descriptor;
 			sourceTree = "<group>";
 		};
 		238811DB244C056C00E8444E = {
@@ -964,6 +983,7 @@
 		238816E32450470800E8444E /* vulkan */ = {
 			isa = PBXGroup;
 			children = (
+				2384C72B29D580D100380DD3 /* descriptor */,
 				23637CB129A4B50700D4D7A6 /* buffer.cpp */,
 				23637CB229A4B50700D4D7A6 /* buffer.hpp */,
 				23637CB929AF552E00D4D7A6 /* buffer.tpp */,
@@ -1079,6 +1099,7 @@
 				238816AC245040DF00E8444E /* closest_point.hpp in Headers */,
 				238816C1245040DF00E8444E /* multiple.hpp in Headers */,
 				23881658245040DF00E8444E /* packing.hpp in Headers */,
+				2384C72A29D2B80300380DD3 /* descriptorCache.hpp in Headers */,
 				23881664245040DF00E8444E /* func_common.hpp in Headers */,
 				2388165D245040DF00E8444E /* glm.hpp in Headers */,
 				238816A2245040DF00E8444E /* simd_vec4.hpp in Headers */,
@@ -1113,6 +1134,7 @@
 				2388168D245040DF00E8444E /* ext.hpp in Headers */,
 				238816A5245040DF00E8444E /* matrix_interpolation.hpp in Headers */,
 				2388166C245040DF00E8444E /* intrinsic_geometric.hpp in Headers */,
+				2384C72F29D5815700380DD3 /* descriptorAlloc.hpp in Headers */,
 				23881668245040DF00E8444E /* type_int.hpp in Headers */,
 				23881670245040DF00E8444E /* func_packing.hpp in Headers */,
 				2388166D245040DF00E8444E /* _vectorize.hpp in Headers */,
@@ -1310,7 +1332,9 @@
 				238816E62450472B00E8444E /* instance.cpp in Sources */,
 				23ED677B290FD29E0039B92A /* device.cpp in Sources */,
 				23ED6783292D943A0039B92A /* swapChain.cpp in Sources */,
+				2384C72929D2B80300380DD3 /* descriptorCache.cpp in Sources */,
 				23637CC029BC5DE100D4D7A6 /* spirv_reflect.cpp in Sources */,
+				2384C72E29D5815700380DD3 /* descriptorAlloc.cpp in Sources */,
 				23881676245040DF00E8444E /* dummy.cpp in Sources */,
 				23637CD329C9A66E00D4D7A6 /* commands.cpp in Sources */,
 				23ED677729069D4F0039B92A /* surface.cpp in Sources */,

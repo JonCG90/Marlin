@@ -33,15 +33,15 @@ using CommandBufferRecordPtr = std::shared_ptr< CommandBufferRecord >;
 class Device;
 using DevicePtr = std::shared_ptr< Device >;
 
+class DescriptorCache;
+using DescriptorCachePtr = std::unique_ptr< DescriptorCache >;
+
 class GraphicsPipeline;
 using GraphicsPipelinePtr = std::shared_ptr< GraphicsPipeline >;
 
 class PhysicalDevice;
 using PhysicalDevicePtr = std::shared_ptr< PhysicalDevice >;
 using PhysicalDevicePtrs = std::vector< PhysicalDevicePtr >;
-
-class ShaderModule;
-using ShaderModulePtr = std::shared_ptr< ShaderModule >;
 
 class Surface;
 using SurfacePtr = std::shared_ptr< Surface >;

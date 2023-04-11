@@ -78,7 +78,7 @@ class GraphicsPipeline : public Pipeline
 {
 public:
     
-    static GraphicsPipelinePtr create( DevicePtr i_device, VkRenderPass i_renderPass, const VkExtent2D &i_extent, VkDescriptorSetLayout i_descriptorSetLayout );
+    static GraphicsPipelinePtr create( DevicePtr i_device, VkRenderPass i_renderPass, const VkExtent2D &i_extent, DescriptorCachePtr &io_descriptorCache );
     
     GraphicsPipeline() = default;
     GraphicsPipeline( VkPipeline i_pipeline, VkPipelineLayout i_layout, DevicePtr i_device );
@@ -86,6 +86,8 @@ public:
     
     void destroy();
 
+private:
+    
 };
 
 } // namespace marlin

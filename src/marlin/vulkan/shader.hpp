@@ -23,27 +23,24 @@ struct DescriptorSetLayoutData
     std::vector< VkDescriptorSetLayoutBinding > bindings;
 };
 
-class ShaderModule : public VkObjectT< VkShaderModule >
+class ShaderStage
 {
 public:
     
-    static ShaderModulePtr create( const std::string &i_path, DevicePtr i_device );
-        
-    ShaderModule() = default;
-    ShaderModule( const std::vector< char > i_bytes, DevicePtr i_device );
+    
+    ShaderStage( const std::string &i_path );
 
-    virtual ~ShaderModule();
+    ~ShaderStage();
     
     std::string getEntryPoint() const;
     VkShaderStageFlagBits getStage() const;
     void getDescriptorSetLayouts( std::vector< DescriptorSetLayoutData > &o_layouts ) const;
-    
-    void destroy();
+    const std::vector< char > & getBytes() const;
     
 protected:
     
-    DevicePtr m_device;
     SpvReflectShaderModule m_spvModule;
+    std::vector< char > m_bytes;
 };
 
 } // namespace marlin
