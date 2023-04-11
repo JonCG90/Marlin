@@ -17,9 +17,13 @@
 #include <marlin/vulkan/surface.hpp>
 #include <marlin/vulkan/swapChain.hpp>
 
-#define GLM_FORCE_RADIANS
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Weverything"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#pragma clang diagnostic pop
+#define GLM_FORCE_RADIANS
+
 
 #include <stb/stb_image.h>
 

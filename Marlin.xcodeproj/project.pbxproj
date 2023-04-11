@@ -13,7 +13,7 @@
 		23637CB729A8C26E00D4D7A6 /* commandBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23637CB529A8C26E00D4D7A6 /* commandBuffer.cpp */; };
 		23637CB829A8C26E00D4D7A6 /* commandBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23637CB629A8C26E00D4D7A6 /* commandBuffer.hpp */; };
 		23637CBE29BC5DE100D4D7A6 /* spirv_reflect.h in Headers */ = {isa = PBXBuildFile; fileRef = 23637CBB29BC5DE100D4D7A6 /* spirv_reflect.h */; };
-		23637CBF29BC5DE100D4D7A6 /* spirv_reflect.c in Sources */ = {isa = PBXBuildFile; fileRef = 23637CBC29BC5DE100D4D7A6 /* spirv_reflect.c */; };
+		23637CBF29BC5DE100D4D7A6 /* spirv_reflect.c in Sources */ = {isa = PBXBuildFile; fileRef = 23637CBC29BC5DE100D4D7A6 /* spirv_reflect.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		23637CC029BC5DE100D4D7A6 /* spirv_reflect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23637CBD29BC5DE100D4D7A6 /* spirv_reflect.cpp */; };
 		23637CC529BC5FDB00D4D7A6 /* spirv.h in Headers */ = {isa = PBXBuildFile; fileRef = 23637CC429BC5FDB00D4D7A6 /* spirv.h */; };
 		23637CC829BEAACD00D4D7A6 /* stb_image.h in Headers */ = {isa = PBXBuildFile; fileRef = 23637CC729BEAACD00D4D7A6 /* stb_image.h */; };

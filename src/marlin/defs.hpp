@@ -1,7 +1,10 @@
 #ifndef MARLIN_DEFS_HPP
 #define MARLIN_DEFS_HPP
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Weverything"
 #include <glm/glm.hpp>
+#pragma clang diagnostic pop
 
 namespace marlin
 {

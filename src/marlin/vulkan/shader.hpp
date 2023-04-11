@@ -12,7 +12,10 @@
 #include <marlin/vulkan/defs.hpp>
 #include <marlin/vulkan/vkObject.hpp>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Weverything"
 #include <SPIRV-Reflect/spirv_reflect.h>
+#pragma clang diagnostic pop
 
 namespace marlin
 {
