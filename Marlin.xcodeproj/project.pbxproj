@@ -181,7 +181,6 @@
 		238816DC2450422B00E8444E /* libMarlin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 238811E4244C056C00E8444E /* libMarlin.a */; };
 		238816E62450472B00E8444E /* instance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 238816E42450472B00E8444E /* instance.cpp */; };
 		238816E72450472B00E8444E /* instance.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 238816E52450472B00E8444E /* instance.hpp */; };
-		23ED676F28FFE2520039B92A /* vkObject.tpp in Sources */ = {isa = PBXBuildFile; fileRef = 23ED676D28FFE2520039B92A /* vkObject.tpp */; };
 		23ED677028FFE2520039B92A /* vkObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23ED676E28FFE2520039B92A /* vkObject.hpp */; };
 		23ED677328FFE49B0039B92A /* physicalDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23ED677128FFE49B0039B92A /* physicalDevice.cpp */; };
 		23ED677428FFE49B0039B92A /* physicalDevice.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23ED677228FFE49B0039B92A /* physicalDevice.hpp */; };
@@ -1341,7 +1340,6 @@
 				23637CB329A4B50700D4D7A6 /* buffer.cpp in Sources */,
 				23637CCB29C1BEFC00D4D7A6 /* pipeline.cpp in Sources */,
 				23ED677328FFE49B0039B92A /* physicalDevice.cpp in Sources */,
-				23ED676F28FFE2520039B92A /* vkObject.tpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
