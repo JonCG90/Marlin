@@ -23,6 +23,26 @@
 		23637CD029C306DD00D4D7A6 /* shader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23637CCE29C306DD00D4D7A6 /* shader.hpp */; };
 		23637CD329C9A66E00D4D7A6 /* commands.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23637CD129C9A66E00D4D7A6 /* commands.cpp */; };
 		23637CD429C9A66E00D4D7A6 /* commands.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23637CD229C9A66E00D4D7A6 /* commands.hpp */; };
+		237253142B1C38B1009F3570 /* sdefl.h in Headers */ = {isa = PBXBuildFile; fileRef = 237252FF2B1C38B1009F3570 /* sdefl.h */; };
+		237253152B1C38B1009F3570 /* cgltf.h in Headers */ = {isa = PBXBuildFile; fileRef = 237253002B1C38B1009F3570 /* cgltf.h */; };
+		237253162B1C38B1009F3570 /* fast_obj.h in Headers */ = {isa = PBXBuildFile; fileRef = 237253012B1C38B1009F3570 /* fast_obj.h */; };
+		237253172B1C38B1009F3570 /* vertexfilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253032B1C38B1009F3570 /* vertexfilter.cpp */; };
+		237253182B1C38B1009F3570 /* vertexcodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253042B1C38B1009F3570 /* vertexcodec.cpp */; };
+		237253192B1C38B1009F3570 /* overdrawanalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253052B1C38B1009F3570 /* overdrawanalyzer.cpp */; };
+		2372531A2B1C38B1009F3570 /* vcacheoptimizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253062B1C38B1009F3570 /* vcacheoptimizer.cpp */; };
+		2372531B2B1C38B1009F3570 /* overdrawoptimizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253072B1C38B1009F3570 /* overdrawoptimizer.cpp */; };
+		2372531C2B1C38B1009F3570 /* meshoptimizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 237253082B1C38B1009F3570 /* meshoptimizer.h */; };
+		2372531D2B1C38B1009F3570 /* stripifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253092B1C38B1009F3570 /* stripifier.cpp */; };
+		2372531E2B1C38B1009F3570 /* vcacheanalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2372530A2B1C38B1009F3570 /* vcacheanalyzer.cpp */; };
+		2372531F2B1C38B1009F3570 /* quantization.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2372530B2B1C38B1009F3570 /* quantization.cpp */; };
+		237253202B1C38B1009F3570 /* indexcodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2372530C2B1C38B1009F3570 /* indexcodec.cpp */; };
+		237253212B1C38B1009F3570 /* vfetchoptimizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2372530D2B1C38B1009F3570 /* vfetchoptimizer.cpp */; };
+		237253222B1C38B1009F3570 /* allocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2372530E2B1C38B1009F3570 /* allocator.cpp */; };
+		237253232B1C38B1009F3570 /* spatialorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2372530F2B1C38B1009F3570 /* spatialorder.cpp */; };
+		237253242B1C38B1009F3570 /* indexgenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253102B1C38B1009F3570 /* indexgenerator.cpp */; };
+		237253252B1C38B1009F3570 /* vfetchanalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253112B1C38B1009F3570 /* vfetchanalyzer.cpp */; };
+		237253262B1C38B1009F3570 /* clusterizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253122B1C38B1009F3570 /* clusterizer.cpp */; };
+		237253272B1C38B1009F3570 /* simplifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253132B1C38B1009F3570 /* simplifier.cpp */; };
 		2384C72929D2B80300380DD3 /* descriptorCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2384C72729D2B80300380DD3 /* descriptorCache.cpp */; };
 		2384C72A29D2B80300380DD3 /* descriptorCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2384C72829D2B80300380DD3 /* descriptorCache.hpp */; };
 		2384C72E29D5815700380DD3 /* descriptorAlloc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2384C72C29D5815700380DD3 /* descriptorAlloc.cpp */; };
@@ -230,6 +250,28 @@
 		23637CCE29C306DD00D4D7A6 /* shader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = shader.hpp; sourceTree = "<group>"; };
 		23637CD129C9A66E00D4D7A6 /* commands.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = commands.cpp; sourceTree = "<group>"; };
 		23637CD229C9A66E00D4D7A6 /* commands.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = commands.hpp; sourceTree = "<group>"; };
+		237252FC2B1C38B1009F3570 /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
+		237252FD2B1C38B1009F3570 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		237252FF2B1C38B1009F3570 /* sdefl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdefl.h; sourceTree = "<group>"; };
+		237253002B1C38B1009F3570 /* cgltf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cgltf.h; sourceTree = "<group>"; };
+		237253012B1C38B1009F3570 /* fast_obj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fast_obj.h; sourceTree = "<group>"; };
+		237253032B1C38B1009F3570 /* vertexfilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vertexfilter.cpp; sourceTree = "<group>"; };
+		237253042B1C38B1009F3570 /* vertexcodec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vertexcodec.cpp; sourceTree = "<group>"; };
+		237253052B1C38B1009F3570 /* overdrawanalyzer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = overdrawanalyzer.cpp; sourceTree = "<group>"; };
+		237253062B1C38B1009F3570 /* vcacheoptimizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vcacheoptimizer.cpp; sourceTree = "<group>"; };
+		237253072B1C38B1009F3570 /* overdrawoptimizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = overdrawoptimizer.cpp; sourceTree = "<group>"; };
+		237253082B1C38B1009F3570 /* meshoptimizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = meshoptimizer.h; sourceTree = "<group>"; };
+		237253092B1C38B1009F3570 /* stripifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stripifier.cpp; sourceTree = "<group>"; };
+		2372530A2B1C38B1009F3570 /* vcacheanalyzer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vcacheanalyzer.cpp; sourceTree = "<group>"; };
+		2372530B2B1C38B1009F3570 /* quantization.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = quantization.cpp; sourceTree = "<group>"; };
+		2372530C2B1C38B1009F3570 /* indexcodec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = indexcodec.cpp; sourceTree = "<group>"; };
+		2372530D2B1C38B1009F3570 /* vfetchoptimizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vfetchoptimizer.cpp; sourceTree = "<group>"; };
+		2372530E2B1C38B1009F3570 /* allocator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = allocator.cpp; sourceTree = "<group>"; };
+		2372530F2B1C38B1009F3570 /* spatialorder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = spatialorder.cpp; sourceTree = "<group>"; };
+		237253102B1C38B1009F3570 /* indexgenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = indexgenerator.cpp; sourceTree = "<group>"; };
+		237253112B1C38B1009F3570 /* vfetchanalyzer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vfetchanalyzer.cpp; sourceTree = "<group>"; };
+		237253122B1C38B1009F3570 /* clusterizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = clusterizer.cpp; sourceTree = "<group>"; };
+		237253132B1C38B1009F3570 /* simplifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = simplifier.cpp; sourceTree = "<group>"; };
 		2384C72729D2B80300380DD3 /* descriptorCache.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = descriptorCache.cpp; sourceTree = "<group>"; };
 		2384C72829D2B80300380DD3 /* descriptorCache.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = descriptorCache.hpp; sourceTree = "<group>"; };
 		2384C72C29D5815700380DD3 /* descriptorAlloc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = descriptorAlloc.cpp; sourceTree = "<group>"; };
@@ -598,6 +640,51 @@
 			path = stb;
 			sourceTree = "<group>";
 		};
+		237252FB2B1C38B1009F3570 /* meshoptimizer */ = {
+			isa = PBXGroup;
+			children = (
+				237252FC2B1C38B1009F3570 /* LICENSE.md */,
+				237252FD2B1C38B1009F3570 /* .gitignore */,
+				237252FE2B1C38B1009F3570 /* extern */,
+				237253022B1C38B1009F3570 /* src */,
+			);
+			path = meshoptimizer;
+			sourceTree = "<group>";
+		};
+		237252FE2B1C38B1009F3570 /* extern */ = {
+			isa = PBXGroup;
+			children = (
+				237252FF2B1C38B1009F3570 /* sdefl.h */,
+				237253002B1C38B1009F3570 /* cgltf.h */,
+				237253012B1C38B1009F3570 /* fast_obj.h */,
+			);
+			path = extern;
+			sourceTree = "<group>";
+		};
+		237253022B1C38B1009F3570 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				237253032B1C38B1009F3570 /* vertexfilter.cpp */,
+				237253042B1C38B1009F3570 /* vertexcodec.cpp */,
+				237253052B1C38B1009F3570 /* overdrawanalyzer.cpp */,
+				237253062B1C38B1009F3570 /* vcacheoptimizer.cpp */,
+				237253072B1C38B1009F3570 /* overdrawoptimizer.cpp */,
+				237253082B1C38B1009F3570 /* meshoptimizer.h */,
+				237253092B1C38B1009F3570 /* stripifier.cpp */,
+				2372530A2B1C38B1009F3570 /* vcacheanalyzer.cpp */,
+				2372530B2B1C38B1009F3570 /* quantization.cpp */,
+				2372530C2B1C38B1009F3570 /* indexcodec.cpp */,
+				2372530D2B1C38B1009F3570 /* vfetchoptimizer.cpp */,
+				2372530E2B1C38B1009F3570 /* allocator.cpp */,
+				2372530F2B1C38B1009F3570 /* spatialorder.cpp */,
+				237253102B1C38B1009F3570 /* indexgenerator.cpp */,
+				237253112B1C38B1009F3570 /* vfetchanalyzer.cpp */,
+				237253122B1C38B1009F3570 /* clusterizer.cpp */,
+				237253132B1C38B1009F3570 /* simplifier.cpp */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
 		2384C72B29D580D100380DD3 /* descriptor */ = {
 			isa = PBXGroup;
 			children = (
@@ -687,6 +774,7 @@
 		2388123E244F8F5300E8444E /* thirdparty */ = {
 			isa = PBXGroup;
 			children = (
+				237252FB2B1C38B1009F3570 /* meshoptimizer */,
 				23637CC629BEA9FD00D4D7A6 /* stb */,
 				23637CBA29BC5D5A00D4D7A6 /* SPIRV-Reflect */,
 				23881549245040DF00E8444E /* glm */,
@@ -1021,10 +1109,13 @@
 				2388169F245040DF00E8444E /* reciprocal.hpp in Headers */,
 				23881659245040DF00E8444E /* mat3x3.hpp in Headers */,
 				238816C3245040DF00E8444E /* wrap.hpp in Headers */,
+				237253152B1C38B1009F3570 /* cgltf.h in Headers */,
 				2388167F245040DF00E8444E /* type_mat4x4.hpp in Headers */,
 				238816A9245040DF00E8444E /* spline.hpp in Headers */,
 				23881672245040DF00E8444E /* _swizzle.hpp in Headers */,
 				2388169B245040DF00E8444E /* constants.hpp in Headers */,
+				237253142B1C38B1009F3570 /* sdefl.h in Headers */,
+				2372531C2B1C38B1009F3570 /* meshoptimizer.h in Headers */,
 				238816A0245040DF00E8444E /* common.hpp in Headers */,
 				238816B7245040DF00E8444E /* associated_min_max.hpp in Headers */,
 				23881696245040DF00E8444E /* bitfield.hpp in Headers */,
@@ -1099,6 +1190,7 @@
 				238816C1245040DF00E8444E /* multiple.hpp in Headers */,
 				23881658245040DF00E8444E /* packing.hpp in Headers */,
 				2384C72A29D2B80300380DD3 /* descriptorCache.hpp in Headers */,
+				237253162B1C38B1009F3570 /* fast_obj.h in Headers */,
 				23881664245040DF00E8444E /* func_common.hpp in Headers */,
 				2388165D245040DF00E8444E /* glm.hpp in Headers */,
 				238816A2245040DF00E8444E /* simd_vec4.hpp in Headers */,
@@ -1326,19 +1418,35 @@
 				23637CCF29C306DD00D4D7A6 /* shader.cpp in Sources */,
 				23637CBF29BC5DE100D4D7A6 /* spirv_reflect.c in Sources */,
 				238816DB245041FC00E8444E /* marlin.cpp in Sources */,
+				2372531F2B1C38B1009F3570 /* quantization.cpp in Sources */,
 				23637CB729A8C26E00D4D7A6 /* commandBuffer.cpp in Sources */,
 				2388167A245040DF00E8444E /* glm.cpp in Sources */,
+				237253242B1C38B1009F3570 /* indexgenerator.cpp in Sources */,
 				238816E62450472B00E8444E /* instance.cpp in Sources */,
 				23ED677B290FD29E0039B92A /* device.cpp in Sources */,
 				23ED6783292D943A0039B92A /* swapChain.cpp in Sources */,
+				2372531D2B1C38B1009F3570 /* stripifier.cpp in Sources */,
+				2372531A2B1C38B1009F3570 /* vcacheoptimizer.cpp in Sources */,
+				237253222B1C38B1009F3570 /* allocator.cpp in Sources */,
+				237253232B1C38B1009F3570 /* spatialorder.cpp in Sources */,
+				237253202B1C38B1009F3570 /* indexcodec.cpp in Sources */,
 				2384C72929D2B80300380DD3 /* descriptorCache.cpp in Sources */,
+				237253192B1C38B1009F3570 /* overdrawanalyzer.cpp in Sources */,
+				2372531B2B1C38B1009F3570 /* overdrawoptimizer.cpp in Sources */,
+				237253252B1C38B1009F3570 /* vfetchanalyzer.cpp in Sources */,
 				23637CC029BC5DE100D4D7A6 /* spirv_reflect.cpp in Sources */,
 				2384C72E29D5815700380DD3 /* descriptorAlloc.cpp in Sources */,
 				23881676245040DF00E8444E /* dummy.cpp in Sources */,
 				23637CD329C9A66E00D4D7A6 /* commands.cpp in Sources */,
+				237253172B1C38B1009F3570 /* vertexfilter.cpp in Sources */,
 				23ED677729069D4F0039B92A /* surface.cpp in Sources */,
+				2372531E2B1C38B1009F3570 /* vcacheanalyzer.cpp in Sources */,
+				237253272B1C38B1009F3570 /* simplifier.cpp in Sources */,
 				23637CB329A4B50700D4D7A6 /* buffer.cpp in Sources */,
+				237253182B1C38B1009F3570 /* vertexcodec.cpp in Sources */,
+				237253262B1C38B1009F3570 /* clusterizer.cpp in Sources */,
 				23637CCB29C1BEFC00D4D7A6 /* pipeline.cpp in Sources */,
+				237253212B1C38B1009F3570 /* vfetchoptimizer.cpp in Sources */,
 				23ED677328FFE49B0039B92A /* physicalDevice.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
