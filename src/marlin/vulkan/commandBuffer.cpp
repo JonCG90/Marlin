@@ -31,10 +31,25 @@ CommandBuffer::CommandBuffer( VkCommandBuffer i_commandBuffer )
 : VkObjectT< VkCommandBuffer >( i_commandBuffer )
 {
 }
+void CommandBuffer::addCommand( CommandPtr i_command )
+{
+    m_commands.emplace_back( std::move( i_command ) );
+}
 
 void CommandBuffer::reset()
 {
     vkResetCommandBuffer( m_object, 0 );
+    m_commands.clear();
+}
+
+void CommandBuffer::record( VkCommandBufferUsageFlags i_flags )
+{
+    CommandBufferRecordPtr record = scopedRecord( i_flags );
+    
+    for ( CommandPtr &command : m_commands )
+    {
+        command->record( getObject() );
+    }
 }
 
 CommandBufferRecordPtr CommandBuffer::scopedRecord( VkCommandBufferUsageFlags i_flags )

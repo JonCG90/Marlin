@@ -23,6 +23,7 @@ using BufferTPtr = std::shared_ptr< BufferT< T > >;
 
 class Command;
 using CommandPtr = std::unique_ptr< Command >;
+using CommandPtrs = std::vector< CommandPtr >;
 
 class CommandBuffer;
 using CommandBufferPtr = std::shared_ptr< CommandBuffer >;

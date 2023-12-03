@@ -9,6 +9,7 @@
 #ifndef MARLIN_COMMANDBUFFER_HPP
 #define MARLIN_COMMANDBUFFER_HPP
 
+#include <marlin/vulkan/commands.hpp>
 #include <marlin/vulkan/defs.hpp>
 #include <marlin/vulkan/vkObject.hpp>
 
@@ -33,8 +34,14 @@ class CommandBuffer : public VkObjectT< VkCommandBuffer >
 public:
     
     explicit CommandBuffer( VkCommandBuffer i_commandBuffer );
+    void addCommand( CommandPtr i_command );
+    void record( VkCommandBufferUsageFlags i_flags );
     void reset();
     CommandBufferRecordPtr scopedRecord( VkCommandBufferUsageFlags i_flags );
+    
+private:
+    
+    CommandPtrs m_commands;
 };
 
 } // namespace marlin

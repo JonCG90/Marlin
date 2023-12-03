@@ -22,20 +22,21 @@ class Command
 public:
         
     Command() = delete;
-    Command( std::function< void ( CommandBufferPtr ) > i_recordFunc );
+    Command( std::function< void ( VkCommandBuffer ) > i_recordFunc );
 
     virtual ~Command() = default;
     
-    void record( CommandBufferPtr i_commandBuffer );
+    void record( VkCommandBuffer i_commandBuffer );
 private:
     
-    std::function< void ( CommandBufferPtr ) > m_recordFunc;
+    std::function< void ( VkCommandBuffer ) > m_recordFunc;
 };
 
 class CommandFactory
 {
 public:
     
+    static CommandPtr commandFunction( std::function< void ( VkCommandBuffer ) > i_func );
     static CommandPtr beginRenderPass( VkRenderPass i_renderPass, VkFramebuffer i_frameBuffer, const VkExtent2D &i_extent );
     static CommandPtr endRenderPass();
     static CommandPtr bindPipeline( GraphicsPipelinePtr i_pipeline );

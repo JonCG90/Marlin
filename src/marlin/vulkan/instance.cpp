@@ -946,28 +946,28 @@ void MlnInstance::recordCommandBuffer( CommandBufferPtr commandBuffer, uint32_t 
     CommandPtr scissor = CommandFactory::setScissor( Vec2i( 0 ), Vec2u( extent.width, extent.height ) );
     CommandPtr endPass = CommandFactory::endRenderPass();
     
-    CommandBufferRecordPtr scopedRecord = commandBuffer->scopedRecord( 0 );
-    
-    VkCommandBuffer vkCommandBuffer = commandBuffer->getObject();
-    beginPass->record( commandBuffer );
-    {
-        
-        bind->record( commandBuffer );
-        viewport->record( commandBuffer );
-        scissor->record( commandBuffer );
+    auto func = [ this ]( VkCommandBuffer i_commandBuffer ) {
         
         VkBuffer vertexBuffers[] = { m_vertexBuffer->getObject() };
         VkDeviceSize offsets[] = { 0 };
-        vkCmdBindVertexBuffers( vkCommandBuffer, 0, 1, vertexBuffers, offsets );
-        vkCmdBindIndexBuffer( vkCommandBuffer, m_indexBuffer->getObject(), 0, VK_INDEX_TYPE_UINT32 );
+        vkCmdBindVertexBuffers( i_commandBuffer, 0, 1, vertexBuffers, offsets );
+        vkCmdBindIndexBuffer( i_commandBuffer, m_indexBuffer->getObject(), 0, VK_INDEX_TYPE_UINT32 );
 
-        vkCmdBindDescriptorSets( vkCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline->getLayout(), 0, 1, &m_descriptorSets[ 0 ], 0, nullptr );
+        vkCmdBindDescriptorSets( i_commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline->getLayout(), 0, 1, &m_descriptorSets[ 0 ], 0, nullptr );
         
         uint32_t count =  static_cast< uint32_t >( m_indexBuffer->getCount() );
-        vkCmdDrawIndexed( vkCommandBuffer, count, 1, 0, 0, 0 );
-    }
+        vkCmdDrawIndexed( i_commandBuffer, count, 1, 0, 0, 0 );
+    };
+    CommandPtr draw = CommandFactory::commandFunction( func );
     
-    endPass->record( commandBuffer );
+    commandBuffer->addCommand( std::move( beginPass ) );
+    commandBuffer->addCommand( std::move( bind ) );
+    commandBuffer->addCommand( std::move( viewport ) );
+    commandBuffer->addCommand( std::move( scissor ) );
+    commandBuffer->addCommand( std::move( draw ) );
+    commandBuffer->addCommand( std::move( endPass ) );
+
+    commandBuffer->record( 0 );
 }
 
 static void s_createSemaphore( const VkDevice &i_device, VkSemaphore &io_semaphor )

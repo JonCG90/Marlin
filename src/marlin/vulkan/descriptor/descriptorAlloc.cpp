@@ -99,6 +99,8 @@ void DescriptorAlloc::destroy()
     {
         vkDestroyDescriptorPool( m_device->getObject(), pool, nullptr );
     }
+    
+    m_pools.clear();
 }
 VkDescriptorPool DescriptorAlloc::getCurrentPool()
 {

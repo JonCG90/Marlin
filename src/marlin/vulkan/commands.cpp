@@ -15,19 +15,24 @@
 namespace marlin
 {
 
-Command::Command( std::function< void ( CommandBufferPtr ) > i_recordFunc )
+Command::Command( std::function< void ( VkCommandBuffer ) > i_recordFunc )
 : m_recordFunc( i_recordFunc )
 {
 }
 
-void Command::record( CommandBufferPtr i_commandBuffer )
+void Command::record( VkCommandBuffer i_commandBuffer )
 {
     m_recordFunc( i_commandBuffer );
 }
 
+CommandPtr CommandFactory::commandFunction( std::function< void ( VkCommandBuffer ) > i_func )
+{
+    return std::make_unique< Command >( i_func );
+}
+
 CommandPtr CommandFactory::beginRenderPass( VkRenderPass i_renderPass, VkFramebuffer i_frameBuffer, const VkExtent2D &i_extent )
 {
-    auto func = [ i_renderPass, i_frameBuffer, i_extent ]( CommandBufferPtr i_commandBuffer ) {
+    auto func = [ i_renderPass, i_frameBuffer, i_extent ]( VkCommandBuffer i_commandBuffer ) {
         
         VkClearValue clearColor = { { { 0.0f, 0.0f, 0.0f, 1.0f } } };
         
@@ -41,7 +46,7 @@ CommandPtr CommandFactory::beginRenderPass( VkRenderPass i_renderPass, VkFramebu
             .pClearValues = &clearColor,
         };
         
-        vkCmdBeginRenderPass( i_commandBuffer->getObject(), &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE );
+        vkCmdBeginRenderPass( i_commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE );
     };
     
     return std::make_unique< Command >( func );
@@ -49,8 +54,8 @@ CommandPtr CommandFactory::beginRenderPass( VkRenderPass i_renderPass, VkFramebu
 
 CommandPtr CommandFactory::endRenderPass()
 {
-    auto func = []( CommandBufferPtr i_commandBuffer ) {
-        vkCmdEndRenderPass( i_commandBuffer->getObject() );
+    auto func = []( VkCommandBuffer i_commandBuffer ) {
+        vkCmdEndRenderPass( i_commandBuffer );
     };
     
     return std::make_unique< Command >( func );
@@ -58,8 +63,8 @@ CommandPtr CommandFactory::endRenderPass()
 
 CommandPtr CommandFactory::bindPipeline( GraphicsPipelinePtr i_pipeline )
 {
-    auto func = [ i_pipeline ]( CommandBufferPtr i_commandBuffer ) {
-        vkCmdBindPipeline( i_commandBuffer->getObject(), VK_PIPELINE_BIND_POINT_GRAPHICS, i_pipeline->getObject() );
+    auto func = [ i_pipeline ]( VkCommandBuffer i_commandBuffer ) {
+        vkCmdBindPipeline( i_commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, i_pipeline->getObject() );
     };
     
     return std::make_unique< Command >( func );
@@ -67,7 +72,7 @@ CommandPtr CommandFactory::bindPipeline( GraphicsPipelinePtr i_pipeline )
 
 CommandPtr CommandFactory::setViewport( const Vec2f i_position, const Vec2f i_size )
 {
-    auto func = [ i_position, i_size ]( CommandBufferPtr i_commandBuffer ) {
+    auto func = [ i_position, i_size ]( VkCommandBuffer i_commandBuffer ) {
         
         VkViewport viewport {
             .x = i_position.x,
@@ -77,7 +82,7 @@ CommandPtr CommandFactory::setViewport( const Vec2f i_position, const Vec2f i_si
             .minDepth = 0.0f,
             .maxDepth = 1.0f,
         };
-        vkCmdSetViewport( i_commandBuffer->getObject(), 0, 1, &viewport );
+        vkCmdSetViewport( i_commandBuffer, 0, 1, &viewport );
     };
     
     return std::make_unique< Command >( func );
@@ -85,13 +90,13 @@ CommandPtr CommandFactory::setViewport( const Vec2f i_position, const Vec2f i_si
 
 CommandPtr CommandFactory::setScissor( const Vec2i i_offset, const Vec2u i_extent )
 {
-    auto func = [ i_offset, i_extent ]( CommandBufferPtr i_commandBuffer ) {
+    auto func = [ i_offset, i_extent ]( VkCommandBuffer i_commandBuffer ) {
         
         VkRect2D scissor {
             .offset = { i_offset.x, i_offset.y },
             .extent = { i_extent.x, i_extent.y },
         };
-        vkCmdSetScissor( i_commandBuffer->getObject(), 0, 1, &scissor );
+        vkCmdSetScissor( i_commandBuffer, 0, 1, &scissor );
     };
     
     return std::make_unique< Command >( func );
