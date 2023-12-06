@@ -561,7 +561,7 @@ void MlnInstance::deinit()
     vkDestroyInstance( m_vkInstance, nullptr );
 }
 
-void MlnInstance::drawFrame()
+void MlnInstance::drawFrame( const Scene &i_scene )
 {
     vkWaitForFences( m_device->getObject(), 1, &m_inFlightFences[ m_currentFrame ], VK_TRUE, UINT64_MAX );
     vkResetFences( m_device->getObject(), 1, &m_inFlightFences[ m_currentFrame ] );

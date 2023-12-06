@@ -43,6 +43,12 @@
 		237253252B1C38B1009F3570 /* vfetchanalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253112B1C38B1009F3570 /* vfetchanalyzer.cpp */; };
 		237253262B1C38B1009F3570 /* clusterizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253122B1C38B1009F3570 /* clusterizer.cpp */; };
 		237253272B1C38B1009F3570 /* simplifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253132B1C38B1009F3570 /* simplifier.cpp */; };
+		2372532B2B1C86DC009F3570 /* mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253292B1C86DC009F3570 /* mesh.cpp */; };
+		2372532C2B1C86DC009F3570 /* mesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2372532A2B1C86DC009F3570 /* mesh.hpp */; };
+		2372532F2B1EEFBD009F3570 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2372532D2B1EEFBD009F3570 /* scene.cpp */; };
+		237253302B1EEFBD009F3570 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2372532D2B1EEFBD009F3570 /* scene.cpp */; };
+		237253312B1EEFBD009F3570 /* scene.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2372532E2B1EEFBD009F3570 /* scene.hpp */; };
+		237253322B1EEFF7009F3570 /* mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253292B1C86DC009F3570 /* mesh.cpp */; };
 		2384C72929D2B80300380DD3 /* descriptorCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2384C72729D2B80300380DD3 /* descriptorCache.cpp */; };
 		2384C72A29D2B80300380DD3 /* descriptorCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2384C72829D2B80300380DD3 /* descriptorCache.hpp */; };
 		2384C72E29D5815700380DD3 /* descriptorAlloc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2384C72C29D5815700380DD3 /* descriptorAlloc.cpp */; };
@@ -272,6 +278,10 @@
 		237253112B1C38B1009F3570 /* vfetchanalyzer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vfetchanalyzer.cpp; sourceTree = "<group>"; };
 		237253122B1C38B1009F3570 /* clusterizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = clusterizer.cpp; sourceTree = "<group>"; };
 		237253132B1C38B1009F3570 /* simplifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = simplifier.cpp; sourceTree = "<group>"; };
+		237253292B1C86DC009F3570 /* mesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mesh.cpp; sourceTree = "<group>"; };
+		2372532A2B1C86DC009F3570 /* mesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = mesh.hpp; sourceTree = "<group>"; };
+		2372532D2B1EEFBD009F3570 /* scene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = scene.cpp; sourceTree = "<group>"; };
+		2372532E2B1EEFBD009F3570 /* scene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = scene.hpp; sourceTree = "<group>"; };
 		2384C72729D2B80300380DD3 /* descriptorCache.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = descriptorCache.cpp; sourceTree = "<group>"; };
 		2384C72829D2B80300380DD3 /* descriptorCache.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = descriptorCache.hpp; sourceTree = "<group>"; };
 		2384C72C29D5815700380DD3 /* descriptorAlloc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = descriptorAlloc.cpp; sourceTree = "<group>"; };
@@ -685,6 +695,17 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		237253282B1C853E009F3570 /* scene */ = {
+			isa = PBXGroup;
+			children = (
+				237253292B1C86DC009F3570 /* mesh.cpp */,
+				2372532A2B1C86DC009F3570 /* mesh.hpp */,
+				2372532D2B1EEFBD009F3570 /* scene.cpp */,
+				2372532E2B1EEFBD009F3570 /* scene.hpp */,
+			);
+			path = scene;
+			sourceTree = "<group>";
+		};
 		2384C72B29D580D100380DD3 /* descriptor */ = {
 			isa = PBXGroup;
 			children = (
@@ -762,6 +783,7 @@
 		2388123B244F8F5300E8444E /* marlin */ = {
 			isa = PBXGroup;
 			children = (
+				237253282B1C853E009F3570 /* scene */,
 				23258F0E2488FF1F0005AF13 /* shaders */,
 				238816E32450470800E8444E /* vulkan */,
 				2388123C244F8F5300E8444E /* marlin.hpp */,
@@ -1214,8 +1236,10 @@
 				23881653245040DF00E8444E /* vec3.hpp in Headers */,
 				23881678245040DF00E8444E /* setup.hpp in Headers */,
 				238816B4245040DF00E8444E /* number_precision.hpp in Headers */,
+				2372532C2B1C86DC009F3570 /* mesh.hpp in Headers */,
 				23881693245040DF00E8444E /* round.hpp in Headers */,
 				238816AB245040DF00E8444E /* dual_quaternion.hpp in Headers */,
+				237253312B1EEFBD009F3570 /* scene.hpp in Headers */,
 				238816A4245040DF00E8444E /* rotate_vector.hpp in Headers */,
 				23881673245040DF00E8444E /* precision.hpp in Headers */,
 				238816A6245040DF00E8444E /* string_cast.hpp in Headers */,
@@ -1419,11 +1443,13 @@
 				23637CBF29BC5DE100D4D7A6 /* spirv_reflect.c in Sources */,
 				238816DB245041FC00E8444E /* marlin.cpp in Sources */,
 				2372531F2B1C38B1009F3570 /* quantization.cpp in Sources */,
+				2372532B2B1C86DC009F3570 /* mesh.cpp in Sources */,
 				23637CB729A8C26E00D4D7A6 /* commandBuffer.cpp in Sources */,
 				2388167A245040DF00E8444E /* glm.cpp in Sources */,
 				237253242B1C38B1009F3570 /* indexgenerator.cpp in Sources */,
 				238816E62450472B00E8444E /* instance.cpp in Sources */,
 				23ED677B290FD29E0039B92A /* device.cpp in Sources */,
+				2372532F2B1EEFBD009F3570 /* scene.cpp in Sources */,
 				23ED6783292D943A0039B92A /* swapChain.cpp in Sources */,
 				2372531D2B1C38B1009F3570 /* stripifier.cpp in Sources */,
 				2372531A2B1C38B1009F3570 /* vcacheoptimizer.cpp in Sources */,
@@ -1455,6 +1481,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				237253322B1EEFF7009F3570 /* mesh.cpp in Sources */,
+				237253302B1EEFBD009F3570 /* scene.cpp in Sources */,
 				23881239244C62BC00E8444E /* MarlinView.mm in Sources */,
 				23881202244C063300E8444E /* main.m in Sources */,
 				238811FA244C062F00E8444E /* AppDelegate.m in Sources */,
@@ -1665,7 +1693,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/src/marlin";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/src",
+					"$(SRCROOT)/src/thirdparty",
+				);
 				INFOPLIST_FILE = MarlinViewer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1691,7 +1722,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/src/marlin";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/src",
+					"$(SRCROOT)/src/thirdparty",
+				);
 				INFOPLIST_FILE = MarlinViewer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

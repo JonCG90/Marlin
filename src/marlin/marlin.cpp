@@ -8,6 +8,7 @@
 
 #include "marlin.hpp"
 
+#include <marlin/scene/scene.hpp>
 #include <marlin/vulkan/instance.hpp>
 
 #include <vulkan/vulkan.h>
@@ -23,9 +24,9 @@ void init( void* i_layer )
     marlin::MlnInstance::getInstance().init( i_layer );
 }
 
-void render()
+void render( const Scene &i_scene )
 {
-    marlin::MlnInstance::getInstance().drawFrame();
+    marlin::MlnInstance::getInstance().drawFrame( i_scene );
 }
 
 void deinit()

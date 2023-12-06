@@ -9,12 +9,16 @@
 #ifndef MARLIN_HPP
 #define MARLIN_HPP
 
+#include <marlin/defs.hpp>
+
 namespace marlin
 {
 
+class Scene;
+
 void init( void* i_layer );
 
-void render();
+void render( const Scene &i_scene );
 
 void deinit();
 

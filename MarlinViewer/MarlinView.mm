@@ -8,9 +8,13 @@
 
 #import "MarlinView.h"
 
-#include <marlin.hpp>
+#include <marlin/marlin.hpp>
+#include <marlin/scene/mesh.hpp>
+#include <marlin/scene/scene.hpp>
 
 #import <QuartzCore/CAMetalLayer.h>
+
+#include <vector>
 
 @interface MarlinViewController ()
 
@@ -27,8 +31,44 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
                                     CVOptionFlags flagsIn,
                                     CVOptionFlags* flagsOut,
                                     void* target) {
+        
+    marlin::Scene scene;
+    static bool first = true;
+    if ( first )
+    {
+
+        const std::vector<marlin::Vec3f> vertices = {
+            {-0.5f, -0.5f, 0.0},
+            { 0.5f, -0.5f, 0.0f},
+            { 0.5f,  0.5f, 0.0f},
+            {-0.5f,  0.5f, 0.0f}
+        };
+
+        const std::vector<marlin::Vec3f> colors = {
+            {1.0f, 0.0f, 0.0f},
+            {0.0f, 1.0f, 0.0f},
+            {0.0f, 0.0f, 1.0f},
+            {1.0f, 1.0f, 1.0f}
+        };
+
+        const std::vector< uint32_t > indices = {
+            0, 1, 2, 2, 3, 0
+        };
+
+        marlin::Mesh mesh;
+        mesh.setVertices( vertices );
+        mesh.setColors( colors );
+        mesh.setIndices( indices );
+        
+        marlin::GeometryPtr geometry = marlin::Geometry::create();
+        geometry->setLOD( mesh, 0 );
+        
+        scene.addObject( geometry );
+        
+        first = false;
+    }
     
-    marlin::render();
+    marlin::render( scene );
     
     return kCVReturnSuccess;
 }

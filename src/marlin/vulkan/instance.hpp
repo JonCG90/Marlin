@@ -9,6 +9,7 @@
 #ifndef MARLIN_INSTANCE_HPP
 #define MARLIN_INSTANCE_HPP
 
+#include <marlin/scene/scene.hpp>
 #include <marlin/vulkan/../defs.hpp>
 #include <marlin/vulkan/defs.hpp>
 #include <marlin/vulkan/pipeline.hpp>
@@ -62,7 +63,7 @@ public:
     void init( void* i_layer );
     void deinit();
     
-    void drawFrame();
+    void drawFrame( const Scene &i_scene );
     void updateUniformBuffer(uint32_t currentImage);
 
     MlnInstance( MlnInstance const &i_instance ) = delete;
