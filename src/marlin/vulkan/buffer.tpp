@@ -66,7 +66,7 @@ void createBuffer( DevicePtr i_device,
     vkBindBufferMemory( i_device->getObject(), o_buffer, o_bufferMemory, 0 );
 }
 
-void copyBuffer( DevicePtr i_device, VkBuffer i_srcBuffer, VkBuffer i_dstBuffer, VkDeviceSize i_size )
+void copyBuffer( DevicePtr i_device, VkBuffer i_srcBuffer, VkBuffer i_dstBuffer, VkDeviceSize i_srcOffset, VkDeviceSize i_dstOffset, VkDeviceSize i_size )
 {
     CommandBufferPtr commandBuffer = i_device->getCommandBuffer( QueueTypeTransfer, 0 );
     commandBuffer->reset();
@@ -75,8 +75,8 @@ void copyBuffer( DevicePtr i_device, VkBuffer i_srcBuffer, VkBuffer i_dstBuffer,
         CommandBufferRecordPtr scopedRecord = commandBuffer->scopedRecord( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
                 
         VkBufferCopy copyRegion {
-            .srcOffset = 0, // Optional
-            .dstOffset = 0, // Optional
+            .srcOffset = i_srcOffset,
+            .dstOffset = i_dstOffset,
             .size = i_size
         };
 
@@ -116,6 +116,16 @@ BufferTPtr< T > BufferT< T >::create( DevicePtr i_device,
     return std::make_shared< BufferT< T > >( i_device, i_physicalDevice, i_usage, i_mode, data );
 }
 
+template < class T >
+BufferTPtr< T > BufferT< T >::create( DevicePtr i_device,
+                                      PhysicalDevicePtr i_physicalDevice,
+                                      VkBufferUsageFlagBits i_usage,
+                                      BufferMode i_mode,
+                                      const T* i_data,
+                                      size_t i_count )
+{
+    return std::make_shared< BufferT< T > >( i_device, i_physicalDevice, i_usage, i_mode, i_data, i_count );
+}
 
 template < class T >
 BufferT< T >::BufferT( DevicePtr i_device,
@@ -123,11 +133,23 @@ BufferT< T >::BufferT( DevicePtr i_device,
                        VkBufferUsageFlagBits i_usage,
                        BufferMode i_mode,
                        const std::vector< T > &i_data )
-: m_device( i_device )
-, m_mode( i_mode )
-, m_count( i_data.size() )
+: BufferT< T >( i_device, i_physicalDevice, i_usage, i_mode, i_data.data(), i_data.size() * sizeof( T ) )
 {
-    const VkDeviceSize size = sizeof( T ) * i_data.size();
+}
+
+template < class T >
+BufferT< T >::BufferT( DevicePtr i_device,
+                       PhysicalDevicePtr i_physicalDevice,
+                       VkBufferUsageFlagBits i_usage,
+                       BufferMode i_mode,
+                       const T* i_data,
+                       size_t i_count )
+: m_device( i_device )
+, m_physicalDevice( i_physicalDevice )
+, m_mode( i_mode )
+, m_count( i_count )
+{
+    const VkDeviceSize size = i_count * sizeof( T );
     const VkPhysicalDeviceMemoryProperties deviceMemoryProperties = i_physicalDevice->getMemoryProperties();
 
     switch ( i_mode ) {
@@ -135,9 +157,9 @@ BufferT< T >::BufferT( DevicePtr i_device,
             {
                 createBuffer( i_device, size, deviceMemoryProperties, i_usage, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_object, m_memory );
              
-                void* data;
-                vkMapMemory( i_device->getObject(), m_memory, 0, size, 0, &data );
-                memcpy( data, i_data.data(), static_cast< size_t >( size ) );
+                void* dest;
+                vkMapMemory( i_device->getObject(), m_memory, 0, size, 0, &dest );
+                memcpy( dest, i_data, static_cast< size_t >( size ) );
                 vkUnmapMemory( i_device->getObject(), m_memory );
             }
             break;
@@ -148,14 +170,14 @@ BufferT< T >::BufferT( DevicePtr i_device,
 
                 createBuffer( i_device, size, deviceMemoryProperties, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory );
 
-                void* data;
-                vkMapMemory( i_device->getObject(), stagingBufferMemory, 0, size, 0, &data );
-                memcpy( data, i_data.data(), static_cast< size_t >( size ) );
+                void* dest;
+                vkMapMemory( i_device->getObject(), stagingBufferMemory, 0, size, 0, &dest );
+                memcpy( dest, i_data, static_cast< size_t >( size ) );
                 vkUnmapMemory( i_device->getObject(), stagingBufferMemory );
 
                 createBuffer( i_device, size, deviceMemoryProperties, VK_BUFFER_USAGE_TRANSFER_DST_BIT | i_usage, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_object, m_memory );
 
-                copyBuffer( m_device, stagingBuffer, m_object, size );
+                copyBuffer( m_device, stagingBuffer, m_object, 0, 0, size );
 
                 vkDestroyBuffer( i_device->getObject(), stagingBuffer, nullptr );
                 vkFreeMemory( i_device->getObject(), stagingBufferMemory, nullptr );
@@ -205,6 +227,50 @@ void BufferT< T >::unmapMemory()
     }
     
     vkUnmapMemory( m_device->getObject(), m_memory );
+}
+
+template < class T >
+void BufferT< T >::updateData( const T* i_data, size_t i_offset, size_t i_size )
+{
+    if ( i_offset + i_size > m_size )
+    {
+        throw std::runtime_error( "Trying to update out of bounds memory." );
+    }
+    
+    VkDevice device = m_device->getObject();
+    
+    switch ( m_mode ) {
+        case BufferMode::Local:
+            {
+                void *dest;
+                vkMapMemory( device, m_memory, i_offset, i_size, 0, &dest );
+                memcpy( dest, i_data, static_cast< size_t >( i_size ) );
+                vkUnmapMemory( device, m_memory );
+            }
+            break;
+        case BufferMode::Device:
+            {
+                VkBuffer stagingBuffer;
+                VkDeviceMemory stagingBufferMemory;
+
+                const VkPhysicalDeviceMemoryProperties deviceMemoryProperties = m_physicalDevice->getMemoryProperties();
+                createBuffer( m_device, i_size, deviceMemoryProperties, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory );
+
+                void* dest;
+                vkMapMemory( device, stagingBufferMemory, 0, i_size, 0, &dest );
+                memcpy( dest, i_data, static_cast< size_t >( i_size ) );
+                vkUnmapMemory( device, stagingBufferMemory );
+
+                copyBuffer( m_device, stagingBuffer, m_object, 0, i_offset, i_size );
+
+                vkDestroyBuffer( device, stagingBuffer, nullptr );
+                vkFreeMemory( device, stagingBufferMemory, nullptr );
+            }
+            break;
+            
+        default:
+            break;
+    }
 }
 
 template < class T >

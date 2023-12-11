@@ -82,7 +82,7 @@ private:
     
     DescriptorCachePtr m_descriptorCache;
 
-    BufferTPtr< Vertex > m_vertexBuffer;
+    BufferTPtr< std::byte > m_vertexBuffer;
     BufferTPtr< uint32_t > m_indexBuffer;
     
     std::vector< BufferTPtr< UniformBufferObject > > m_uniformBuffers;

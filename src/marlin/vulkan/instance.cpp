@@ -563,6 +563,8 @@ void MlnInstance::deinit()
 
 void MlnInstance::drawFrame( const Scene &i_scene )
 {
+    
+    
     vkWaitForFences( m_device->getObject(), 1, &m_inFlightFences[ m_currentFrame ], VK_TRUE, UINT64_MAX );
     vkResetFences( m_device->getObject(), 1, &m_inFlightFences[ m_currentFrame ] );
 
@@ -842,14 +844,15 @@ uint32_t findMemoryType2( PhysicalDevicePtr i_device, uint32_t i_typeFilter, VkM
 
 void MlnInstance::createVertexBuffer()
 {
-    const std::vector<Vertex> vertices = {
+    std::vector<Vertex> vertices = {
         {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
         {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
         {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
         {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
     };
     
-    m_vertexBuffer = BufferT< Vertex >::create( m_device, m_physicalDevice, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, BufferMode::Device, vertices );
+    std::byte* bytes = reinterpret_cast< std::byte* >( vertices.data() );
+    m_vertexBuffer = BufferT< std::byte >::create( m_device, m_physicalDevice, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, BufferMode::Local, bytes, vertices.size() * sizeof( Vertex ) );
 }
 
 void MlnInstance::createIndexBuffer()
