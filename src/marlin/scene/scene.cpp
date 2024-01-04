@@ -15,7 +15,7 @@ namespace marlin
 
 SceneObject::SceneObject()
 {
-    static uint64_t idCounter = 0;
+    static std::atomic_uint64_t idCounter = 0;
     m_id = idCounter++;
 }
 

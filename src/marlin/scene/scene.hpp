@@ -57,6 +57,7 @@ public:
     
 private:
     
+    // LOD array of mesh and dirty states
     std::array< std::pair< Mesh, bool >, s_maxLODs > m_lods;
 };
 

@@ -100,6 +100,7 @@ void getExtensions( bool i_enableValidation, std::vector< const char* > &o_exten
     std::vector< const char* > extensions = {
         VK_EXT_METAL_SURFACE_EXTENSION_NAME,
         VK_KHR_SURFACE_EXTENSION_NAME,
+        VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME,
     };
 
     if ( i_enableValidation )
@@ -166,11 +167,12 @@ Instance Instance::create( bool i_enableValidation )
     appInfo.applicationVersion = VK_MAKE_VERSION( 1, 0, 0 );
     appInfo.pEngineName = "No Engine";
     appInfo.engineVersion = VK_MAKE_VERSION( 1, 0, 0 );
-    appInfo.apiVersion = VK_API_VERSION_1_0;
+    appInfo.apiVersion = VK_MAKE_VERSION( 1, 3, 0 );
     
     VkInstanceCreateInfo createInstanceInfo {};
     createInstanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
     createInstanceInfo.pApplicationInfo = &appInfo;
+    createInstanceInfo.flags = VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
     
     std::vector< const char* > extensions;
     getExtensions( i_enableValidation, extensions );
@@ -281,6 +283,10 @@ static int getDeviceScore( const PhysicalDevicePtr &i_device )
     if ( deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU )
     {
         score += 100;
+    }
+    else if ( deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU )
+    {
+        score += 50;
     }
     
     return score;
@@ -563,8 +569,6 @@ void MlnInstance::deinit()
 
 void MlnInstance::drawFrame( const Scene &i_scene )
 {
-    
-    
     vkWaitForFences( m_device->getObject(), 1, &m_inFlightFences[ m_currentFrame ], VK_TRUE, UINT64_MAX );
     vkResetFences( m_device->getObject(), 1, &m_inFlightFences[ m_currentFrame ] );
 

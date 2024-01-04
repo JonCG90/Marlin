@@ -62,11 +62,11 @@ VkPipelineLayout Pipeline::getLayout() const
 GraphicsPipelinePtr GraphicsPipeline::create( DevicePtr i_device, VkRenderPass i_renderPass, const VkExtent2D &i_extent, DescriptorCachePtr &io_descriptorCache )
 {
     
-    const std::vector< VkDescriptorSetLayout > &vertLayouts = io_descriptorCache->getLayouts( "/Users/jongraham/Projects/Marlin/src/marlin/shaders/vert.spv" );
-        const std::vector< VkDescriptorSetLayout > &fragLayouts = io_descriptorCache->getLayouts( "/Users/jongraham/Projects/Marlin/src/marlin/shaders/frag.spv" );
+    const std::vector< VkDescriptorSetLayout > &vertLayouts = io_descriptorCache->getLayouts( "/Users/jonathangraham/Code/Marlin/src/marlin/shaders/vert.spv" );
+        const std::vector< VkDescriptorSetLayout > &fragLayouts = io_descriptorCache->getLayouts( "/Users/jonathangraham/Code/Marlin/src/marlin/shaders/frag.spv" );
     
-    ShaderStage vertStage( "/Users/jongraham/Projects/Marlin/src/marlin/shaders/vert.spv" );
-    ShaderStage fragStage( "/Users/jongraham/Projects/Marlin/src/marlin/shaders/frag.spv" );
+    ShaderStage vertStage( "/Users/jonathangraham/Code/Marlin/src/marlin/shaders/vert.spv" );
+    ShaderStage fragStage( "/Users/jonathangraham/Code/Marlin/src/marlin/shaders/frag.spv" );
 
     VkShaderModule vertShaderModule = createShaderModule( i_device, vertStage.getBytes() );
     VkShaderModule fragShaderModule = createShaderModule( i_device, fragStage.getBytes() );

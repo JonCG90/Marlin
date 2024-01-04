@@ -9,6 +9,6 @@
 // Configuration settings file format documentation can be found at:
 // https://help.apple.com/xcode/#/dev745c5c974
 
-VULKAN_PATH = /Users/jongraham/vulkan/1.2.135.0
+VULKAN_PATH = /Users/jonathangraham/VulkanSDK/1.3.268.1 
 VULKAN_SDK = $(VULKAN_PATH)/macOS
 MOLTENVK_PATH = $(VULKAN_PATH)/MoltenVK

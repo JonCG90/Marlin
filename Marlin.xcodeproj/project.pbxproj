@@ -1430,7 +1430,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/Users/jongraham/vulkan/1.2.135.0/macOS/bin/glslc $SRCROOT/src/marlin/shaders/shader.vert -o $SRCROOT/src/marlin/shaders/vert.spv\n/Users/jongraham/vulkan/1.2.135.0/macOS/bin/glslc $SRCROOT/src/marlin/shaders/shader.frag -o $SRCROOT/src/marlin/shaders/frag.spv\n";
+			shellScript = "$MOLTENVK_PATH/../macOS/bin/glslc $SRCROOT/src/marlin/shaders/shader.vert -o $SRCROOT/src/marlin/shaders/vert.spv\n$MOLTENVK_PATH/../macOS/bin/glslc $SRCROOT/src/marlin/shaders/shader.frag -o $SRCROOT/src/marlin/shaders/frag.spv\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1584,6 +1584,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
+				VULKAN_PATH = /Users/jonathangraham/VulkanSDK/1.3.268.1;
 			};
 			name = Debug;
 		};
@@ -1640,6 +1641,7 @@
 				MTL_FAST_MATH = YES;
 				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
+				VULKAN_PATH = /Users/jonathangraham/VulkanSDK/1.3.268.1;
 			};
 			name = Release;
 		};
@@ -1660,6 +1662,7 @@
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				VULKAN_PATH = /Users/jonathangraham/VulkanSDK/1.3.268.1;
 			};
 			name = Debug;
 		};
@@ -1680,6 +1683,7 @@
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				VULKAN_PATH = /Users/jonathangraham/VulkanSDK/1.3.268.1;
 			};
 			name = Release;
 		};
@@ -1709,6 +1713,7 @@
 				OTHER_LDFLAGS = "-lvulkan";
 				PRODUCT_BUNDLE_IDENTIFIER = Graham.MarlinViewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VULKAN_PATH = /Users/jonathangraham/VulkanSDK/1.3.268.1;
 			};
 			name = Debug;
 		};
@@ -1738,6 +1743,7 @@
 				OTHER_LDFLAGS = "-lvulkan";
 				PRODUCT_BUNDLE_IDENTIFIER = Graham.MarlinViewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VULKAN_PATH = /Users/jonathangraham/VulkanSDK/1.3.268.1;
 			};
 			name = Release;
 		};
@@ -1759,6 +1765,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Graham.MarlinViewerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MarlinViewer.app/Contents/MacOS/MarlinViewer";
+				VULKAN_PATH = /Users/jonathangraham/VulkanSDK/1.3.268.1;
 			};
 			name = Debug;
 		};
@@ -1780,6 +1787,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Graham.MarlinViewerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MarlinViewer.app/Contents/MacOS/MarlinViewer";
+				VULKAN_PATH = /Users/jonathangraham/VulkanSDK/1.3.268.1;
 			};
 			name = Release;
 		};
