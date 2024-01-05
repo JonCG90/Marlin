@@ -157,30 +157,36 @@ BufferT< T >::BufferT( DevicePtr i_device,
             {
                 createBuffer( i_device, size, deviceMemoryProperties, i_usage, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_object, m_memory );
              
-                void* dest;
-                vkMapMemory( i_device->getObject(), m_memory, 0, size, 0, &dest );
-                memcpy( dest, i_data, static_cast< size_t >( size ) );
-                vkUnmapMemory( i_device->getObject(), m_memory );
+                if ( i_data != nullptr )
+                {
+                    void* dest;
+                    vkMapMemory( i_device->getObject(), m_memory, 0, size, 0, &dest );
+                    memcpy( dest, i_data, static_cast< size_t >( size ) );
+                    vkUnmapMemory( i_device->getObject(), m_memory );
+                }
             }
             break;
         case BufferMode::Device:
             {
-                VkBuffer stagingBuffer;
-                VkDeviceMemory stagingBufferMemory;
-
-                createBuffer( i_device, size, deviceMemoryProperties, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory );
-
-                void* dest;
-                vkMapMemory( i_device->getObject(), stagingBufferMemory, 0, size, 0, &dest );
-                memcpy( dest, i_data, static_cast< size_t >( size ) );
-                vkUnmapMemory( i_device->getObject(), stagingBufferMemory );
-
                 createBuffer( i_device, size, deviceMemoryProperties, VK_BUFFER_USAGE_TRANSFER_DST_BIT | i_usage, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_object, m_memory );
+                
+                if ( i_data != nullptr )
+                {
+                    VkBuffer stagingBuffer;
+                    VkDeviceMemory stagingBufferMemory;
 
-                copyBuffer( m_device, stagingBuffer, m_object, 0, 0, size );
+                    createBuffer( i_device, size, deviceMemoryProperties, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory );
 
-                vkDestroyBuffer( i_device->getObject(), stagingBuffer, nullptr );
-                vkFreeMemory( i_device->getObject(), stagingBufferMemory, nullptr );
+                    void* dest;
+                    vkMapMemory( i_device->getObject(), stagingBufferMemory, 0, size, 0, &dest );
+                    memcpy( dest, i_data, static_cast< size_t >( size ) );
+                    vkUnmapMemory( i_device->getObject(), stagingBufferMemory );
+
+                    copyBuffer( m_device, stagingBuffer, m_object, 0, 0, size );
+
+                    vkDestroyBuffer( i_device->getObject(), stagingBuffer, nullptr );
+                    vkFreeMemory( i_device->getObject(), stagingBufferMemory, nullptr );
+                }
             }
             break;
             

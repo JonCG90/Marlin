@@ -51,6 +51,14 @@
 		237253302B1EEFBD009F3570 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2372532D2B1EEFBD009F3570 /* scene.cpp */; };
 		237253312B1EEFBD009F3570 /* scene.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2372532E2B1EEFBD009F3570 /* scene.hpp */; };
 		237253322B1EEFF7009F3570 /* mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253292B1C86DC009F3570 /* mesh.cpp */; };
+		237253382B27144C009F3570 /* offsetAllocator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237253342B27144C009F3570 /* offsetAllocator.hpp */; };
+		237253392B27144C009F3570 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 237253352B27144C009F3570 /* LICENSE */; };
+		2372533A2B27144C009F3570 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 237253362B27144C009F3570 /* README.md */; };
+		2372533B2B27144C009F3570 /* offsetAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253372B27144C009F3570 /* offsetAllocator.cpp */; };
+		2372533C2B27144C009F3570 /* offsetAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253372B27144C009F3570 /* offsetAllocator.cpp */; };
+		237253442B271646009F3570 /* vertexPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253422B271646009F3570 /* vertexPool.cpp */; };
+		237253452B271646009F3570 /* vertexPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253422B271646009F3570 /* vertexPool.cpp */; };
+		237253462B271646009F3570 /* vertexPool.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237253432B271646009F3570 /* vertexPool.hpp */; };
 		2384C72929D2B80300380DD3 /* descriptorCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2384C72729D2B80300380DD3 /* descriptorCache.cpp */; };
 		2384C72A29D2B80300380DD3 /* descriptorCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2384C72829D2B80300380DD3 /* descriptorCache.hpp */; };
 		2384C72E29D5815700380DD3 /* descriptorAlloc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2384C72C29D5815700380DD3 /* descriptorAlloc.cpp */; };
@@ -286,6 +294,12 @@
 		2372532A2B1C86DC009F3570 /* mesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = mesh.hpp; sourceTree = "<group>"; };
 		2372532D2B1EEFBD009F3570 /* scene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = scene.cpp; sourceTree = "<group>"; };
 		2372532E2B1EEFBD009F3570 /* scene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = scene.hpp; sourceTree = "<group>"; };
+		237253342B27144C009F3570 /* offsetAllocator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = offsetAllocator.hpp; sourceTree = "<group>"; };
+		237253352B27144C009F3570 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		237253362B27144C009F3570 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		237253372B27144C009F3570 /* offsetAllocator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = offsetAllocator.cpp; sourceTree = "<group>"; };
+		237253422B271646009F3570 /* vertexPool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vertexPool.cpp; sourceTree = "<group>"; };
+		237253432B271646009F3570 /* vertexPool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vertexPool.hpp; sourceTree = "<group>"; };
 		2384C72729D2B80300380DD3 /* descriptorCache.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = descriptorCache.cpp; sourceTree = "<group>"; };
 		2384C72829D2B80300380DD3 /* descriptorCache.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = descriptorCache.hpp; sourceTree = "<group>"; };
 		2384C72C29D5815700380DD3 /* descriptorAlloc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = descriptorAlloc.cpp; sourceTree = "<group>"; };
@@ -712,6 +726,17 @@
 			path = scene;
 			sourceTree = "<group>";
 		};
+		237253332B27144C009F3570 /* OffsetAllocator */ = {
+			isa = PBXGroup;
+			children = (
+				237253342B27144C009F3570 /* offsetAllocator.hpp */,
+				237253352B27144C009F3570 /* LICENSE */,
+				237253362B27144C009F3570 /* README.md */,
+				237253372B27144C009F3570 /* offsetAllocator.cpp */,
+			);
+			path = OffsetAllocator;
+			sourceTree = "<group>";
+		};
 		2384C72B29D580D100380DD3 /* descriptor */ = {
 			isa = PBXGroup;
 			children = (
@@ -802,6 +827,7 @@
 		2388123E244F8F5300E8444E /* thirdparty */ = {
 			isa = PBXGroup;
 			children = (
+				237253332B27144C009F3570 /* OffsetAllocator */,
 				237252FB2B1C38B1009F3570 /* meshoptimizer */,
 				23637CC629BEA9FD00D4D7A6 /* stb */,
 				23637CBA29BC5D5A00D4D7A6 /* SPIRV-Reflect */,
@@ -1123,6 +1149,8 @@
 				23ED676D28FFE2520039B92A /* vkObject.tpp */,
 				23637CD129C9A66E00D4D7A6 /* commands.cpp */,
 				23637CD229C9A66E00D4D7A6 /* commands.hpp */,
+				237253422B271646009F3570 /* vertexPool.cpp */,
+				237253432B271646009F3570 /* vertexPool.hpp */,
 			);
 			path = vulkan;
 			sourceTree = "<group>";
@@ -1154,6 +1182,7 @@
 				238816AF245040DF00E8444E /* matrix_cross_product.hpp in Headers */,
 				238816C0245040DF00E8444E /* projection.hpp in Headers */,
 				2388168C245040DF00E8444E /* intrinsic_common.hpp in Headers */,
+				237253462B271646009F3570 /* vertexPool.hpp in Headers */,
 				2388169D245040DF00E8444E /* matrix_access.hpp in Headers */,
 				23881684245040DF00E8444E /* type_vec3.hpp in Headers */,
 				23ED677C290FD29E0039B92A /* device.hpp in Headers */,
@@ -1288,6 +1317,7 @@
 				2388167B245040DF00E8444E /* type_mat3x4.hpp in Headers */,
 				238816D1245040DF00E8444E /* extented_min_max.hpp in Headers */,
 				23881695245040DF00E8444E /* type_precision.hpp in Headers */,
+				237253382B27144C009F3570 /* offsetAllocator.hpp in Headers */,
 				23637CAF298BA7B100D4D7A6 /* defs.hpp in Headers */,
 				2388165C245040DF00E8444E /* matrix.hpp in Headers */,
 				2388168A245040DF00E8444E /* type_mat2x4.hpp in Headers */,
@@ -1407,7 +1437,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				237253392B27144C009F3570 /* LICENSE in Resources */,
 				238811FC244C063300E8444E /* Assets.xcassets in Resources */,
+				2372533A2B27144C009F3570 /* README.md in Resources */,
 				238811FF244C063300E8444E /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1455,6 +1487,7 @@
 				2388167A245040DF00E8444E /* glm.cpp in Sources */,
 				14EF53EE2B46A143004A4C07 /* renderStorage.cpp in Sources */,
 				237253242B1C38B1009F3570 /* indexgenerator.cpp in Sources */,
+				2372533B2B27144C009F3570 /* offsetAllocator.cpp in Sources */,
 				238816E62450472B00E8444E /* instance.cpp in Sources */,
 				23ED677B290FD29E0039B92A /* device.cpp in Sources */,
 				2372532F2B1EEFBD009F3570 /* scene.cpp in Sources */,
@@ -1480,6 +1513,7 @@
 				237253182B1C38B1009F3570 /* vertexcodec.cpp in Sources */,
 				237253262B1C38B1009F3570 /* clusterizer.cpp in Sources */,
 				23637CCB29C1BEFC00D4D7A6 /* pipeline.cpp in Sources */,
+				237253442B271646009F3570 /* vertexPool.cpp in Sources */,
 				237253212B1C38B1009F3570 /* vfetchoptimizer.cpp in Sources */,
 				23ED677328FFE49B0039B92A /* physicalDevice.cpp in Sources */,
 			);
@@ -1491,7 +1525,9 @@
 			files = (
 				237253322B1EEFF7009F3570 /* mesh.cpp in Sources */,
 				237253302B1EEFBD009F3570 /* scene.cpp in Sources */,
+				2372533C2B27144C009F3570 /* offsetAllocator.cpp in Sources */,
 				23881239244C62BC00E8444E /* MarlinView.mm in Sources */,
+				237253452B271646009F3570 /* vertexPool.cpp in Sources */,
 				23881202244C063300E8444E /* main.m in Sources */,
 				238811FA244C062F00E8444E /* AppDelegate.m in Sources */,
 			);
