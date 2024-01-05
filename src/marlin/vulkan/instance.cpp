@@ -567,8 +567,11 @@ void MlnInstance::deinit()
     vkDestroyInstance( m_vkInstance, nullptr );
 }
 
-void MlnInstance::drawFrame( const Scene &i_scene )
+void MlnInstance::drawFrame( ScenePtr i_scene )
 {
+    // Make sure the device entities are up to date
+    i_scene->update();
+    
     vkWaitForFences( m_device->getObject(), 1, &m_inFlightFences[ m_currentFrame ], VK_TRUE, UINT64_MAX );
     vkResetFences( m_device->getObject(), 1, &m_inFlightFences[ m_currentFrame ] );
 
@@ -854,6 +857,17 @@ void MlnInstance::createVertexBuffer()
         {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
         {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
     };
+    
+//    std::vector<float> vertices = {
+//        -0.5f, -0.5f,
+//         0.5f, -0.5f,
+//         0.5f, 0.5f,
+//        -0.5f, 0.5f,
+//         1.0f, 0.0f, 0.0f,
+//         0.0f, 1.0f, 0.0f,
+//         0.0f, 0.0f, 1.0f,
+//         1.0f, 1.0f, 1.0f
+//    };
     
     std::byte* bytes = reinterpret_cast< std::byte* >( vertices.data() );
     m_vertexBuffer = BufferT< std::byte >::create( m_device, m_physicalDevice, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, BufferMode::Local, bytes, vertices.size() * sizeof( Vertex ) );

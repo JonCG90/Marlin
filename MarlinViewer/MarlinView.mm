@@ -32,7 +32,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
                                     CVOptionFlags* flagsOut,
                                     void* target) {
         
-    marlin::Scene scene;
+    marlin::ScenePtr scene = marlin::Scene::create();
     static bool first = true;
     if ( first )
     {
@@ -60,10 +60,10 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         mesh.setColors( colors );
         mesh.setIndices( indices );
         
-        marlin::GeometryPtr geometry = marlin::Geometry::create();
+        marlin::GeometryPtr geometry = marlin::Geometry::create( scene );
         geometry->setLOD( mesh, 0 );
         
-        scene.addObject( geometry );
+        scene->addObject( geometry );
         
         first = false;
     }

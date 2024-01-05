@@ -11,6 +11,7 @@
 
 #include <marlin/vulkan/../defs.hpp>
 #include <marlin/scene/mesh.hpp>
+#include <marlin/scene/renderStorage.hpp>
 
 #include <array>
 #include <unordered_map>
@@ -20,24 +21,38 @@ namespace marlin
 
 static const uint32_t s_maxLODs = 5;
 
+class Scene;
+using ScenePtr = std::shared_ptr< Scene >;
+
 class SceneObject;
 using SceneObjectPtr = std::shared_ptr< SceneObject >;
 
+using ObjectId = uint64_t;
+
 class SceneObject
 {
+    friend class Scene;
+    
 public:
     
-    SceneObject();
+    explicit SceneObject( ScenePtr i_scene );
     ~SceneObject() = default;
     
-    uint64_t getId() const;
+    ObjectId getId() const;
     
     void setMatrix( const Mat4d &i_matrix );
     Mat4d getMatrix() const;
     
-private:
+protected:
     
-    uint64_t m_id;
+    std::weak_ptr< Scene > m_parentScene;
+    
+    virtual void update( RenderStorage &i_renderStorage ) = 0;
+    void setDirty();
+
+private:
+        
+    ObjectId m_id;
     Mat4d m_matrix;
 };
 
@@ -48,12 +63,16 @@ class Geometry : public SceneObject
 {
 public:
     
-    static GeometryPtr create();
+    static GeometryPtr create( ScenePtr i_scene );
     
-    Geometry();
+    explicit Geometry( ScenePtr i_scene );
     ~Geometry() = default;
     
     void setLOD( const Mesh &mesh, uint32_t lodIndex );
+    
+protected:
+    
+    void update( RenderStorage &i_renderStorage ) override;
     
 private:
     
@@ -65,12 +84,18 @@ class Scene
 {
 public:
     
+    static ScenePtr create();
+    
     void addObject( SceneObjectPtr object );
     void removeObject( SceneObjectPtr object );
-
-private:
+    void update();
+    void setDirty( ObjectId id );
     
-    std::unordered_map< uint64_t, SceneObjectPtr > m_objects;
+private:
+        
+    std::unordered_map< ObjectId, SceneObjectPtr > m_objects;
+    std::vector< ObjectId > m_dirtyList;
+    RenderStorage m_renderStorage;
 };
 
 } // namespace marlin

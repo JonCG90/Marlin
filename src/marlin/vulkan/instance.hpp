@@ -63,7 +63,7 @@ public:
     void init( void* i_layer );
     void deinit();
     
-    void drawFrame( const Scene &i_scene );
+    void drawFrame( ScenePtr i_scene );
     void updateUniformBuffer(uint32_t currentImage);
 
     MlnInstance( MlnInstance const &i_instance ) = delete;

@@ -10,6 +10,7 @@
 #define MARLIN_HPP
 
 #include <marlin/defs.hpp>
+#include <marlin/scene/scene.hpp>
 
 namespace marlin
 {
@@ -18,7 +19,7 @@ class Scene;
 
 void init( void* i_layer );
 
-void render( const Scene &i_scene );
+void render( ScenePtr i_scene );
 
 void deinit();
 

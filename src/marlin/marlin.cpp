@@ -24,7 +24,7 @@ void init( void* i_layer )
     marlin::MlnInstance::getInstance().init( i_layer );
 }
 
-void render( const Scene &i_scene )
+void render( ScenePtr i_scene )
 {
     marlin::MlnInstance::getInstance().drawFrame( i_scene );
 }

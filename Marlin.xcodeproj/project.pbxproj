@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14EF53EE2B46A143004A4C07 /* renderStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14EF53EC2B46A143004A4C07 /* renderStorage.cpp */; };
+		14EF53EF2B46A143004A4C07 /* renderStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 14EF53ED2B46A143004A4C07 /* renderStorage.hpp */; };
 		23637CAF298BA7B100D4D7A6 /* defs.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23637CAE298BA7B100D4D7A6 /* defs.hpp */; };
 		23637CB329A4B50700D4D7A6 /* buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23637CB129A4B50700D4D7A6 /* buffer.cpp */; };
 		23637CB429A4B50700D4D7A6 /* buffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23637CB229A4B50700D4D7A6 /* buffer.hpp */; };
@@ -237,6 +239,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		14EF53EC2B46A143004A4C07 /* renderStorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = renderStorage.cpp; sourceTree = "<group>"; };
+		14EF53ED2B46A143004A4C07 /* renderStorage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = renderStorage.hpp; sourceTree = "<group>"; };
 		23258F0F2488FF3C0005AF13 /* shader.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = shader.vert; sourceTree = "<group>"; };
 		23258F102488FF4A0005AF13 /* shader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = shader.frag; sourceTree = "<group>"; };
 		23637CAE298BA7B100D4D7A6 /* defs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = defs.hpp; sourceTree = "<group>"; };
@@ -702,6 +706,8 @@
 				2372532A2B1C86DC009F3570 /* mesh.hpp */,
 				2372532D2B1EEFBD009F3570 /* scene.cpp */,
 				2372532E2B1EEFBD009F3570 /* scene.hpp */,
+				14EF53EC2B46A143004A4C07 /* renderStorage.cpp */,
+				14EF53ED2B46A143004A4C07 /* renderStorage.hpp */,
 			);
 			path = scene;
 			sourceTree = "<group>";
@@ -1278,6 +1284,7 @@
 				238816B2245040DF00E8444E /* transform.hpp in Headers */,
 				2388167C245040DF00E8444E /* intrinsic_exponential.hpp in Headers */,
 				23881675245040DF00E8444E /* type_mat3x2.hpp in Headers */,
+				14EF53EF2B46A143004A4C07 /* renderStorage.hpp in Headers */,
 				2388167B245040DF00E8444E /* type_mat3x4.hpp in Headers */,
 				238816D1245040DF00E8444E /* extented_min_max.hpp in Headers */,
 				23881695245040DF00E8444E /* type_precision.hpp in Headers */,
@@ -1446,6 +1453,7 @@
 				2372532B2B1C86DC009F3570 /* mesh.cpp in Sources */,
 				23637CB729A8C26E00D4D7A6 /* commandBuffer.cpp in Sources */,
 				2388167A245040DF00E8444E /* glm.cpp in Sources */,
+				14EF53EE2B46A143004A4C07 /* renderStorage.cpp in Sources */,
 				237253242B1C38B1009F3570 /* indexgenerator.cpp in Sources */,
 				238816E62450472B00E8444E /* instance.cpp in Sources */,
 				23ED677B290FD29E0039B92A /* device.cpp in Sources */,

@@ -9,17 +9,19 @@
 #include "scene.hpp"
 
 #include <iostream>
+#include <set>
 
 namespace marlin
 {
 
-SceneObject::SceneObject()
+SceneObject::SceneObject( ScenePtr i_scene )
+: m_parentScene( i_scene )
 {
-    static std::atomic_uint64_t idCounter = 0;
+    static std::atomic< ObjectId > idCounter = 0;
     m_id = idCounter++;
 }
 
-uint64_t SceneObject::getId() const
+ObjectId SceneObject::getId() const
 {
     return m_id;
 }
@@ -34,13 +36,19 @@ Mat4d SceneObject::getMatrix() const
     return m_matrix;
 }
 
-GeometryPtr Geometry::create()
+void SceneObject::setDirty()
 {
-    return std::make_shared< Geometry >();
+    ScenePtr scene = m_parentScene.lock();
+    scene->setDirty( m_id );
 }
 
-Geometry::Geometry()
-: SceneObject()
+GeometryPtr Geometry::create( ScenePtr i_scene )
+{
+    return std::make_shared< Geometry >( i_scene );
+}
+
+Geometry::Geometry( ScenePtr i_scene )
+: SceneObject( i_scene )
 {
     // Set all LODs to dirty
     for ( auto &pair : m_lods )
@@ -57,16 +65,79 @@ void Geometry::setLOD( const Mesh &mesh, uint32_t lodIndex )
     }
     
     m_lods[ lodIndex ] = { mesh, true };
+    
+    // Mark ourselves as dirty
+    setDirty();
+}
+
+void Geometry::update( RenderStorage &i_renderStorage )
+{
+    for ( auto &pair : m_lods )
+    {
+        // Skip if not dirty
+        if ( !pair.second )
+        {
+            continue;
+        }
+        
+        // Update
+        Mesh &mesh = pair.first;
+        
+//        std::byte* bytes = reinterpret_cast< std::byte* >( vertices.data() );
+//        m_vertexBuffer = BufferT< std::byte >::create( m_device, m_physicalDevice, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, BufferMode::Local, bytes, vertices.size() * sizeof( Vertex ) );
+//        
+//        m_indexBuffer = BufferT< uint32_t >::create( m_device, m_physicalDevice, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, BufferMode::Device, indices );
+        
+        pair.second = false;
+    }
+}
+
+ScenePtr Scene::create()
+{
+    return std::make_shared< Scene >();
 }
 
 void Scene::addObject( SceneObjectPtr object )
 {
-    m_objects[ object->getId() ] = object;
+    ObjectId objectId = object->getId();
+    m_objects[ objectId ] = object;
+    m_dirtyList.push_back( objectId );
 }
 
 void Scene::removeObject( SceneObjectPtr object )
 {
     m_objects.erase( object->getId() );
+}
+
+void Scene::update()
+{
+    std::set< ObjectId > processed;
+    for ( ObjectId id : m_dirtyList )
+    {
+        // Check that our object hasn't been deleted
+        const auto itr = m_objects.find( id );
+        if ( itr == m_objects.end() )
+        {
+            continue;
+        }
+        
+        // Check that our object hasn't already been processed
+        const auto pair = processed.insert( id );
+        if ( !pair.second )
+        {
+            continue;
+        }
+        
+        SceneObjectPtr object = itr->second;
+        object->update( m_renderStorage );
+    }
+    
+    m_dirtyList.clear();
+}
+
+void Scene::setDirty( ObjectId id )
+{
+    m_dirtyList.push_back( id );
 }
 
 } // namespace marlin
