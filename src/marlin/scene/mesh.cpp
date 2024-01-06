@@ -6,7 +6,7 @@
 //  Copyright © 2023 Jonathan Graham. All rights reserved.
 //
 
-#include "mesh.hpp"
+#include <marlin/scene/mesh.hpp>
 
 namespace marlin
 {

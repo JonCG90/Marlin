@@ -9,6 +9,8 @@
 #ifndef MARLIN_RENDERSTORAGE_HPP
 #define MARLIN_RENDERSTORAGE_HPP
 
+#include <marlin/vulkan/vertexPool.hpp>
+
 namespace marlin
 {
 
@@ -16,8 +18,12 @@ class RenderStorage
 {
 public:
 
-    RenderStorage() = default;
+    RenderStorage( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice );
     ~RenderStorage() = default;
+    
+private:
+    
+    VertexPool m_vertexPool;
     
 //    BufferTPtr< std::byte > m_vertexBuffer;
 //    BufferTPtr< uint32_t > m_indexBuffer;

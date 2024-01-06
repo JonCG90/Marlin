@@ -6,7 +6,9 @@
 //  Copyright © 2023 Jonathan Graham. All rights reserved.
 //
 
-#include "scene.hpp"
+#include <marlin/scene/scene.hpp>
+
+#include <marlin/vulkan/instance.hpp>
 
 #include <iostream>
 #include <set>
@@ -129,7 +131,9 @@ void Scene::update()
         }
         
         SceneObjectPtr object = itr->second;
-        object->update( m_renderStorage );
+        
+        RenderStorage &storage = marlin::MlnInstance::getInstance().getRenderStorage();
+        object->update( storage );
     }
     
     m_dirtyList.clear();

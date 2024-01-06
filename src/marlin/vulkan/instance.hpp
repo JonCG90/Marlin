@@ -65,6 +65,8 @@ public:
     
     void drawFrame( ScenePtr i_scene );
     void updateUniformBuffer(uint32_t currentImage);
+    
+    RenderStorage & getRenderStorage();
 
     MlnInstance( MlnInstance const &i_instance ) = delete;
     void operator=( MlnInstance const &i_instance )  = delete;
@@ -101,6 +103,8 @@ private:
     std::vector< VkSemaphore > m_imageAvailableSemaphores;
     std::vector< VkSemaphore > m_renderFinishedSemaphores;
     std::vector< VkFence > m_inFlightFences;
+    
+    RenderStorage* m_renderStorage;
 
     bool m_enableValidation;
     uint32_t m_currentFrame = 0;
@@ -119,8 +123,6 @@ private:
     
     void createGraphicsPipeline();
     void createFramebuffers();
-    void copyBuffer( VkBuffer i_srcBuffer, VkBuffer i_dstBuffer, VkDeviceSize i_size );
-    void createBuffer( VkDeviceSize i_size, VkBufferUsageFlags i_usage, VkMemoryPropertyFlags i_properties, VkBuffer &o_buffer, VkDeviceMemory &o_bufferMemory );
     void createVertexBuffer();
     void createIndexBuffer();
     void createUniformBuffers();

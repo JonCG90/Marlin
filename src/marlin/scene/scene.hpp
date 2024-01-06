@@ -11,7 +11,6 @@
 
 #include <marlin/vulkan/../defs.hpp>
 #include <marlin/scene/mesh.hpp>
-#include <marlin/scene/renderStorage.hpp>
 
 #include <array>
 #include <unordered_map>
@@ -26,6 +25,8 @@ using ScenePtr = std::shared_ptr< Scene >;
 
 class SceneObject;
 using SceneObjectPtr = std::shared_ptr< SceneObject >;
+
+class RenderStorage;
 
 using ObjectId = uint64_t;
 
@@ -95,7 +96,6 @@ private:
         
     std::unordered_map< ObjectId, SceneObjectPtr > m_objects;
     std::vector< ObjectId > m_dirtyList;
-    RenderStorage m_renderStorage;
 };
 
 } // namespace marlin

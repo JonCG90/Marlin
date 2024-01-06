@@ -48,9 +48,7 @@
 		2372532B2B1C86DC009F3570 /* mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253292B1C86DC009F3570 /* mesh.cpp */; };
 		2372532C2B1C86DC009F3570 /* mesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2372532A2B1C86DC009F3570 /* mesh.hpp */; };
 		2372532F2B1EEFBD009F3570 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2372532D2B1EEFBD009F3570 /* scene.cpp */; };
-		237253302B1EEFBD009F3570 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2372532D2B1EEFBD009F3570 /* scene.cpp */; };
 		237253312B1EEFBD009F3570 /* scene.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2372532E2B1EEFBD009F3570 /* scene.hpp */; };
-		237253322B1EEFF7009F3570 /* mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253292B1C86DC009F3570 /* mesh.cpp */; };
 		237253382B27144C009F3570 /* offsetAllocator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237253342B27144C009F3570 /* offsetAllocator.hpp */; };
 		237253392B27144C009F3570 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 237253352B27144C009F3570 /* LICENSE */; };
 		2372533A2B27144C009F3570 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 237253362B27144C009F3570 /* README.md */; };
@@ -1522,8 +1520,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				237253322B1EEFF7009F3570 /* mesh.cpp in Sources */,
-				237253302B1EEFBD009F3570 /* scene.cpp in Sources */,
 				2372533C2B27144C009F3570 /* offsetAllocator.cpp in Sources */,
 				23881239244C62BC00E8444E /* MarlinView.mm in Sources */,
 				23881202244C063300E8444E /* main.m in Sources */,

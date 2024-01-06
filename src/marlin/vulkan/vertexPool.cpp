@@ -8,8 +8,6 @@
 
 #include <marlin/vulkan/vertexPool.hpp>
 
-#include <marlin/vulkan/buffer.hpp>
-
 namespace marlin
 {
 
@@ -35,7 +33,7 @@ VertexPoolHandle VertexPool::allocate( uint32_t i_size )
     
     if ( handle.allocation.offset != OffsetAllocator::Allocation::NO_SPACE )
     {
-        BufferTPtr< std::byte > buffer = BufferT< std::byte >::create( m_device, m_physicalDevice, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, BufferMode::Device, nullptr, kPoolSize );
+//        BufferTPtr< std::byte > buffer = BufferT< std::byte >::create( m_device, m_physicalDevice, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, BufferMode::Device, nullptr, kPoolSize );
         
 //        m_entries.emplace_back( kPoolSize, buffer );
         handle = allocate( m_entries.size() - 1, i_size );

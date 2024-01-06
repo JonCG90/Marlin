@@ -11,6 +11,8 @@
 
 #include <marlin/vulkan/defs.hpp>
 
+#include <marlin/vulkan/buffer.hpp>
+
 #include <thirdparty/OffsetAllocator/offsetAllocator.hpp>
 
 namespace marlin

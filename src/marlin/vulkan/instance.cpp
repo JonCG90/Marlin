@@ -8,6 +8,8 @@
 
 #include <marlin/vulkan/instance.hpp>
 
+#include <marlin/scene/renderStorage.hpp>
+
 #include <marlin/vulkan/buffer.hpp>
 #include <marlin/vulkan/commandBuffer.hpp>
 #include <marlin/vulkan/commands.hpp>
@@ -499,6 +501,8 @@ void MlnInstance::init( void* i_layer )
     // Create logical device
     createLogicalDevice();
     
+    m_renderStorage = new RenderStorage( m_device, m_physicalDevice );
+    
     // Create the swap chain
     createSwapChain();
     createImageViews();
@@ -556,6 +560,9 @@ void MlnInstance::deinit()
     }
     
     m_swapChain->destroy();
+    
+    delete m_renderStorage;
+    
     m_device->destroy();
 
     if ( m_enableValidation )
@@ -642,6 +649,11 @@ void MlnInstance::updateUniformBuffer( uint32_t currentImage )
     ubo.projection[1][1] *= -1;
     
     memcpy( m_uniformBuffersMapped[ currentImage ], &ubo, sizeof( ubo ) );
+}
+
+RenderStorage & MlnInstance::getRenderStorage()
+{
+    return *m_renderStorage;
 }
 
 void MlnInstance::createLogicalDevice()
