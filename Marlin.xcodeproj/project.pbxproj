@@ -57,7 +57,6 @@
 		2372533B2B27144C009F3570 /* offsetAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253372B27144C009F3570 /* offsetAllocator.cpp */; };
 		2372533C2B27144C009F3570 /* offsetAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253372B27144C009F3570 /* offsetAllocator.cpp */; };
 		237253442B271646009F3570 /* vertexPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253422B271646009F3570 /* vertexPool.cpp */; };
-		237253452B271646009F3570 /* vertexPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253422B271646009F3570 /* vertexPool.cpp */; };
 		237253462B271646009F3570 /* vertexPool.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237253432B271646009F3570 /* vertexPool.hpp */; };
 		2384C72929D2B80300380DD3 /* descriptorCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2384C72729D2B80300380DD3 /* descriptorCache.cpp */; };
 		2384C72A29D2B80300380DD3 /* descriptorCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2384C72829D2B80300380DD3 /* descriptorCache.hpp */; };
@@ -1527,7 +1526,6 @@
 				237253302B1EEFBD009F3570 /* scene.cpp in Sources */,
 				2372533C2B27144C009F3570 /* offsetAllocator.cpp in Sources */,
 				23881239244C62BC00E8444E /* MarlinView.mm in Sources */,
-				237253452B271646009F3570 /* vertexPool.cpp in Sources */,
 				23881202244C063300E8444E /* main.m in Sources */,
 				238811FA244C062F00E8444E /* AppDelegate.m in Sources */,
 			);
