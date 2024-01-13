@@ -54,8 +54,8 @@
 		2372533A2B27144C009F3570 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 237253362B27144C009F3570 /* README.md */; };
 		2372533B2B27144C009F3570 /* offsetAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253372B27144C009F3570 /* offsetAllocator.cpp */; };
 		2372533C2B27144C009F3570 /* offsetAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253372B27144C009F3570 /* offsetAllocator.cpp */; };
-		237253442B271646009F3570 /* vertexPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253422B271646009F3570 /* vertexPool.cpp */; };
-		237253462B271646009F3570 /* vertexPool.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237253432B271646009F3570 /* vertexPool.hpp */; };
+		237253442B271646009F3570 /* bufferPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253422B271646009F3570 /* bufferPool.cpp */; };
+		237253462B271646009F3570 /* bufferPool.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237253432B271646009F3570 /* bufferPool.hpp */; };
 		2384C72929D2B80300380DD3 /* descriptorCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2384C72729D2B80300380DD3 /* descriptorCache.cpp */; };
 		2384C72A29D2B80300380DD3 /* descriptorCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2384C72829D2B80300380DD3 /* descriptorCache.hpp */; };
 		2384C72E29D5815700380DD3 /* descriptorAlloc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2384C72C29D5815700380DD3 /* descriptorAlloc.cpp */; };
@@ -295,8 +295,8 @@
 		237253352B27144C009F3570 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		237253362B27144C009F3570 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		237253372B27144C009F3570 /* offsetAllocator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = offsetAllocator.cpp; sourceTree = "<group>"; };
-		237253422B271646009F3570 /* vertexPool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vertexPool.cpp; sourceTree = "<group>"; };
-		237253432B271646009F3570 /* vertexPool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vertexPool.hpp; sourceTree = "<group>"; };
+		237253422B271646009F3570 /* bufferPool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bufferPool.cpp; sourceTree = "<group>"; };
+		237253432B271646009F3570 /* bufferPool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bufferPool.hpp; sourceTree = "<group>"; };
 		2384C72729D2B80300380DD3 /* descriptorCache.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = descriptorCache.cpp; sourceTree = "<group>"; };
 		2384C72829D2B80300380DD3 /* descriptorCache.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = descriptorCache.hpp; sourceTree = "<group>"; };
 		2384C72C29D5815700380DD3 /* descriptorAlloc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = descriptorAlloc.cpp; sourceTree = "<group>"; };
@@ -1146,8 +1146,8 @@
 				23ED676D28FFE2520039B92A /* vkObject.tpp */,
 				23637CD129C9A66E00D4D7A6 /* commands.cpp */,
 				23637CD229C9A66E00D4D7A6 /* commands.hpp */,
-				237253422B271646009F3570 /* vertexPool.cpp */,
-				237253432B271646009F3570 /* vertexPool.hpp */,
+				237253422B271646009F3570 /* bufferPool.cpp */,
+				237253432B271646009F3570 /* bufferPool.hpp */,
 			);
 			path = vulkan;
 			sourceTree = "<group>";
@@ -1179,7 +1179,7 @@
 				238816AF245040DF00E8444E /* matrix_cross_product.hpp in Headers */,
 				238816C0245040DF00E8444E /* projection.hpp in Headers */,
 				2388168C245040DF00E8444E /* intrinsic_common.hpp in Headers */,
-				237253462B271646009F3570 /* vertexPool.hpp in Headers */,
+				237253462B271646009F3570 /* bufferPool.hpp in Headers */,
 				2388169D245040DF00E8444E /* matrix_access.hpp in Headers */,
 				23881684245040DF00E8444E /* type_vec3.hpp in Headers */,
 				23ED677C290FD29E0039B92A /* device.hpp in Headers */,
@@ -1510,7 +1510,7 @@
 				237253182B1C38B1009F3570 /* vertexcodec.cpp in Sources */,
 				237253262B1C38B1009F3570 /* clusterizer.cpp in Sources */,
 				23637CCB29C1BEFC00D4D7A6 /* pipeline.cpp in Sources */,
-				237253442B271646009F3570 /* vertexPool.cpp in Sources */,
+				237253442B271646009F3570 /* bufferPool.cpp in Sources */,
 				237253212B1C38B1009F3570 /* vfetchoptimizer.cpp in Sources */,
 				23ED677328FFE49B0039B92A /* physicalDevice.cpp in Sources */,
 			);

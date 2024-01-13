@@ -881,8 +881,14 @@ void MlnInstance::createVertexBuffer()
 //         1.0f, 1.0f, 1.0f
 //    };
     
+    
     std::byte* bytes = reinterpret_cast< std::byte* >( vertices.data() );
-    m_vertexBuffer = BufferT< std::byte >::create( m_device, m_physicalDevice, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, BufferMode::Local, bytes, vertices.size() * sizeof( Vertex ) );
+    uint32_t size = static_cast< uint32_t >( vertices.size() * sizeof( Vertex ) );
+    BufferPoolHandle handle = m_renderStorage->allocateVertexBuffer( size );
+    BufferTPtr< std::byte > buffer = handle.buffer;
+    buffer->updateData( bytes, handle.allocation.offset, size );
+    
+    m_vertexBuffer = buffer;
 }
 
 void MlnInstance::createIndexBuffer()
@@ -891,7 +897,7 @@ void MlnInstance::createIndexBuffer()
         0, 1, 2, 2, 3, 0
     };
     
-    m_indexBuffer = BufferT< uint32_t >::create( m_device, m_physicalDevice, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, BufferMode::Device, indices );
+    m_indexBuffer = BufferT< uint32_t >::create( m_device, m_physicalDevice, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, BufferMode::Local, indices );
 }
 
 void MlnInstance::createUniformBuffers()
