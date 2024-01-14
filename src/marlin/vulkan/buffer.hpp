@@ -61,7 +61,7 @@ public:
     
     void* mapMemory();
     void unmapMemory();
-    void updateData( const T* i_data, size_t offset, size_t i_size );
+    void updateData( const T* i_data, size_t offset, size_t i_count );
 
     size_t getCount() const;
     void destroy();

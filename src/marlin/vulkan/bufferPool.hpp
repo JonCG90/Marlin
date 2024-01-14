@@ -46,7 +46,7 @@ class BufferPoolT
 {
 public:
 
-    BufferPoolT( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice, PoolUsage i_usage );
+    BufferPoolT( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice, PoolUsage i_usage, size_t i_size );
     ~BufferPoolT() = default;
     
     BufferPoolHandleT< T > allocate( uint32_t i_size );
@@ -59,6 +59,7 @@ private:
     DevicePtr m_device;
     PhysicalDevicePtr m_physicalDevice;
     VkBufferUsageFlagBits m_vkUsage;
+    size_t m_poolSize;
     
     std::vector< PoolEntryT< T > > m_entries;
 };

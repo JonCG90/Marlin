@@ -893,11 +893,16 @@ void MlnInstance::createVertexBuffer()
 
 void MlnInstance::createIndexBuffer()
 {
-    const std::vector< uint32_t > indices = {
+    std::vector< uint32_t > indices = {
         0, 1, 2, 2, 3, 0
     };
     
-    m_indexBuffer = BufferT< uint32_t >::create( m_device, m_physicalDevice, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, BufferMode::Local, indices );
+    uint32_t size = static_cast< uint32_t >( indices.size() );
+    IndexPoolHandle handle = m_renderStorage->allocateIndexBuffer( size );
+    BufferTPtr< uint32_t > buffer = handle.buffer;
+    buffer->updateData( indices.data(), handle.allocation.offset, size );
+    
+    m_indexBuffer = buffer;
 }
 
 void MlnInstance::createUniformBuffers()

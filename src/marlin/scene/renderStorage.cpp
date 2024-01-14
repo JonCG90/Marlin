@@ -12,8 +12,8 @@ namespace marlin
 {
 
 RenderStorage::RenderStorage( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice )
-: m_vertexPool( i_device, i_physicalDevice, PoolUsage::Vertex )
-, m_indexPool( i_device, i_physicalDevice, PoolUsage::Index )
+: m_vertexPool( i_device, i_physicalDevice, PoolUsage::Vertex, 2048 * 3 )
+, m_indexPool( i_device, i_physicalDevice, PoolUsage::Index, 2048 )
 {
 }
 

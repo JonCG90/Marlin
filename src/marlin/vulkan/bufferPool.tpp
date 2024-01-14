@@ -11,8 +11,6 @@
 namespace marlin
 {
 
-const static size_t kPoolSize = 2048;
-
 template < class T >
 PoolEntryT< T >::PoolEntryT( OffsetAllocator::Allocator i_allocator, BufferTPtr< T > i_buffer )
 : allocator( std::move( i_allocator ) )
@@ -20,10 +18,11 @@ PoolEntryT< T >::PoolEntryT( OffsetAllocator::Allocator i_allocator, BufferTPtr<
 {}
 
 template < class T >
-BufferPoolT< T >::BufferPoolT( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice, PoolUsage i_usage )
+BufferPoolT< T >::BufferPoolT( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice, PoolUsage i_usage, size_t i_size )
 : m_device( i_device )
 , m_physicalDevice( i_physicalDevice )
 , m_vkUsage( VK_BUFFER_USAGE_FLAG_BITS_MAX_ENUM )
+, m_poolSize( i_size )
 {
     if ( i_usage == PoolUsage::Vertex )
     {
@@ -50,8 +49,8 @@ BufferPoolHandleT< T > BufferPoolT< T >::allocate( uint32_t i_size )
     
     if ( handle.allocation.offset == OffsetAllocator::Allocation::NO_SPACE )
     {
-        BufferTPtr< T > buffer = BufferT< T >::create( m_device, m_physicalDevice, m_vkUsage, BufferMode::Local, nullptr, kPoolSize );
-        m_entries.emplace_back( kPoolSize, buffer );
+        BufferTPtr< T > buffer = BufferT< T >::create( m_device, m_physicalDevice, m_vkUsage, BufferMode::Local, nullptr, m_poolSize );
+        m_entries.emplace_back( m_poolSize, buffer );
         handle = allocate( m_entries.size() - 1, i_size );
     }
     
