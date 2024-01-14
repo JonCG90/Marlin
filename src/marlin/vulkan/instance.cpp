@@ -884,7 +884,7 @@ void MlnInstance::createVertexBuffer()
     
     std::byte* bytes = reinterpret_cast< std::byte* >( vertices.data() );
     uint32_t size = static_cast< uint32_t >( vertices.size() * sizeof( Vertex ) );
-    BufferPoolHandle handle = m_renderStorage->allocateVertexBuffer( size );
+    VertexPoolHandle handle = m_renderStorage->allocateVertexBuffer( size );
     BufferTPtr< std::byte > buffer = handle.buffer;
     buffer->updateData( bytes, handle.allocation.offset, size );
     

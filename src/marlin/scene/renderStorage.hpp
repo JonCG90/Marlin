@@ -14,6 +14,9 @@
 namespace marlin
 {
 
+using VertexPoolHandle = BufferPoolHandleT< std::byte >;
+using IndexPoolHandle = BufferPoolHandleT< uint32_t >;
+
 class RenderStorage
 {
 public:
@@ -21,20 +24,16 @@ public:
     RenderStorage( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice );
     ~RenderStorage() = default;
     
-    BufferPoolHandle allocateVertexBuffer( uint32_t i_size );
-    void deallocateVertexBuffer( const BufferPoolHandle &i_handle );
+    VertexPoolHandle allocateVertexBuffer( uint32_t i_size );
+    void deallocateVertexBuffer( const VertexPoolHandle &i_handle );
     
-    BufferPoolHandle allocateIndexBuffer( uint32_t i_size );
-    void deallocateIndexBuffer( const BufferPoolHandle &i_handle );
+    IndexPoolHandle allocateIndexBuffer( uint32_t i_size );
+    void deallocateIndexBuffer( const IndexPoolHandle &i_handle );
 
 private:
     
-    BufferPool m_vertexPool;
-    BufferPool m_indexPool;
-
-//    BufferTPtr< std::byte > m_vertexBuffer;
-//    BufferTPtr< uint32_t > m_indexBuffer;
-    
+    BufferPoolT< std::byte > m_vertexPool;
+    BufferPoolT< uint32_t > m_indexPool;
 };
 
 

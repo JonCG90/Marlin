@@ -1,5 +1,5 @@
 //
-//  bufferPool.cpp
+//  bufferPool.tpp
 //  Marlin
 //
 //  Created by Jonathan Graham on 12/11/23.
@@ -13,7 +13,14 @@ namespace marlin
 
 const static size_t kPoolSize = 2048;
 
-BufferPool::BufferPool( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice, PoolUsage i_usage )
+template < class T >
+PoolEntryT< T >::PoolEntryT( OffsetAllocator::Allocator i_allocator, BufferTPtr< T > i_buffer )
+: allocator( std::move( i_allocator ) )
+, buffer( i_buffer )
+{}
+
+template < class T >
+BufferPoolT< T >::BufferPoolT( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice, PoolUsage i_usage )
 : m_device( i_device )
 , m_physicalDevice( i_physicalDevice )
 , m_vkUsage( VK_BUFFER_USAGE_FLAG_BITS_MAX_ENUM )
@@ -28,9 +35,10 @@ BufferPool::BufferPool( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice, 
     }
 }
 
-BufferPoolHandle BufferPool::allocate( uint32_t i_size )
+template < class T >
+BufferPoolHandleT< T > BufferPoolT< T >::allocate( uint32_t i_size )
 {
-    BufferPoolHandle handle;
+    BufferPoolHandleT< T > handle;
     for ( uint32_t i = 0; i < m_entries.size(); i++ )
     {
         handle = allocate( i, i_size );
@@ -42,7 +50,7 @@ BufferPoolHandle BufferPool::allocate( uint32_t i_size )
     
     if ( handle.allocation.offset == OffsetAllocator::Allocation::NO_SPACE )
     {
-        BufferTPtr< std::byte > buffer = BufferT< std::byte >::create( m_device, m_physicalDevice, m_vkUsage, BufferMode::Local, nullptr, kPoolSize );
+        BufferTPtr< T > buffer = BufferT< T >::create( m_device, m_physicalDevice, m_vkUsage, BufferMode::Local, nullptr, kPoolSize );
         m_entries.emplace_back( kPoolSize, buffer );
         handle = allocate( m_entries.size() - 1, i_size );
     }
@@ -50,16 +58,18 @@ BufferPoolHandle BufferPool::allocate( uint32_t i_size )
     return handle;
 }
 
-void BufferPool::deallocate( const BufferPoolHandle &i_handle )
+template < class T >
+void BufferPoolT< T >::deallocate( const BufferPoolHandleT< T > &i_handle )
 {
     m_entries[ i_handle.index ].allocator.free( i_handle.allocation );
 }
 
-BufferPoolHandle BufferPool::allocate( size_t i_index, uint32_t i_size )
+template < class T >
+BufferPoolHandleT< T > BufferPoolT< T >::allocate( size_t i_index, uint32_t i_size )
 {
     OffsetAllocator::Allocation allocation = m_entries[ i_index ].allocator.allocate( i_size );
 
-    BufferPoolHandle handle;
+    BufferPoolHandleT< T > handle;
     handle.allocation = allocation;
     handle.index = i_index;
     handle.buffer = m_entries[ i_index ].buffer;

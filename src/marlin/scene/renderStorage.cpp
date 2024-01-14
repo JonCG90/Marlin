@@ -17,22 +17,22 @@ RenderStorage::RenderStorage( DevicePtr i_device, PhysicalDevicePtr i_physicalDe
 {
 }
 
-BufferPoolHandle RenderStorage::allocateVertexBuffer( uint32_t i_size )
+VertexPoolHandle RenderStorage::allocateVertexBuffer( uint32_t i_size )
 {
     return m_vertexPool.allocate( i_size );
 }
 
-void RenderStorage::deallocateVertexBuffer( const BufferPoolHandle &i_handle )
+void RenderStorage::deallocateVertexBuffer( const VertexPoolHandle &i_handle )
 {
     m_vertexPool.deallocate( i_handle );
 }
 
-BufferPoolHandle RenderStorage::allocateIndexBuffer( uint32_t i_size )
+IndexPoolHandle RenderStorage::allocateIndexBuffer( uint32_t i_size )
 {
     return m_indexPool.allocate( i_size );
 }
 
-void RenderStorage::deallocateIndexBuffer( const BufferPoolHandle &i_handle )
+void RenderStorage::deallocateIndexBuffer( const IndexPoolHandle &i_handle )
 {
     m_indexPool.deallocate( i_handle );
 }

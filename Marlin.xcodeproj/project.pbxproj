@@ -54,7 +54,7 @@
 		2372533A2B27144C009F3570 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 237253362B27144C009F3570 /* README.md */; };
 		2372533B2B27144C009F3570 /* offsetAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253372B27144C009F3570 /* offsetAllocator.cpp */; };
 		2372533C2B27144C009F3570 /* offsetAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253372B27144C009F3570 /* offsetAllocator.cpp */; };
-		237253442B271646009F3570 /* bufferPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253422B271646009F3570 /* bufferPool.cpp */; };
+		237253442B271646009F3570 /* bufferPool.tpp in Sources */ = {isa = PBXBuildFile; fileRef = 237253422B271646009F3570 /* bufferPool.tpp */; };
 		237253462B271646009F3570 /* bufferPool.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 237253432B271646009F3570 /* bufferPool.hpp */; };
 		2384C72929D2B80300380DD3 /* descriptorCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2384C72729D2B80300380DD3 /* descriptorCache.cpp */; };
 		2384C72A29D2B80300380DD3 /* descriptorCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2384C72829D2B80300380DD3 /* descriptorCache.hpp */; };
@@ -295,7 +295,7 @@
 		237253352B27144C009F3570 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		237253362B27144C009F3570 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		237253372B27144C009F3570 /* offsetAllocator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = offsetAllocator.cpp; sourceTree = "<group>"; };
-		237253422B271646009F3570 /* bufferPool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bufferPool.cpp; sourceTree = "<group>"; };
+		237253422B271646009F3570 /* bufferPool.tpp */ = {isa = PBXFileReference; lastKnownFileType = text; path = bufferPool.tpp; sourceTree = "<group>"; };
 		237253432B271646009F3570 /* bufferPool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bufferPool.hpp; sourceTree = "<group>"; };
 		2384C72729D2B80300380DD3 /* descriptorCache.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = descriptorCache.cpp; sourceTree = "<group>"; };
 		2384C72829D2B80300380DD3 /* descriptorCache.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = descriptorCache.hpp; sourceTree = "<group>"; };
@@ -1146,7 +1146,7 @@
 				23ED676D28FFE2520039B92A /* vkObject.tpp */,
 				23637CD129C9A66E00D4D7A6 /* commands.cpp */,
 				23637CD229C9A66E00D4D7A6 /* commands.hpp */,
-				237253422B271646009F3570 /* bufferPool.cpp */,
+				237253422B271646009F3570 /* bufferPool.tpp */,
 				237253432B271646009F3570 /* bufferPool.hpp */,
 			);
 			path = vulkan;
@@ -1510,7 +1510,7 @@
 				237253182B1C38B1009F3570 /* vertexcodec.cpp in Sources */,
 				237253262B1C38B1009F3570 /* clusterizer.cpp in Sources */,
 				23637CCB29C1BEFC00D4D7A6 /* pipeline.cpp in Sources */,
-				237253442B271646009F3570 /* bufferPool.cpp in Sources */,
+				237253442B271646009F3570 /* bufferPool.tpp in Sources */,
 				237253212B1C38B1009F3570 /* vfetchoptimizer.cpp in Sources */,
 				23ED677328FFE49B0039B92A /* physicalDevice.cpp in Sources */,
 			);

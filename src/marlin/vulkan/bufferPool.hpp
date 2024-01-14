@@ -24,45 +24,47 @@ enum class PoolUsage
     Index,
 };
 
-struct BufferPoolHandle
+template < class T >
+struct BufferPoolHandleT
 {
     size_t index = 0;
     OffsetAllocator::Allocation allocation;
-    BufferTPtr< std::byte > buffer;
+    BufferTPtr< T > buffer;
 };
 
-class BufferPool
+template < class T >
+struct PoolEntryT
+{
+    PoolEntryT( OffsetAllocator::Allocator i_allocator, BufferTPtr< T > i_buffer );
+    
+    OffsetAllocator::Allocator allocator;
+    BufferTPtr< T > buffer;
+};
+
+template < class T >
+class BufferPoolT
 {
 public:
 
-    BufferPool( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice, PoolUsage i_usage );
-    ~BufferPool() = default;
+    BufferPoolT( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice, PoolUsage i_usage );
+    ~BufferPoolT() = default;
     
-    BufferPoolHandle allocate( uint32_t i_size );
-    void deallocate( const BufferPoolHandle &i_handle );
+    BufferPoolHandleT< T > allocate( uint32_t i_size );
+    void deallocate( const BufferPoolHandleT< T > &i_handle );
 
 private:
     
-    struct PoolEntry
-    {       
-        PoolEntry( OffsetAllocator::Allocator i_allocator, BufferTPtr< std::byte > i_buffer )
-        : allocator( std::move( i_allocator ) )
-        , buffer( i_buffer )
-        {}
-        
-        OffsetAllocator::Allocator allocator;
-        BufferTPtr< std::byte > buffer;
-    };
-    
-    BufferPoolHandle allocate( size_t i_index, uint32_t i_size );
+    BufferPoolHandleT< T > allocate( size_t i_index, uint32_t i_size );
     
     DevicePtr m_device;
     PhysicalDevicePtr m_physicalDevice;
     VkBufferUsageFlagBits m_vkUsage;
     
-    std::vector< PoolEntry > m_entries;
+    std::vector< PoolEntryT< T > > m_entries;
 };
 
 } // namespace marlin
+
+#include "bufferPool.tpp"
 
 #endif /* MARLIN_BUFFERPOOL_HPP */
