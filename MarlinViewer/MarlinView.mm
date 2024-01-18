@@ -69,15 +69,15 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         
         {
             const std::vector<marlin::Vec3f> vertices = {
-                {-1.5f, -1.5f, 0.0},
-                { 1.5f, -1.5f, 0.0f},
-                { 1.5f,  1.5f, 0.0f},
-                {-1.5f,  1.5f, 0.0f}
+                {-1.5f, -1.5f, -1.0},
+                { 1.5f, -1.5f, -1.0f},
+                { 1.5f,  1.5f, -1.0f},
+                {-1.5f,  1.5f, -1.0f}
             };
 
             const std::vector<marlin::Vec3f> colors = {
-                {1.0f, 0.0f, 0.0f},
-                {0.0f, 1.0f, 0.0f},
+                {1.0f, 0.0f, 1.0f},
+                {0.0f, 1.0f, 1.0f},
                 {0.0f, 0.0f, 1.0f},
                 {1.0f, 1.0f, 1.0f}
             };

@@ -50,7 +50,7 @@ void RenderStorage::updateLOD( ObjectId i_id, uint32_t i_lodIndex, const Mesh &i
     
     struct Vertex
     {
-        Vec2 pos;
+        Vec3 pos;
         Vec3 color;
     };
     
@@ -66,7 +66,7 @@ void RenderStorage::updateLOD( ObjectId i_id, uint32_t i_lodIndex, const Mesh &i
         Vec3f meshColor = meshColors[ i ];
         
         Vertex vertex;
-        vertex.pos = Vec2( meshVertex.x, meshVertex.y );
+        vertex.pos = meshVertex;
         vertex.color = meshColor;
         
         vertices.push_back( vertex );
