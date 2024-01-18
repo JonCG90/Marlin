@@ -30,6 +30,10 @@ struct BufferPoolHandleT
     size_t index = 0;
     OffsetAllocator::Allocation allocation;
     BufferTPtr< T > buffer;
+    bool isValid()
+    {
+        return ( allocation.metadata != OffsetAllocator::Allocation::NO_SPACE );
+    }
 };
 
 template < class T >

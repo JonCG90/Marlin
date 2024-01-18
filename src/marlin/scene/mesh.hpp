@@ -24,10 +24,19 @@ public:
     ~Mesh() = default;
 
     void setVertices( const std::vector< Vec3f > &i_vertices );
+    const std::vector< Vec3f > & getVertices() const;
+    
     void setNormals( const std::vector< Vec3f > &i_normals );
+    const std::vector< Vec3f > & getNormals() const;
+
     void setColors( const std::vector< Vec3f > &i_colors );
+    const std::vector< Vec3f > & getColors() const;
+
     void setUVs( const std::vector< Vec2f > &i_uvs );
+    const std::vector< Vec2f > & getUVs() const;
+
     void setIndices( const std::vector< uint32_t > &i_indices );
+    const std::vector< uint32_t > & getIndices() const;
     
 protected:
     

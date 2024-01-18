@@ -7,6 +7,7 @@
 //
 
 #include <marlin/scene/scene.hpp>
+#include <marlin/scene/renderStorage.hpp>
 
 #include <marlin/vulkan/instance.hpp>
 
@@ -74,8 +75,10 @@ void Geometry::setLOD( const Mesh &mesh, uint32_t lodIndex )
 
 void Geometry::update( RenderStorage &i_renderStorage )
 {
-    for ( auto &pair : m_lods )
+    for ( uint32_t i = 0; i < s_maxLODs; i++ )
     {
+        auto &pair = m_lods[ i ];
+        
         // Skip if not dirty
         if ( !pair.second )
         {
@@ -83,12 +86,8 @@ void Geometry::update( RenderStorage &i_renderStorage )
         }
         
         // Update
-        Mesh &mesh = pair.first;
-        
-//        std::byte* bytes = reinterpret_cast< std::byte* >( vertices.data() );
-//        m_vertexBuffer = BufferT< std::byte >::create( m_device, m_physicalDevice, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, BufferMode::Local, bytes, vertices.size() * sizeof( Vertex ) );
-//        
-//        m_indexBuffer = BufferT< uint32_t >::create( m_device, m_physicalDevice, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, BufferMode::Device, indices );
+        const Mesh &mesh = pair.first;
+        i_renderStorage.updateLOD( getId(), i, mesh );
         
         pair.second = false;
     }

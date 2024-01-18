@@ -37,33 +37,65 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     if ( first )
     {
 
-        const std::vector<marlin::Vec3f> vertices = {
-            {-0.5f, -0.5f, 0.0},
-            { 0.5f, -0.5f, 0.0f},
-            { 0.5f,  0.5f, 0.0f},
-            {-0.5f,  0.5f, 0.0f}
-        };
+        {
+            const std::vector<marlin::Vec3f> vertices = {
+                {-0.5f, -0.5f, 0.0},
+                { 0.5f, -0.5f, 0.0f},
+                { 0.5f,  0.5f, 0.0f},
+                {-0.5f,  0.5f, 0.0f}
+            };
 
-        const std::vector<marlin::Vec3f> colors = {
-            {1.0f, 0.0f, 0.0f},
-            {0.0f, 1.0f, 0.0f},
-            {0.0f, 0.0f, 1.0f},
-            {1.0f, 1.0f, 1.0f}
-        };
+            const std::vector<marlin::Vec3f> colors = {
+                {1.0f, 0.0f, 0.0f},
+                {0.0f, 1.0f, 0.0f},
+                {0.0f, 0.0f, 1.0f},
+                {1.0f, 1.0f, 1.0f}
+            };
 
-        const std::vector< uint32_t > indices = {
-            0, 1, 2, 2, 3, 0
-        };
+            const std::vector< uint32_t > indices = {
+                0, 1, 2, 2, 3, 0
+            };
 
-        marlin::Mesh mesh;
-        mesh.setVertices( vertices );
-        mesh.setColors( colors );
-        mesh.setIndices( indices );
+            marlin::Mesh mesh;
+            mesh.setVertices( vertices );
+            mesh.setColors( colors );
+            mesh.setIndices( indices );
+            
+            marlin::GeometryPtr geometry = marlin::Geometry::create( scene );
+            geometry->setLOD( mesh, 0 );
+            
+            scene->addObject( geometry );
+        }
         
-        marlin::GeometryPtr geometry = marlin::Geometry::create( scene );
-        geometry->setLOD( mesh, 0 );
-        
-        scene->addObject( geometry );
+        {
+            const std::vector<marlin::Vec3f> vertices = {
+                {-1.5f, -1.5f, 0.0},
+                { 1.5f, -1.5f, 0.0f},
+                { 1.5f,  1.5f, 0.0f},
+                {-1.5f,  1.5f, 0.0f}
+            };
+
+            const std::vector<marlin::Vec3f> colors = {
+                {1.0f, 0.0f, 0.0f},
+                {0.0f, 1.0f, 0.0f},
+                {0.0f, 0.0f, 1.0f},
+                {1.0f, 1.0f, 1.0f}
+            };
+
+            const std::vector< uint32_t > indices = {
+                0, 1, 2, 2, 3, 0
+            };
+
+            marlin::Mesh mesh;
+            mesh.setVertices( vertices );
+            mesh.setColors( colors );
+            mesh.setIndices( indices );
+            
+            marlin::GeometryPtr geometry = marlin::Geometry::create( scene );
+            geometry->setLOD( mesh, 0 );
+            
+            scene->addObject( geometry );
+        }
         
         first = false;
     }

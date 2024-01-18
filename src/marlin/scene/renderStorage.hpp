@@ -9,13 +9,28 @@
 #ifndef MARLIN_RENDERSTORAGE_HPP
 #define MARLIN_RENDERSTORAGE_HPP
 
+#include <marlin/scene/mesh.hpp>
+#include <marlin/scene/scene.hpp>
 #include <marlin/vulkan/bufferPool.hpp>
+
+#include <unordered_map>
 
 namespace marlin
 {
 
 using VertexPoolHandle = BufferPoolHandleT< std::byte >;
 using IndexPoolHandle = BufferPoolHandleT< uint32_t >;
+
+struct MeshStorage
+{
+    VertexPoolHandle vertexHandle;
+    IndexPoolHandle indexHandle;
+};
+
+struct MeshLODs
+{
+    std::map< uint8_t, MeshStorage > meshLODs;
+};
 
 class RenderStorage
 {
@@ -29,11 +44,18 @@ public:
     
     IndexPoolHandle allocateIndexBuffer( uint32_t i_size );
     void deallocateIndexBuffer( const IndexPoolHandle &i_handle );
+    
+    void updateLOD( ObjectId i_id, uint32_t i_lodIndex, const Mesh &i_mesh );
+    const MeshLODs* getLODs( ObjectId i_id ) const;
+    
+    std::vector< ObjectId > getGeometryIds() const;
 
 private:
     
     BufferPoolT< std::byte > m_vertexPool;
     BufferPoolT< uint32_t > m_indexPool;
+    
+    std::unordered_map< ObjectId, MeshLODs > m_meshStorage;
 };
 
 

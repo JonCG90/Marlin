@@ -990,25 +990,48 @@ void MlnInstance::recordCommandBuffer( CommandBufferPtr commandBuffer, uint32_t 
     CommandPtr scissor = CommandFactory::setScissor( Vec2i( 0 ), Vec2u( extent.width, extent.height ) );
     CommandPtr endPass = CommandFactory::endRenderPass();
     
-    auto func = [ this ]( VkCommandBuffer i_commandBuffer ) {
-        
-        VkBuffer vertexBuffers[] = { m_vertexBuffer->getObject() };
-        VkDeviceSize offsets[] = { 0 };
-        vkCmdBindVertexBuffers( i_commandBuffer, 0, 1, vertexBuffers, offsets );
-        vkCmdBindIndexBuffer( i_commandBuffer, m_indexBuffer->getObject(), 0, VK_INDEX_TYPE_UINT32 );
-
-        vkCmdBindDescriptorSets( i_commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline->getLayout(), 0, 1, &m_descriptorSets[ 0 ], 0, nullptr );
-        
-        uint32_t count =  static_cast< uint32_t >( m_indexBuffer->getCount() );
-        vkCmdDrawIndexed( i_commandBuffer, count, 1, 0, 0, 0 );
-    };
-    CommandPtr draw = CommandFactory::commandFunction( func );
+    std::vector< CommandPtr > drawCommands;
     
+    std::vector< ObjectId > geometryIds = m_renderStorage->getGeometryIds();
+    for ( ObjectId geometryId : geometryIds )
+    {
+        const MeshLODs* lod = m_renderStorage->getLODs( geometryId );
+        if ( lod == nullptr )
+        {
+            continue;
+        }
+        
+        for ( const auto &pair : lod->meshLODs )
+        {
+            const MeshStorage &lodStorage = pair.second;
+            
+            auto func = [ this, &lodStorage ]( VkCommandBuffer i_commandBuffer ) {
+                
+                VkBuffer vertexBuffers[] = { lodStorage.vertexHandle.buffer->getObject() };
+                VkDeviceSize offsets[] = { lodStorage.vertexHandle.allocation.offset };
+                vkCmdBindVertexBuffers( i_commandBuffer, 0, 1, vertexBuffers, offsets );
+                vkCmdBindIndexBuffer( i_commandBuffer, lodStorage.indexHandle.buffer->getObject(), 0, VK_INDEX_TYPE_UINT32 );
+
+                vkCmdBindDescriptorSets( i_commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline->getLayout(), 0, 1, &m_descriptorSets[ 0 ], 0, nullptr );
+                
+                uint32_t count =  static_cast< uint32_t >( lodStorage.indexHandle.buffer->getCount() );
+                vkCmdDrawIndexed( i_commandBuffer, count, 1, 0, 0, 0 );
+            };
+            
+            drawCommands.emplace_back( CommandFactory::commandFunction( func ) );
+        }
+    }
+
     commandBuffer->addCommand( std::move( beginPass ) );
     commandBuffer->addCommand( std::move( bind ) );
     commandBuffer->addCommand( std::move( viewport ) );
     commandBuffer->addCommand( std::move( scissor ) );
-    commandBuffer->addCommand( std::move( draw ) );
+    
+    for ( CommandPtr &drawCommand : drawCommands )
+    {
+        commandBuffer->addCommand( std::move( drawCommand ) );
+    }
+    
     commandBuffer->addCommand( std::move( endPass ) );
 
     commandBuffer->record( 0 );

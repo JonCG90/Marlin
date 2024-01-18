@@ -60,6 +60,7 @@ BufferPoolHandleT< T > BufferPoolT< T >::allocate( uint32_t i_size )
 template < class T >
 void BufferPoolT< T >::deallocate( const BufferPoolHandleT< T > &i_handle )
 {
+    // Clear entry
     m_entries[ i_handle.index ].allocator.free( i_handle.allocation );
 }
 
