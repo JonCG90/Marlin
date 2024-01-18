@@ -83,9 +83,6 @@ private:
     VkQueue m_presentQueue;
     
     DescriptorCachePtr m_descriptorCache;
-
-    BufferTPtr< std::byte > m_vertexBuffer;
-    BufferTPtr< uint32_t > m_indexBuffer;
     
     std::vector< BufferTPtr< UniformBufferObject > > m_uniformBuffers;
     std::vector<void*> m_uniformBuffersMapped;
@@ -123,8 +120,6 @@ private:
     
     void createGraphicsPipeline();
     void createFramebuffers();
-    void createVertexBuffer();
-    void createIndexBuffer();
     void createUniformBuffers();
     void createDescriptorPool();
     void createDescriptorSets();

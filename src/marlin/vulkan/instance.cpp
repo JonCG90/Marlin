@@ -515,8 +515,6 @@ void MlnInstance::init( void* i_layer )
     
     createFramebuffers();
     
-    createVertexBuffer();
-    createIndexBuffer();
     createUniformBuffers();
     createDescriptorPool();
     createDescriptorSets();
@@ -532,9 +530,6 @@ void MlnInstance::deinit()
         vkDestroySemaphore( m_device->getObject(), m_renderFinishedSemaphores[ i ], nullptr );
         vkDestroyFence( m_device->getObject(), m_inFlightFences[ i ], nullptr );
     }
-    
-    m_indexBuffer->destroy();
-    m_vertexBuffer->destroy();
 
     for ( auto framebuffer : m_swapChainFramebuffers )
     {
@@ -859,50 +854,6 @@ uint32_t findMemoryType2( PhysicalDevicePtr i_device, uint32_t i_typeFilter, VkM
     }
 
     throw std::runtime_error("failed to find suitable memory type!");
-}
-
-void MlnInstance::createVertexBuffer()
-{
-    std::vector<Vertex> vertices = {
-        {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-        {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-        {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-        {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
-    };
-    
-//    std::vector<float> vertices = {
-//        -0.5f, -0.5f,
-//         0.5f, -0.5f,
-//         0.5f, 0.5f,
-//        -0.5f, 0.5f,
-//         1.0f, 0.0f, 0.0f,
-//         0.0f, 1.0f, 0.0f,
-//         0.0f, 0.0f, 1.0f,
-//         1.0f, 1.0f, 1.0f
-//    };
-    
-    
-    std::byte* bytes = reinterpret_cast< std::byte* >( vertices.data() );
-    uint32_t size = static_cast< uint32_t >( vertices.size() * sizeof( Vertex ) );
-    VertexPoolHandle handle = m_renderStorage->allocateVertexBuffer( size );
-    BufferTPtr< std::byte > buffer = handle.buffer;
-    buffer->updateData( bytes, handle.allocation.offset, size );
-    
-    m_vertexBuffer = buffer;
-}
-
-void MlnInstance::createIndexBuffer()
-{
-    std::vector< uint32_t > indices = {
-        0, 1, 2, 2, 3, 0
-    };
-    
-    uint32_t size = static_cast< uint32_t >( indices.size() );
-    IndexPoolHandle handle = m_renderStorage->allocateIndexBuffer( size );
-    BufferTPtr< uint32_t > buffer = handle.buffer;
-    buffer->updateData( indices.data(), handle.allocation.offset, size );
-    
-    m_indexBuffer = buffer;
 }
 
 void MlnInstance::createUniformBuffers()
