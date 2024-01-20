@@ -28,30 +28,30 @@ public:
     
     static BufferTPtr< T > create( DevicePtr i_device,
                                    PhysicalDevicePtr i_physicalDevice,
-                                   VkBufferUsageFlagBits i_usage,
+                                   VkBufferUsageFlags i_usage,
                                    BufferMode i_mode,
                                    const std::vector< T > &i_data );
     static BufferTPtr< T > create( DevicePtr i_device,
                                    PhysicalDevicePtr i_physicalDevice,
-                                   VkBufferUsageFlagBits i_usage,
+                                   VkBufferUsageFlags i_usage,
                                    BufferMode i_mode,
                                    T i_data );
     static BufferTPtr< T > create( DevicePtr i_device,
                                    PhysicalDevicePtr i_physicalDevice,
-                                   VkBufferUsageFlagBits i_usage,
+                                   VkBufferUsageFlags i_usage,
                                    BufferMode i_mode,
                                    const T* i_data,
                                    size_t i_size );
     
     BufferT( DevicePtr i_device,
              PhysicalDevicePtr i_physicalDevice,
-             VkBufferUsageFlagBits i_usage,
+             VkBufferUsageFlags i_usage,
              BufferMode i_mode,
              const std::vector< T > &i_data );
     
     BufferT( DevicePtr i_device,
              PhysicalDevicePtr i_physicalDevice,
-             VkBufferUsageFlagBits i_usage,
+             VkBufferUsageFlags i_usage,
              BufferMode i_mode,
              const T* i_data,
              size_t i_size );
@@ -62,6 +62,7 @@ public:
     void* mapMemory();
     void unmapMemory();
     void updateData( const T* i_data, size_t offset, size_t i_count );
+    void updateData( const std::vector< T > &i_data, size_t i_offset );
 
     size_t getCount() const;
     void destroy();

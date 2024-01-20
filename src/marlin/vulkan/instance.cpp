@@ -955,6 +955,10 @@ void MlnInstance::recordCommandBuffer( CommandBufferPtr commandBuffer, uint32_t 
         for ( const auto &pair : lod->meshLODs )
         {
             const MeshStorage &lodStorage = pair.second;
+            if ( lodStorage.indexCount == 0 )
+            {
+                continue;
+            }
             
             auto func = [ this, &lodStorage ]( VkCommandBuffer i_commandBuffer ) {
                 
@@ -965,7 +969,20 @@ void MlnInstance::recordCommandBuffer( CommandBufferPtr commandBuffer, uint32_t 
 
                 vkCmdBindDescriptorSets( i_commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline->getLayout(), 0, 1, &m_descriptorSets[ 0 ], 0, nullptr );
                 
-                vkCmdDrawIndexed( i_commandBuffer, lodStorage.indexCount, 1, 0, 0, 0 );
+//                vkCmdDrawIndexed( i_commandBuffer, lodStorage.indexCount, 1, 0, 0, 0 );
+                
+                VkDrawIndexedIndirectCommand drawIndirect {
+                    .indexCount = lodStorage.indexCount,
+                    .instanceCount = 1,
+                    .firstIndex = 0,
+                    .vertexOffset = 0,
+                    .firstInstance = 0,
+                };
+                
+                BufferTPtr< VkDrawIndexedIndirectCommand > indirectBuffer = m_renderStorage->getIndirectBuffer();  
+                std::vector< VkDrawIndexedIndirectCommand > indirectCommands = { drawIndirect };
+                indirectBuffer->updateData( indirectCommands, 0 );
+                vkCmdDrawIndexedIndirect( i_commandBuffer, indirectBuffer->getObject(), 0, 1, sizeof( VkDrawIndexedIndirectCommand ) );
             };
             
             drawCommands.emplace_back( CommandFactory::commandFunction( func ) );

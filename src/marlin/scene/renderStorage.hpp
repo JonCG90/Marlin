@@ -51,11 +51,15 @@ public:
     const MeshLODs* getLODs( ObjectId i_id ) const;
     
     std::vector< ObjectId > getGeometryIds() const;
+    
+    BufferTPtr< VkDrawIndexedIndirectCommand > getIndirectBuffer() const;
 
 private:
     
     BufferPoolT< std::byte > m_vertexPool;
     BufferPoolT< uint32_t > m_indexPool;
+    
+    BufferTPtr< VkDrawIndexedIndirectCommand > m_indirectBuffer;
     
     std::unordered_map< ObjectId, MeshLODs > m_meshStorage;
 };

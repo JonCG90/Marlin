@@ -46,7 +46,7 @@ inline void createBuffer( DevicePtr i_device,
 
     if ( vkCreateBuffer( i_device->getObject(), &bufferInfo, nullptr, &o_buffer ) != VK_SUCCESS )
     {
-        throw std::runtime_error( "Error: Failed to create buffer" );
+        throw std::runtime_error( "Error: Failed to  buffer" );
     }
 
     VkMemoryRequirements memRequirements;
@@ -98,7 +98,7 @@ inline void copyBuffer( DevicePtr i_device, VkBuffer i_srcBuffer, VkBuffer i_dst
 template < class T >
 BufferTPtr< T > BufferT< T >::create( DevicePtr i_device,
                                       PhysicalDevicePtr i_physicalDevice,
-                                      VkBufferUsageFlagBits i_usage,
+                                      VkBufferUsageFlags i_usage,
                                       BufferMode i_mode,
                                       const std::vector< T > &i_data )
 {
@@ -108,7 +108,7 @@ BufferTPtr< T > BufferT< T >::create( DevicePtr i_device,
 template < class T >
 BufferTPtr< T > BufferT< T >::create( DevicePtr i_device,
                                       PhysicalDevicePtr i_physicalDevice,
-                                      VkBufferUsageFlagBits i_usage,
+                                      VkBufferUsageFlags i_usage,
                                       BufferMode i_mode,
                                       T i_data )
 {
@@ -119,7 +119,7 @@ BufferTPtr< T > BufferT< T >::create( DevicePtr i_device,
 template < class T >
 BufferTPtr< T > BufferT< T >::create( DevicePtr i_device,
                                       PhysicalDevicePtr i_physicalDevice,
-                                      VkBufferUsageFlagBits i_usage,
+                                      VkBufferUsageFlags i_usage,
                                       BufferMode i_mode,
                                       const T* i_data,
                                       size_t i_count )
@@ -130,7 +130,7 @@ BufferTPtr< T > BufferT< T >::create( DevicePtr i_device,
 template < class T >
 BufferT< T >::BufferT( DevicePtr i_device,
                        PhysicalDevicePtr i_physicalDevice,
-                       VkBufferUsageFlagBits i_usage,
+                       VkBufferUsageFlags i_usage,
                        BufferMode i_mode,
                        const std::vector< T > &i_data )
 : BufferT< T >( i_device, i_physicalDevice, i_usage, i_mode, i_data.data(), i_data.size() * sizeof( T ) )
@@ -140,7 +140,7 @@ BufferT< T >::BufferT( DevicePtr i_device,
 template < class T >
 BufferT< T >::BufferT( DevicePtr i_device,
                        PhysicalDevicePtr i_physicalDevice,
-                       VkBufferUsageFlagBits i_usage,
+                       VkBufferUsageFlags i_usage,
                        BufferMode i_mode,
                        const T* i_data,
                        size_t i_count )
@@ -238,6 +238,11 @@ void BufferT< T >::unmapMemory()
 template < class T >
 void BufferT< T >::updateData( const T* i_data, size_t i_offset, size_t i_count )
 {
+    if ( i_count == 0 )
+    {
+        return;
+    }
+
     if ( ( i_offset + i_count ) * sizeof( T ) > m_size )
     {
         throw std::runtime_error( "Trying to update out of bounds memory." );
@@ -280,6 +285,12 @@ void BufferT< T >::updateData( const T* i_data, size_t i_offset, size_t i_count 
         default:
             break;
     }
+}
+
+template < class T >
+void BufferT< T >::updateData( const std::vector< T > &i_data, size_t i_offset )
+{
+    updateData( i_data.data(), i_offset, i_data.size() );
 }
 
 template < class T >

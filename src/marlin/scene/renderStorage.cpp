@@ -14,7 +14,8 @@ namespace marlin
 RenderStorage::RenderStorage( DevicePtr i_device, PhysicalDevicePtr i_physicalDevice )
 : m_vertexPool( i_device, i_physicalDevice, PoolUsage::Vertex, 2048 * 3 )
 , m_indexPool( i_device, i_physicalDevice, PoolUsage::Index, 2048 )
-{
+{    
+    m_indirectBuffer = BufferT< VkDrawIndexedIndirectCommand >::create( i_device, i_physicalDevice, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |  VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, BufferMode::Device, nullptr, sizeof( VkDrawIndexedIndirectCommand ) );
 }
 
 VertexPoolHandle RenderStorage::allocateVertexBuffer( uint32_t i_size )
@@ -104,6 +105,11 @@ const MeshLODs* RenderStorage::getLODs( ObjectId i_id ) const
         return &itr->second;
     }
     return nullptr;
+}
+
+BufferTPtr< VkDrawIndexedIndirectCommand > RenderStorage::getIndirectBuffer() const
+{
+    return m_indirectBuffer;
 }
 
 std::vector< ObjectId > RenderStorage::getGeometryIds() const
