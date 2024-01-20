@@ -78,6 +78,8 @@ void RenderStorage::updateLOD( ObjectId i_id, uint32_t i_lodIndex, const Mesh &i
     BufferTPtr< std::byte > vertexBuffer = vertexHandle.buffer;
     vertexBuffer->updateData( bytes, vertexHandle.allocation.offset, vertexBufferSize );
     
+    meshLOD.vertexCount = static_cast< uint32_t>( vertices.size() );
+    
     IndexPoolHandle &indexHandle = meshLOD.indexHandle;
     if ( indexHandle.isValid() )
     {
@@ -90,6 +92,8 @@ void RenderStorage::updateLOD( ObjectId i_id, uint32_t i_lodIndex, const Mesh &i
     indexHandle = allocateIndexBuffer( indexBufferSize );
     BufferTPtr< uint32_t > indexBuffer = indexHandle.buffer;
     indexBuffer->updateData( indices.data(), indexHandle.allocation.offset, indexBufferSize );
+    
+    meshLOD.indexCount = static_cast< uint32_t>( indices.size() );
 }
 
 const MeshLODs* RenderStorage::getLODs( ObjectId i_id ) const

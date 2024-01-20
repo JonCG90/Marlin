@@ -25,6 +25,8 @@ struct MeshStorage
 {
     VertexPoolHandle vertexHandle;
     IndexPoolHandle indexHandle;
+    uint32_t vertexCount;
+    uint32_t indexCount;
 };
 
 struct MeshLODs

@@ -965,8 +965,7 @@ void MlnInstance::recordCommandBuffer( CommandBufferPtr commandBuffer, uint32_t 
 
                 vkCmdBindDescriptorSets( i_commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline->getLayout(), 0, 1, &m_descriptorSets[ 0 ], 0, nullptr );
                 
-                uint32_t count =  static_cast< uint32_t >( lodStorage.indexHandle.buffer->getCount() );
-                vkCmdDrawIndexed( i_commandBuffer, count, 1, 0, 0, 0 );
+                vkCmdDrawIndexed( i_commandBuffer, lodStorage.indexCount, 1, 0, 0, 0 );
             };
             
             drawCommands.emplace_back( CommandFactory::commandFunction( func ) );
